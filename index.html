@@ -1618,47 +1618,7 @@ function attachEvents(){
       else if(a==="goLovemon"){S.screen="board";S.tab="lm_pet";render();}
       else if(a==="goPlaza"){S.screen="board";S.tab="lm_plaza";render();}
       else if(a==="lm_createPet"){initOrLoadPet(S.myEntry.nick,S.myEntry.gender,S.myEntry.mbti,S.myBalEntry?.answers);}
-      else if(a === "lm_buyFeed") {
-        const itemId = el.dataset.item;
-        const myPet = S.myBalEntry?.answers?.lovemon;
-        // 1. 펫 존재 여부 확인
-        if (!myPet) {
-          alert("먼저 러브몬을 생성한 후 아이템을 구매해주세요!");
-          return;
-        }
-        // 2. 사랑의 묘약(love_potion) 특수 처리
-        if (itemId === "love_potion") {
-          // 비용 확인
-          if ((S.myBalEntry?.points || 0) < 1000) {
-            alert("포인트가 부족합니다. (1,000P 필요)");
-            return;
-          }
-          // 이미 레벨이 10 이상인 경우 예외 처리
-          if (myPet.level >= 10) {
-            alert("이미 레벨이 10 이상이어서 교배가 가능한 상태입니다! 다른 아이템을 이용해주세요.");
-            return;
-          }
-          // 포인트 차감 및 펫 능력치 변경 (즉시 10레벨로 상승)
-          S.myBalEntry.points -= 1000;
-          myPet.level = 10;
-          myPet.exp = 0;
-          // 외형이나 이름 등 등급 업데이트가 필요한 경우 (게임 내 기존 진화 함수가 있다면 호출 가능)
-          if (typeof updatePetStatus === "function") {
-            updatePetStatus(myPet);
-          }
-          alert("💘 사랑의 묘약을 복용했습니다!\n내 러브몬이 즉시 [레벨 10]이 되어 교배가 가능한 상태가 되었습니다!");
-          // 데이터 저장 및 화면 갱신
-          if (S.myEntry && S.myEntry.nick) {
-            updateParticipant(S.myEntry.nick, S.myBalEntry);
-          }
-          render();
-          return; // 사랑의 묘약 처리가 끝났으므로 종료
-        }
-        // 3. 기존의 일반 사료 아이템들은 원래 함수로 처리
-        if (typeof feedPet === "function") {
-          feedPet(itemId);
-        }
-      }
+      else if(a==="lm_buyFeed"){feedPet(el.dataset.item);}
       else if(a==="lm_feedOther"){
         const itemId = prompt("어떤 아이템을 선물하시겠습니까?\n1. 기본 사료 (100P)\n2. 도파민 특식 (500P)\n번호를 입력해주세요:", "1");
         if(itemId === "1") feedPet('feed_basic', el.dataset.nick);
