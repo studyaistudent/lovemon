@@ -331,11 +331,11 @@ const DQ=[
 ];
  
 /* ═══════════════════════════════════════
-   STATE (비밀번호 pin 추가됨)
+   STATE (area 추가됨)
 ═══════════════════════════════════════ */
 let S={
   screen:"home",
-  nick:"", pin:"", gender:"", height:"", freeTime:"", idealType:"", appeal:"", giDol:"",
+  nick:"", area:"", pin:"", gender:"", height:"", freeTime:"", idealType:"", appeal:"", giDol:"",
   err:"",
   answers:{},qIdx:0,
   myEntry:null,
@@ -349,13 +349,13 @@ let S={
   loading:true,
 };
  
-/* Persist identity in localStorage (pin 추가 로드) */
+/* Persist identity in localStorage */
 (()=> {
   try{
     const u=JSON.parse(localStorage.getItem("lmg_user")||"null");
     if(u){
       S.myEntry=u;
-      S.nick=u.nick||""; S.pin=u.pin||""; S.gender=u.gender||"";
+      S.nick=u.nick||""; S.area=u.area||""; S.pin=u.pin||""; S.gender=u.gender||"";
       S.height=u.height||""; S.freeTime=u.freeTime||"";
       S.idealType=u.idealType||""; S.appeal=u.appeal||"";
       S.giDol=u.giDol||"";
@@ -522,7 +522,7 @@ function getHTML(){
   }
 }
  
-/* ─── HOME VIEW (비밀번호 입력 UI 추가) ─── */
+/* ─── HOME VIEW (닉네임/지역 분리 및 불러오기 버튼 추가) ─── */
 function rHome(){
   return`<div style="max-width:480px;margin:0 auto;padding:.5rem 0" class="fadein">
     <div style="text-align:center;padding:1.5rem 0 1rem">
@@ -534,11 +534,17 @@ function rHome(){
     <div class="card" style="margin-bottom:10px">
       <p style="font-size:12px;font-weight:700;color:var(--rose2);margin:0 0 12px;letter-spacing:.3px">🍀 내 프로필 입력</p>
       
-      <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">닉네임 / 지역</label>
-      <input id="nickI" class="inp" style="margin-bottom:9px" value="${esc(S.nick)}" placeholder="예: 홍길동 / 서울">
-      
-      <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">비밀번호 (4자리 - 본인 확인 및 도용 방지)</label>
-      <input id="pinI" type="password" class="inp" style="margin-bottom:9px" value="${esc(S.pin)}" placeholder="비밀번호 4자리 입력" maxlength="4">
+      <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">닉네임</label>
+      <input id="nickI" class="inp" style="margin-bottom:9px" value="${esc(S.nick)}" placeholder="예: 홍길동">
+
+      <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">비밀번호 (4자리 - 본인 인증 및 데이터 불러오기)</label>
+      <div style="display:flex;gap:6px;margin-bottom:9px">
+        <input id="pinI" type="password" class="inp" value="${esc(S.pin)}" placeholder="비밀번호 4자리" maxlength="4">
+        <button class="btn btn-plum" style="padding:0 14px;font-size:12px;flex-shrink:0" data-a="loadMyInfo">🔓 불러오기</button>
+      </div>
+
+      <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">지역</label>
+      <input id="areaI" class="inp" style="margin-bottom:9px" value="${esc(S.area)}" placeholder="예: 서울 강남구">
       
       <label style="font-size:11.5px;color:var(--text2);display:block;margin-bottom:3px">키</label>
       <input id="heightI" class="inp" style="margin-bottom:9px" value="${esc(S.height)}" placeholder="예: 175cm">
@@ -602,7 +608,7 @@ function rMBTITest(){
 function rResult(){
   if(!S.myEntry)return rHome();
   const e=S.myEntry; const info=MI[e.mbti]||{n:"",d:""};
-  const shareText=`🍀닉네임/지역: ${e.nick}\n🍀키: ${e.height||"-"}\n🍀낮/밤 프리: ${e.freeTime||"-"}\n🍀썸상: ${e.idealType||"-"}\n🍀어필: ${e.appeal||"-"}\n🍀기/돌: ${e.giDol||"-"}\n🍀MBTI: ${e.mbti} (${info.n})`;
+  const shareText=`🍀닉네임: ${e.nick}\n🍀지역: ${e.area||"-"}\n🍀키: ${e.height||"-"}\n🍀낮/밤 프리: ${e.freeTime||"-"}\n🍀썸상: ${e.idealType||"-"}\n🍀어필: ${e.appeal||"-"}\n🍀기/돌: ${e.giDol||"-"}\n🍀MBTI: ${e.mbti} (${info.n})`;
   return`<div style="max-width:480px;margin:0 auto;padding:.5rem 0" class="fadein">
     <div class="card card-rose" style="text-align:center;margin-bottom:12px">
       <p style="font-size:13px;color:var(--text2);margin:0 0 14px">${esc(shortNick(e.nick))} (${e.gender}) 님의 결과</p>
@@ -747,7 +753,7 @@ function rBoard(){
   </div>`;
 }
  
-/* ─── COMMUNITY BOARD TAB ─── */
+/* ─── COMMUNITY BOARD TAB (지역 표시 세분화) ─── */
 function rBoardTab(){
   if(S.loading)return`<p style="text-align:center;color:var(--text3);padding:3rem">불러오는 중... 💕</p>`;
   if(!S.entries.length)return`<div style="text-align:center;padding:3rem 0"><div style="font-size:40px;margin-bottom:12px">💌</div><p style="color:var(--text2);margin-bottom:16px">참여자가 없어요. 첫 번째로 검사해보세요!</p><button class="btn btn-primary" style="padding:10px 22px" data-a="goHome">시작하기</button></div>`;
@@ -761,7 +767,7 @@ function rBoardTab(){
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px">
           <span style="font-weight:600;font-size:14.5px">${esc(e.nick)}</span>
-          <span style="font-size:11px;color:var(--text3)">${e.gender}${e.height?" · "+esc(e.height):""}</span>
+          <span style="font-size:11px;color:var(--text3)">${esc(e.area||"미정")} · ${e.gender}${e.height?" · "+esc(e.height):""}</span>
         </div>
         <div style="font-size:11.5px;color:var(--text2);display:flex;flex-direction:column;gap:2px">
           ${e.freeTime?`<span>⏰ ${esc(e.freeTime)}</span>`:""}
@@ -844,7 +850,7 @@ function rRoseTab(){
               return`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:7px;background:white">
                 <div>
                   <span style="font-weight:600;font-size:14px">${esc(shortNick(e.nick))}</span>
-                  <span style="font-size:11px;color:var(--text3);margin-left:6px">${esc(e.mbti)}</span>
+                  <span style="font-size:11px;color:var(--text3);margin-left:6px">${esc(e.area||"미정")} · ${esc(e.mbti)}</span>
                   ${rc>0?`<span class="rose-badge" style="margin-left:5px">🌹 ×${rc}</span>`:""}
                 </div>
                 ${alreadySent?`<span style="font-size:12px;color:var(--rose);background:var(--rose-lt);padding:5px 12px;border-radius:99px">💕 보냈어요</span>`
@@ -873,16 +879,16 @@ function rRoseTab(){
 /* ─── ADMIN MANAGEMENT TAB ─── */
 function rAdminTab(){
   if(!S.isAdmin)return`<div class="card" style="text-align:center;max-width:360px;margin:0 auto"><div style="font-size:36px;margin-bottom:8px">🔐</div><p style="font-weight:600;margin:0 0 14px">관리자 로그인</p><input id="pwI" type="password" class="inp" placeholder="비밀번호 입력" style="margin-bottom:8px">${S.pwErr?`<p style="font-size:13px;color:#C62828;margin:0 0 8px">${S.pwErr}</p>`:""}<button class="btn btn-primary" style="width:100%;padding:10px" data-a="login">로그인</button></div>`;
-  const rows=!S.entries.length?`<p style="color:var(--text2);text-align:center;padding:2rem">참여자가 없습니다.</p>`:S.entries.map(e=>`<div class="card" style="margin-bottom:7px;display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0"><span style="font-weight:500">${esc(e.nick)}</span><span style="font-size:11.5px;color:var(--text3);margin-left:6px">${e.gender} · ${esc(e.mbti)} (PIN:${esc(e.pin)})</span></div><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;flex-shrink:0" data-a="del" data-id="${e.id}">🗑️</button></div>`).join("");
+  const rows=!S.entries.length?`<p style="color:var(--text2);text-align:center;padding:2rem">참여자가 없습니다.</p>`:S.entries.map(e=>`<div class="card" style="margin-bottom:7px;display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0"><span style="font-weight:500">${esc(e.nick)}</span><span style="font-size:11.5px;color:var(--text3);margin-left:6px">${esc(e.area||"미정")} · ${e.gender} · ${esc(e.mbti)} (PIN:${esc(e.pin)})</span></div><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;flex-shrink:0" data-a="del" data-id="${e.id}">🗑️</button></div>`).join("");
   return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p style="margin:0;font-weight:600">참여자 관리 (${S.entries.length}명)</p><div style="display:flex;gap:6px"><button class="btn btn-danger" style="padding:6px 12px;font-size:12px" data-a="delAll">전체삭제</button><button class="btn" style="padding:6px 12px;font-size:12px" data-a="logout">로그아웃</button></div></div>${rows}`;
 }
  
 /* ═══════════════════════════════════════
-   DOM EVENTS BINDING (pinI 추가)
+   DOM EVENTS BINDING (areaI 추가)
 ═══════════════════════════════════════ */
 function attachEvents(){
   const app=document.getElementById("app");
-  [["nickI","nick"],["pinI","pin"],["heightI","height"],["freeI","freeTime"],
+  [["nickI","nick"],["areaI","area"],["pinI","pin"],["heightI","height"],["freeI","freeTime"],
    ["idealI","idealType"],["appealI","appeal"],["gidolI","giDol"]
   ].forEach(([id,key])=>{
     const el=app.querySelector("#"+id);
@@ -897,11 +903,12 @@ function attachEvents(){
       else if(a==="startMBTI")startMBTI();
       else if(a==="startBal")startBal();
       else if(a==="startDat")startDat();
+      else if(a==="loadMyInfo")loadMyInfo();
       else if(a==="goHome"){S.screen="home";render();}
       else if(a==="goBoard"){S.screen="board";S.tab="board";render();}
       else if(a==="goCompat"){S.screen="board";S.tab="compat";render();}
       else if(a==="retry"){
-        S.nick="";S.pin="";S.gender="";S.height="";S.freeTime="";S.idealType="";S.appeal="";S.giDol="";
+        S.nick="";S.area="";S.pin="";S.gender="";S.height="";S.freeTime="";S.idealType="";S.appeal="";S.giDol="";
         S.myEntry=null;S.myBalEntry=null;S.myDatEntry=null;
         localStorage.removeItem("lmg_user");localStorage.removeItem("lmg_bal");localStorage.removeItem("lmg_dat");
         S.screen="home";render();
@@ -927,13 +934,64 @@ function attachEvents(){
 }
  
 /* ═══════════════════════════════════════
-   GAME VALIDATION & AUTH LOGIC (핵심 추가)
+   GAME VALIDATION & AUTH LOGIC 
 ═══════════════════════════════════════ */
 function validate(){
-  if(!S.nick.trim()){S.err="닉네임 / 지역을 입력해주세요";render();return false;}
+  if(!S.nick.trim()){S.err="닉네임을 입력해주세요";render();return false;}
+  if(!S.area.trim()){S.err="지역을 입력해주세요";render();return false;}
   if(!S.pin.trim() || S.pin.trim().length < 4){S.err="비밀번호 4자리를 정확히 입력해주세요";render();return false;}
   if(!S.gender){S.err="성별을 선택해주세요";render();return false;}
   S.err="";return true;
+}
+
+/* 수동 정보 불러오기 함수 (닉네임 + 비밀번호 인증 시 프로필 복원) */
+async function loadMyInfo() {
+  const nick = S.nick.trim(); const pin = S.pin.trim();
+  if(!nick){ alert("닉네임을 먼저 입력해주세요."); return; }
+  if(!pin || pin.length < 4){ alert("비밀번호 4자리를 정확히 입력해주세요."); return; }
+  
+  try {
+    const snap = await mbtiCol.where("nick", "==", nick).get();
+    if(!snap.empty) {
+      const exData = snap.docs[0].data();
+      if(exData.pin !== pin) {
+        alert("이미 등록된 닉네임입니다. 비밀번호가 일치하지 않습니다.");
+        return;
+      }
+      
+      /* 정보 바인딩 및 복구 */
+      S.myEntry = { id: snap.docs[0].id, ...exData };
+      S.area = exData.area || "";
+      S.gender = exData.gender || "";
+      S.height = exData.height || "";
+      S.freeTime = exData.freeTime || "";
+      S.idealType = exData.idealType || "";
+      S.appeal = exData.appeal || "";
+      S.giDol = exData.giDol || "";
+      
+      localStorage.setItem("lmg_user", JSON.stringify(S.myEntry));
+      
+      const bSnap = await balCol.where("nick", "==", nick).get();
+      if(!bSnap.empty) {
+        S.myBalEntry = { id: bSnap.docs[0].id, ...bSnap.docs[0].data() };
+        localStorage.setItem("lmg_bal", JSON.stringify(S.myBalEntry));
+      }
+      
+      const dSnap = await datCol.where("nick", "==", nick).get();
+      if(!dSnap.empty) {
+        S.myDatEntry = { id: dSnap.docs[0].id, ...dSnap.docs[0].data() };
+        localStorage.setItem("lmg_dat", JSON.stringify(S.myDatEntry));
+      }
+      
+      S.err = "";
+      render();
+      alert("🎉 이전에 입력하셨던 프로필과 게임 기록을 성공적으로 불러왔습니다! 내용을 수정하신 뒤 미니게임을 시작하거나 커뮤니티로 이동하실 수 있습니다.");
+    } else {
+      alert("등록되지 않은 새로운 닉네임입니다. 아래의 프로필 정보를 채워서 검사를 새로 시작해주세요.");
+    }
+  } catch(e) {
+    alert("데이터를 불러오는 도중 오류가 발생했습니다.");
+  }
 }
  
 /* 닉네임 유무 및 비밀번호 일치 검증 공통 함수 */
@@ -948,21 +1006,8 @@ async function checkUserAuth(){
         S.err = "이미 등록된 닉네임입니다. 비밀번호가 틀렸습니다.";
         render(); return false;
       }
-      /* 로그인 성공: 연동 데이터 갱신 */
       S.myEntry = { id: snap.docs[0].id, ...exData };
       localStorage.setItem("lmg_user", JSON.stringify(S.myEntry));
-      
-      const bSnap = await balCol.where("nick", "==", nick).get();
-      if(!bSnap.empty) {
-        S.myBalEntry = { id: bSnap.docs[0].id, ...bSnap.docs[0].data() };
-        localStorage.setItem("lmg_bal", JSON.stringify(S.myBalEntry));
-      } else { S.myBalEntry = null; localStorage.removeItem("lmg_bal"); }
-      
-      const dSnap = await datCol.where("nick", "==", nick).get();
-      if(!dSnap.empty) {
-        S.myDatEntry = { id: dSnap.docs[0].id, ...dSnap.docs[0].data() };
-        localStorage.setItem("lmg_dat", JSON.stringify(S.myDatEntry));
-      } else { S.myDatEntry = null; localStorage.removeItem("lmg_dat"); }
       return "EXISTING";
     }
     return "NEW";
@@ -1002,7 +1047,7 @@ function mbtiAns(v){
   else{
     const mbti=calcMBTI(S.answers);
     const entry={
-      nick:S.nick.trim(), pin:S.pin.trim(), gender:S.gender, height:S.height.trim(),
+      nick:S.nick.trim(), area:S.area.trim(), pin:S.pin.trim(), gender:S.gender, height:S.height.trim(),
       freeTime:S.freeTime.trim(), idealType:S.idealType.trim(),
       appeal:S.appeal.trim(), giDol:S.giDol.trim(), mbti,
       time:new Date().toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"}),
