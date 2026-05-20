@@ -753,7 +753,6 @@ const CHOSUNG_QS=[
   {genre:'직업',cho:['ㅇ','ㅌ','ㅂ'],ans:'유튜버',hint:'동영상을 찍어 유튜브에 올리는 직업'},
 ];
 
-
 const MARKET_ITEMS=[
   {id:'feed_basic',  name:'기본 사료',   emoji:'🌾', cost:100,  xp:30,  desc:'XP +30, 기본 성장'},
   {id:'feed_dopamine',name:'도파민 특식',emoji:'🍗', cost:500,  xp:250,  desc:'XP +250, 댄스 이펙트!'},
@@ -785,12 +784,11 @@ const DEF_SKILLS=[
   {id:'dodge', name:'회피 강화',    emoji:'💨',  mp:20, evaMult:2.0, desc:'회피율 2배 (이번 턴) · MP -20'},
   {id:'heal',  name:'자가 치유',    emoji:'💚',  mp:30, healPct:0.22, desc:'HP 22% 회복 · MP -30'},
 ];
-
 const POTION_ITEMS=[
-  {id:'hp_sm',  name:'HP 소형 물약',  emoji:'🧪', cost:50,  hp:200,   desc:'HP +200 즉시 회복'},
-  {id:'hp_lg',  name:'HP 대형 물약',  emoji:'🫙', cost:150,  hp:500,  desc:'HP +500 즉시 회복'},
-  {id:'mp_sm',  name:'MP 소형 물약',  emoji:'💧', cost:100,  mp:100,   desc:'MP +100 즉시 회복'},
-  {id:'mp_lg',  name:'MP 대형 물약',  emoji:'🌊', cost:300,  mp:300,  desc:'MP +300 즉시 회복'},
+  {id:'hp_sm',  name:'HP 소형 물약',  emoji:'🧪', cost:200,  hp:50,   desc:'HP +50 즉시 회복'},
+  {id:'hp_lg',  name:'HP 대형 물약',  emoji:'🫙', cost:500,  hp:150,  desc:'HP +150 즉시 회복'},
+  {id:'mp_sm',  name:'MP 소형 물약',  emoji:'💧', cost:150,  mp:30,   desc:'MP +30 즉시 회복'},
+  {id:'mp_lg',  name:'MP 대형 물약',  emoji:'🌊', cost:400,  mp:100,  desc:'MP +100 즉시 회복'},
 ];
 const DUNGEON_FLOORS=[
   {floor:1, name:'풀숲 입구',   emoji:'🌿', reqLv:1,
@@ -1558,23 +1556,30 @@ async function rerollDice(){
   const myNick=S.myEntry?.nick;
   if(!myNick||!S.myPet){alert("MBTI 검사 완료 후 이용해주세요!");return;}
   const isFirst=!S.myPet.diceStats;
-  const cost=isFirst?0:1000;
-  if(cost>0&&(S.myPet.points||0)<cost){alert("포인트가 부족합니다! (필요: 1000P)");return;}
-  if(!confirm(`🎲 주사위를 굴려 기본 스탯을 결정합니다!\n${isFirst?'첫 번째 굴림은 무료예요! 🎁':'추가 굴림은 1000P 차감됩니다.'}\n\n결과는 랜덤이며 레벨에 비례해 성장합니다.`))return;
+  const cost=isFirst?0:500; /* ★ 500P로 변경 */
+  if(cost>0&&(S.myPet.points||0)<cost){alert("포인트가 부족합니다! (필요: 500P)");return;}
+  if(!confirm(`🎲 주사위를 굴려 기본 스탯을 결정합니다!\n${isFirst?'첫 번째 굴림은 무료예요! 🎁':'추가 굴림은 500P 차감됩니다.'}\n\n결과는 랜덤이며 레벨에 비례해 성장합니다.`))return;
   const newStats=rollDiceStats();
   const scaled=getScaledStats({...S.myPet,diceStats:newStats});
-  const updateData={
+
+  /* ★ DB용(INC 포함)과 로컬용(순수 숫자)을 분리 → points가 NaN되는 버그 수정 */
+  const dbData={
     diceStats:newStats,
     currentHp:scaled.maxHp,
     currentMp:scaled.maxMp,
     currentSp:100,
     inventory:S.myPet.inventory||{},
   };
-  if(cost>0)updateData.points=INC(-cost);
+  if(cost>0) dbData.points=INC(-cost); /* Firestore 전용 — 로컬에 spread 금지 */
+
   try{
-    await petCol.doc(myNick).update(updateData);
-    S.myPet={...S.myPet,...updateData,diceStats:newStats};
-    if(cost>0)S.myPet.points=(S.myPet.points||0)-cost;
+    await petCol.doc(myNick).update(dbData);
+    /* 로컬 S.myPet은 INC 객체 없이 직접 숫자로 갱신 */
+    S.myPet.diceStats=newStats;
+    S.myPet.currentHp=scaled.maxHp;
+    S.myPet.currentMp=scaled.maxMp;
+    S.myPet.currentSp=100;
+    if(cost>0) S.myPet.points=(S.myPet.points||0)-cost;
     alert(`🎲 주사위 결과!\nHP ${newStats.hp} · MP ${newStats.mp} · ATK ${newStats.atk} · DEF ${newStats.def} · EVA ${newStats.eva}%\n(레벨 성장으로 추가 증가해요 📈)`);
     render();
   }catch(e){console.error(e);alert("오류가 발생했습니다.");}
@@ -1633,8 +1638,12 @@ function startDungeon(floorIdx, mobIdx){
 }
 
 function calcDmg(atk, def, mult=1){
-  const base=Math.max(1, Math.round((atk-def)*mult + (Math.random()*6-3)));
-  return Math.max(1,base);
+  /* DEF가 아무리 높아도 ATK의 28%는 항상 관통
+     DEF는 68%만 방어력으로 작용 (나머지는 관통)
+     ±5 랜덤 변동 */
+  const minDmg=Math.max(1,Math.round(atk*0.28*mult));
+  const rawDmg=Math.round((atk-def*0.68)*mult+(Math.random()*10-5));
+  return Math.max(minDmg,rawDmg);
 }
 function checkEva(eva){ return Math.random()*100 < eva; }
 
@@ -1649,15 +1658,12 @@ function dungeonAction(actionType, skillId){
   /* ── 플레이어 행동 ── */
   if(actionType==='attack'){
     const skill=ATK_SKILLS.find(s=>s.id===skillId)||ATK_SKILLS[0];
-    /* SP 체크 */
-    if(skill.sp>0&&ds.playerSp<skill.sp){
-      alert(`SP가 부족합니다! (필요: ${skill.sp}SP, 보유: ${ds.playerSp}SP)`);return;
+    /* MP 체크 */
+    const mpCost=skill.mp||0;
+    if(mpCost>0&&ds.playerMp<mpCost){
+      alert(`MP가 부족합니다! (필요: ${mpCost}MP, 보유: ${ds.playerMp}MP)`);return;
     }
-    if(skill.mpCost&&ds.playerMp<skill.mpCost){
-      alert(`MP가 부족합니다! (필요: ${skill.mpCost}MP)`);return;
-    }
-    ds.playerSp=Math.max(0,ds.playerSp-skill.sp);
-    if(skill.mpCost)ds.playerMp=Math.max(0,ds.playerMp-skill.mpCost);
+    ds.playerMp=Math.max(0,ds.playerMp-mpCost);
 
     /* 크리티컬 확정 or 랜덤 */
     const isCrit=skill.id==='crit'||Math.random()<0.12;
@@ -1665,15 +1671,13 @@ function dungeonAction(actionType, skillId){
     const dmg=calcDmg(scaled.atk, ds.mob.def, mult);
     ds.mobCurrentHp=Math.max(0,ds.mobCurrentHp-dmg);
     log.push(`${skill.emoji} ${skill.name}! ${ds.mob.emoji}에게 ${dmg} 피해${isCrit&&skill.id!=='crit'?' ⚡크리!':''} (남은 HP: ${ds.mobCurrentHp})`);
-    ds.playerSp=Math.min(100,ds.playerSp+5); /* SP 턴당 +5 회복 */
   }
   else if(actionType==='defense'){
     const skill=DEF_SKILLS.find(s=>s.id===skillId);
     if(!skill)return;
-    if(skill.sp>0&&ds.playerSp<skill.sp){alert(`SP 부족! (필요 ${skill.sp}SP)`);return;}
-    if(skill.mpCost&&ds.playerMp<skill.mpCost){alert(`MP 부족! (필요 ${skill.mpCost}MP)`);return;}
-    ds.playerSp=Math.max(0,ds.playerSp-skill.sp);
-    if(skill.mpCost)ds.playerMp=Math.max(0,ds.playerMp-skill.mpCost);
+    const mpCost=skill.mp||0;
+    if(mpCost>0&&ds.playerMp<mpCost){alert(`MP 부족! (필요 ${mpCost}MP, 보유 ${ds.playerMp}MP)`);return;}
+    ds.playerMp=Math.max(0,ds.playerMp-mpCost);
 
     if(skill.id==='guard'){defBoostNext=skill.defMult;log.push(`${skill.emoji} 철벽 가드! 방어력 ${skill.defMult}배 (이번 턴)`);}
     else if(skill.id==='dodge'){evaBoostNext=skill.evaMult;log.push(`${skill.emoji} 회피 강화! 회피율 ${skill.evaMult}배 (이번 턴)`);}
@@ -1682,7 +1686,6 @@ function dungeonAction(actionType, skillId){
       ds.playerHp=Math.min(ds.playerMaxHp,ds.playerHp+healAmt);
       log.push(`${skill.emoji} 자가 치유! HP +${healAmt} (현재 ${ds.playerHp}/${ds.playerMaxHp})`);
     }
-    ds.playerSp=Math.min(100,ds.playerSp+5);
   }
   else if(actionType==='potion'){
     const item=POTION_ITEMS.find(i=>i.id===skillId);
@@ -2371,7 +2374,6 @@ function rColorTab() {
   colorChartHtml += `</div></div>`;
   return colorChartHtml;
 }
-
 /* ─── ADMIN TAB ─── */
 /* ★ 승인 버튼 + 연동 삭제 추가 */
 function rAdminTab(){
@@ -2844,7 +2846,7 @@ function rDungeonTab(){
 
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       ${hasDice
-        ?`<button class="btn" style="padding:6px 12px;font-size:11.5px;border-color:var(--plum);color:var(--plum)" data-a="lm_rerollDice">🎲 재굴림 (1000P)</button>`
+        ?`<button class="btn" style="padding:6px 12px;font-size:11.5px;border-color:var(--plum);color:var(--plum)" data-a="lm_rerollDice">🎲 재굴림 (500P)</button>`
         :''
       }
       <button class="btn btn-mint" style="padding:6px 12px;font-size:11.5px" data-a="lm_restoreHpMp">💊 완전회복 (500P)</button>
@@ -2856,7 +2858,7 @@ function rDungeonTab(){
   <div class="card card-gold" style="margin-bottom:12px;text-align:center;padding:1.5rem">
     <div style="font-size:48px;margin-bottom:10px" class="float">🎲</div>
     <p style="font-size:15px;font-weight:700;color:var(--text1);margin-bottom:6px">기본 스탯을 설정해주세요!</p>
-    <p style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.7">주사위를 굴려 HP·MP·ATK·DEF·EVA 기본값을 결정합니다<br>첫 번째 굴림은 무료예요! 🎁<br>재굴림은 1000P마다 가능합니다</p>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.7">주사위를 굴려 HP·MP·ATK·DEF·EVA 기본값을 결정합니다<br>첫 번째 굴림은 무료예요! 🎁<br>재굴림은 500P마다 가능합니다</p>
     <button class="btn btn-gold" style="padding:12px 32px;font-size:14px" data-a="lm_rerollDice">🎲 주사위 굴리기 (무료)</button>
   </div>`:''}
 
@@ -2882,7 +2884,7 @@ function rDungeonTab(){
       ${ATK_SKILLS.map(s=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)">
         <span style="font-size:18px">${s.emoji}</span>
         <span style="font-weight:600;flex:1">${s.name}</span>
-        <span style="color:${s.sp>0?'#8E24AA':'var(--text3)'};font-size:11px">${s.sp>0?`SP -${s.sp}`:'무료'}</span>
+        <span style="color:${(s.mp||0)>0?'#1E88E5':'var(--text3)'};font-size:11px">${(s.mp||0)>0?`MP -${s.mp}`:'무료'}</span>
         <span style="font-size:10.5px;color:var(--text3)">${s.desc.split('·')[0]}</span>
       </div>`).join('')}
     </div>
@@ -2890,7 +2892,7 @@ function rDungeonTab(){
       ${DEF_SKILLS.map(s=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)">
         <span style="font-size:18px">${s.emoji}</span>
         <span style="font-weight:600;flex:1">${s.name}</span>
-        <span style="color:#8E24AA;font-size:11px">SP -${s.sp}</span>
+        <span style="color:#1E88E5;font-size:11px">MP -${s.mp||0}</span>
         <span style="font-size:10.5px;color:var(--text3)">${s.desc.split('·')[0]}</span>
       </div>`).join('')}
     </div>
