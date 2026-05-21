@@ -234,6 +234,61 @@ body::before{
 .dice-stat-box .val{font-size:20px;font-weight:700;color:var(--rose2);}
 .dice-stat-box .lbl{font-size:10.5px;color:var(--text3);margin-top:2px;}
 
+/* ── 등급별 펫 글로우 효과 (3D 퀄리티) ── */
+.glow-normal  { box-shadow: 0 0 15px rgba(158,158,158,.3), var(--shadow); }
+.glow-rare    { box-shadow: 0 0 25px rgba(33,150,243,.5), 0 0 60px rgba(33,150,243,.15), var(--shadow); }
+.glow-epic    { box-shadow: 0 0 30px rgba(156,39,176,.6), 0 0 80px rgba(156,39,176,.2), var(--shadow); }
+.glow-unique  { box-shadow: 0 0 35px rgba(255,87,34,.7), 0 0 90px rgba(255,87,34,.25), var(--shadow); }
+.glow-legend  { box-shadow: 0 0 40px rgba(244,67,54,.8), 0 0 100px rgba(244,67,54,.3), var(--shadow); }
+.glow-rebirth { box-shadow: 0 0 50px rgba(255,215,0,1), 0 0 120px rgba(255,165,0,.6), 0 0 200px rgba(255,100,0,.3); animation: rebirthPulse 2s ease-in-out infinite; }
+@keyframes rebirthPulse { 0%,100%{box-shadow:0 0 50px rgba(255,215,0,1),0 0 120px rgba(255,165,0,.6);} 50%{box-shadow:0 0 70px rgba(255,215,0,1),0 0 160px rgba(255,165,0,.8),0 0 250px rgba(255,100,0,.5);} }
+
+/* ── 장착 아이템 슬롯 ── */
+.equip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:10px; }
+.equip-slot { border:1.5px solid var(--border); border-radius:10px; background:white; padding:8px 6px; text-align:center; cursor:pointer; transition:all .15s; min-height:64px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+.equip-slot:hover { border-color:var(--rose); background:var(--rose-lt); transform:translateY(-2px); }
+.equip-slot.filled { background:linear-gradient(135deg,rgba(232,83,122,.06),rgba(155,89,182,.06)); border-color:var(--rose2); }
+.equip-slot .slot-emoji { font-size:24px; }
+.equip-slot .slot-name { font-size:9px; color:var(--text3); }
+.equip-slot .slot-item { font-size:10.5px; font-weight:600; color:var(--text1); }
+.grade-normal  { color:#9E9E9E !important; }
+.grade-rare    { color:#2196F3 !important; }
+.grade-epic    { color:#9C27B0 !important; }
+.grade-unique  { color:#FF5722 !important; }
+.grade-legend  { color:#F44336 !important; }
+.grade-god     { color:#FFD700 !important; }
+
+/* ── 하우스 3D 컨테이너 ── */
+.house-canvas-wrap { width:100%; height:360px; border-radius:14px; overflow:hidden; position:relative; background:#1a1a2e; }
+.house-canvas-wrap canvas { display:block; width:100% !important; height:100% !important; }
+.house-ctrl-hint { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,.5); background:rgba(0,0,0,.3); padding:3px 8px; border-radius:99px; pointer-events:none; }
+.house-tier-card { border:1.5px solid var(--border); border-radius:10px; background:white; padding:10px; text-align:center; cursor:pointer; transition:all .15s; }
+.house-tier-card:hover { border-color:var(--rose); background:var(--rose-lt); transform:translateY(-2px); }
+.house-tier-card.current { border-color:var(--rose2); background:var(--rose-lt); }
+.furniture-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.furniture-item { border:1.5px solid var(--border); border-radius:10px; background:white; padding:10px 8px; text-align:center; cursor:pointer; transition:all .15s; }
+.furniture-item:hover { border-color:var(--rose); background:var(--rose-lt); transform:translateY(-2px); }
+
+/* ── 선물함 ── */
+.gift-card { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; background:white; margin-bottom:6px; }
+.gift-card.unread { background:var(--rose-lt); border-color:var(--border2); }
+.gift-unread-dot { width:8px; height:8px; background:var(--rose); border-radius:50%; flex-shrink:0; animation:pulse 1.5s infinite; }
+
+/* ── 환생 ── */
+.rebirth-btn { width:100%; padding:14px; font-size:15px; font-family:'Noto Sans KR',sans-serif; background:linear-gradient(135deg,#FF6B35,#FFD700,#FF6B35); background-size:200% 100%; color:white; border:none; border-radius:12px; cursor:pointer; font-weight:700; animation:shimmerBtn 2s linear infinite; box-shadow:0 4px 20px rgba(255,107,53,.5); }
+@keyframes shimmerBtn { 0%{background-position:0% 0%} 100%{background-position:200% 0%} }
+.rebirth-badge { display:inline-flex; align-items:center; gap:4px; background:linear-gradient(135deg,#FF6B35,#FFD700); color:white; padding:2px 10px; border-radius:99px; font-size:11px; font-weight:700; }
+
+/* ── 던전 쿨타임 ── */
+.dungeon-cooltime { display:flex; align-items:center; gap:10px; padding:12px 14px; background:linear-gradient(135deg,rgba(255,87,34,.08),rgba(255,152,0,.06)); border:1.5px solid rgba(255,87,34,.25); border-radius:12px; margin-bottom:12px; }
+.cooltime-timer { font-size:22px; font-weight:700; color:#E64A19; font-variant-numeric:tabular-nums; }
+
+/* ── 향상된 펫 카드 ── */
+.pet-card-3d { background:linear-gradient(160deg,rgba(253,238,244,.98),rgba(240,230,255,.98)); border-radius:20px; padding:1.5rem; text-align:center; position:relative; overflow:hidden; }
+.pet-card-3d::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at 60% 40%, rgba(232,83,122,.08) 0%, transparent 50%); pointer-events:none; }
+.pet-emoji-3d { font-size:80px; display:block; margin:0 auto 8px; filter:drop-shadow(0 8px 16px rgba(232,83,122,.3)); animation:float3d 3s ease-in-out infinite; }
+@keyframes float3d { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-12px) rotate(2deg);} }
+
 /* ── 랭킹 모드 탭 ── */
 .lb-mode-tabs{display:flex;gap:6px;margin-bottom:10px;}
 .lb-mode-btn{flex:1;padding:8px;font-size:12.5px;font-family:'Noto Sans KR',sans-serif;border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;background:white;color:var(--text2);transition:all .15s;}
@@ -242,6 +297,7 @@ body::before{
 /* ── 대기중 카드 ── */
 .pending-card{background:linear-gradient(135deg,rgba(255,248,230,.98),rgba(255,252,240,.98));border:1.5px dashed var(--gold);border-radius:var(--r);padding:1.1rem;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-analytics-compat.js"></script>
@@ -282,6 +338,11 @@ const familyCol    =db.collection("lm_family");
 const feedLogCol   =db.collection("lm_feed_logs");
 /* ── 2세 육아 컬렉션 (신규) ── */
 const babyPetCol   =db.collection("lm_baby_pets");
+/* ★ 신규 컬렉션 */
+const houseCol     =db.collection("lm_houses");
+const giftsCol     =db.collection("lm_gifts");
+const cmStrokesCol =db.collection("lm_cm_strokes");
+const cmGuessesCol =db.collection("lm_cm_guesses");
 
 /* ═══════════════════════════════════════
    MBTI & BALANCE & DATING DATA
@@ -363,9 +424,22 @@ const PET_BY_MBTI={
 };
 
 const CHOSUNG_QS=[
-  {genre:'영화',cho:['ㄱ','ㅅ'],ans:'관상',hint:'내가 왕이 될 상인가?'},
-  {genre:'영화',cho:['ㅁ','ㄹ'],ans:'명량',hint:'신에게는 아직 12척의 배가 있습니다'},
-  {genre:'영화',cho:['ㅂ','ㅌ','ㄹ'],ans:'베테랑',hint:'어이가 없네?'},
+  {genre:'영화', cho:['ㄱ','ㅅ'],       ans:'관상',   hint:'내가 왕이 될 상인가?'},
+  {genre:'영화', cho:['ㅁ','ㄹ'],       ans:'명량',   hint:'신에게는 아직 12척의 배가 있습니다'},
+  {genre:'영화', cho:['ㄱ','ㅇ','ㅅ'],  ans:'기생충', hint:'2020 아카데미 작품상 수상'},
+  {genre:'가수', cho:['ㅂ','ㅅ'],       ans:'방시혁', hint:'빅히트 엔터테인먼트 창업자'},
+  {genre:'음식', cho:['ㄷ','ㅈ','ㄱ'],  ans:'닭죽',   hint:'아프면 먹는 따뜻한 음식'},
+  {genre:'동물', cho:['ㅎ','ㄷ','ㄱ'],  ans:'흰두루미',hint:'천연기념물 새'},
+  {genre:'게임', cho:['ㄹ','ㅇ','ㅇ'],  ans:'리그오브레전드', hint:'줄여서 LOL'},
+  {genre:'노래', cho:['ㄷ','ㄴ','ㅊ'],  ans:'다이너마이트', hint:'BTS 영어 노래'},
+  {genre:'TV',   cho:['ㅅ','ㅇ','ㄱ'],  ans:'슬기로운의사생활', hint:'tvN 의학 드라마'},
+  {genre:'스포츠',cho:['ㅅ','ㅋ','ㅅ','ㅅ'],ans:'손흥민', hint:'토트넘 레전드'},
+  {genre:'브랜드',cho:['ㅅ','ㅅ'],      ans:'삼성',   hint:'갤럭시 스마트폰 제조사'},
+  {genre:'음식', cho:['ㅌ','ㄷ','ㅅ'],  ans:'탕수육', hint:'부먹? 찍먹?'},
+  {genre:'영화', cho:['ㅇ','ㅂ','ㅇ','ㄷ'],ans:'어벤져스인피니티워', hint:'타노스가 나오는 마블 영화'},
+  {genre:'노래', cho:['ㄴ','ㄷ'],       ans:'눈의꽃', hint:'박효신 대표곡'},
+  {genre:'동물', cho:['ㅋ','ㄱ','ㄹ'],  ans:'캥거루', hint:'주머니에 새끼를 넣고 다니는 동물'},
+{genre:'영화',cho:['ㅂ','ㅌ','ㄹ'],ans:'베테랑',hint:'어이가 없네?'},
   {genre:'영화',cho:['ㅅ','ㅅ','ㄱ'],ans:'신세계',hint:'드루와, 드루와'},
   {genre:'영화',cho:['ㄷ','ㄷ','ㄷ'],ans:'도둑들',hint:'마카오박, 팹시, 예니콜'},
   {genre:'영화',cho:['ㅇ','ㅅ'],ans:'암살',hint:'하와이 피스톨'},
@@ -751,9 +825,86 @@ const CHOSUNG_QS=[
   {genre:'직업',cho:['ㅂ','ㅇ'],ans:'배우',hint:'영화나 드라마에서 연기를 하는 직업'},
   {genre:'직업',cho:['ㅋ','ㅁ','ㄷ','ㅇ'],ans:'코미디언',hint:'사람들을 웃게 만드는 개그맨'},
   {genre:'직업',cho:['ㅇ','ㅌ','ㅂ'],ans:'유튜버',hint:'동영상을 찍어 유튜브에 올리는 직업'},
+
 ];
 
-const MARKET_ITEMS=[
+/* ★ OX 퀴즈 */
+const OX_QUESTIONS=[
+  {q:"수박은 채소다",                       ans:"O", explain:"과채류(채소)에 속합니다!"},
+  {q:"달은 스스로 빛을 낸다",               ans:"X", explain:"태양빛을 반사할 뿐이에요"},
+  {q:"문어의 심장은 3개다",                 ans:"O", explain:"체심장1개 + 아가미심장2개"},
+  {q:"바나나는 나무에서 자란다",             ans:"X", explain:"바나나는 나무가 아닌 풀(초본)입니다"},
+  {q:"사람의 혈액형은 4가지뿐이다",          ans:"X", explain:"희귀 혈액형(Rh 음성 등)도 있어요"},
+  {q:"번개는 같은 곳에 두 번 치지 않는다",  ans:"X", explain:"같은 곳에 여러 번 칠 수 있어요"},
+  {q:"지구에서 가장 빠른 동물은 치타다",     ans:"O", explain:"시속 120km까지 달려요"},
+  {q:"달팽이는 눈이 4개다",                 ans:"O", explain:"더듬이 끝에 눈이 있어요"},
+  {q:"금은 산에 녹지 않는다",               ans:"X", explain:"왕수(염산+질산 혼합물)에 녹아요"},
+  {q:"콜라를 발명한 나라는 미국이다",        ans:"O", explain:"1886년 약사 존 펨버튼이 발명"},
+  {q:"지구의 자전 방향은 서→동이다",         ans:"O", explain:"서쪽에서 동쪽으로 자전해요"},
+  {q:"인간의 뼈는 태어날 때부터 206개다",   ans:"X", explain:"태어날 때 약 270개, 자라면서 합쳐져요"},
+  {q:"마리아나 해구는 에베레스트보다 깊다",  ans:"O", explain:"마리아나: 11,000m > 에베레스트: 8,849m"},
+  {q:"피카추의 꼬리 끝은 갈색이다",         ans:"O", explain:"피카추 꼬리 끝에 갈색 줄무늬가 있어요"},
+  {q:"한국은 섬나라다",                     ans:"X", explain:"삼면이 바다인 반도 국가예요"},
+  {q:"사람은 혀로 맛을 느끼는 부위가 정해져 있다",ans:"X",explain:"혀 전체에서 모든 맛을 느낄 수 있어요"},
+  {q:"상어는 뼈가 없다",                    ans:"O", explain:"연골어류라 뼈 대신 연골만 있어요"},
+  {q:"커피는 원래 씨앗이다",                ans:"O", explain:"커피 열매의 씨앗을 볶아 만들어요"},
+  {q:"벌은 한 번 쏘면 죽는다",              ans:"O", explain:"꿀벌(일벌)은 침이 빠지면 죽어요. 말벌은 여러 번 쏠 수 있어요"},
+  {q:"북극에는 펭귄이 산다",                ans:"X", explain:"펭귄은 남극에 살아요. 북극엔 북극곰!"},
+];
+
+/* ★ 넌센스 퀴즈 */
+const NONSENSE_QUESTIONS=[
+  {q:"세상에서 제일 빠른 닭은?",               ans:"후라이드치킨",  hint:"닭이 '날아오르는' 상태를 생각해봐요", explain:"후라이드 = fried(튀겨진), 이미 '처리'가 완료됐으니까!"},
+  {q:"피자가 절대 운동을 못 하는 이유는?",     ans:"도가없어서",    hint:"피자의 재료 중 밀가루 반죽은?", explain:"도우(dough)가 없으면 피자가 못 움직여요 🍕"},
+  {q:"아이스크림이 혼자 다닐 때 하는 말은?",   ans:"나녹아",       hint:"혼자라는 표현의 다른 말", explain:"'나 홀로' → '나 녹아'요 🍦"},
+  {q:"개미가 항상 이기는 게임은?",             ans:"개미지옥",     hint:"개미 + 지는 것의 반대", explain:"개미지옥 = 개미가 사는 지옥, 개미만 들어가면 이기는 구조!"},
+  {q:"경찰차가 지나갈 때 왜 삐뽀삐뽀 소리가 날까?",ans:"경찰이타서", hint:"경찰차 안에 있는 것은?", explain:"경찰(이)이 타서 → '경찰이 타(ride)서' 😄"},
+  {q:"세상에서 제일 더러운 강은?",             ans:"이끼강",       hint:"이끼가 가득한 강", explain:"이끼강 → '이끼(때)'가 낀 강이니까 더럽죠!"},
+  {q:"토끼가 당근을 먹으면서 하는 말은?",      ans:"당근이지",     hint:"당연한 것을 뜻하는 속어", explain:"당근이지 = 당연하지! 🥕"},
+  {q:"나무가 제일 싫어하는 것은?",             ans:"나무꾼",       hint:"나무를 해치는 사람은?", explain:"나무꾼이 나무를 베니까 당연히 싫죠 🪓"},
+  {q:"가장 게으른 사람이 좋아하는 요일은?",    ans:"일요일",       hint:"쉬는 날을 생각해봐요", explain:"일(work)이 없는 일요일! 🛌"},
+  {q:"소가 천 마리 있으면?",                   ans:"하하하",       hint:"천 마리의 소 울음소리는?", explain:"소가 '음매' × 1000 → 음매음매... → 하하하?? 아니 '음매천마리'! 😂"},
+  {q:"세상에서 제일 짧은 다리는?",             ans:"개다리소반",   hint:"개와 관련된 가구", explain:"개다리소반(낮은 밥상)의 다리가 제일 짧아요"},
+  {q:"아기 소의 이름은?",                      ans:"아기소",       hint:"너무 쉬운 걸 물어보는 게 포인트!","explain":"정답 그대로 '아기 소'예요 🐄"},
+  {q:"눈이 있지만 볼 수 없는 것은?",           ans:"바늘",         hint:"실을 꿰는 도구", explain:"바늘의 구멍을 '바늘귀(눈)'라고 하지만 볼 순 없죠 🪡"},
+  {q:"천재들이 즐겨 마시는 음료는?",           ans:"천재지변",     hint:"자연재해를 뜻하는 사자성어", explain:"천재+지변 → 천재들이 즐겨 마시는 지변(juice?)"},
+  {q:"왜 수학책은 항상 우울할까?",             ans:"문제가많아서",  hint:"수학책 안에는?", explain:"수학책에는 '문제'(problem)가 가득하니까요 📚"},
+];
+
+/* ★ 주관식 퀴즈 */
+const SHORT_QUESTIONS=[
+  {q:"대한민국의 수도는?",             ans:["서울"],                explain:"대한민국 수도 서울 🇰🇷"},
+  {q:"H₂O는 무엇인가요?",             ans:["물","water"],           explain:"물(Water) 💧"},
+  {q:"세계에서 가장 높은 산은?",       ans:["에베레스트","에베레스트산"], explain:"에베레스트(8,849m) 🏔️"},
+  {q:"BTS의 멤버 수는? (숫자로)",      ans:["7"],                   explain:"RM·진·슈가·제이홉·지민·뷔·정국 7명!"},
+  {q:"피카추의 타입은?",               ans:["전기","전기타입"],      explain:"피카추는 전기 타입 포켓몬⚡"},
+  {q:"삼각형의 내각의 합은? (숫자)",   ans:["180","180도"],          explain:"삼각형 내각의 합 = 180°"},
+  {q:"지구에서 가장 큰 대양은?",       ans:["태평양"],              explain:"태평양(Pacific Ocean)이 가장 커요"},
+  {q:"대한민국 대통령 집무실 이름은?", ans:["청와대","용산"],        explain:"청와대(구)·용산 대통령실"},
+  {q:"가장 빠른 육상 동물은?",         ans:["치타"],                explain:"치타 시속 120km ⚡"},
+  {q:"무지개 색깔 수는? (숫자)",       ans:["7"],                   explain:"빨주노초파남보 7가지 🌈"},
+  {q:"월드컵은 몇 년마다 열리나요?",   ans:["4","4년"],              explain:"4년마다 FIFA 월드컵 개최 ⚽"},
+  {q:"원소 주기율표에서 H는 무엇?",    ans:["수소","hydrogen"],      explain:"H = 수소(Hydrogen)"},
+  {q:"스타벅스 창업 도시는?",          ans:["시애틀","seattle"],     explain:"1971년 미국 시애틀에서 창업"},
+  {q:"이순신 장군이 활약한 전쟁은?",   ans:["임진왜란"],             explain:"1592년 임진왜란 ⚓"},
+  {q:"포켓몬 첫 번째 도감 번호는?",    ans:["이상해씨","001","1"],   explain:"001번 이상해씨 🌱"},
+  {q:"사람의 체온은 약 몇 도? (숫자)",  ans:["36","37","36.5"],      explain:"정상 체온 약 36.5°C"},
+  {q:"빛의 속도는 초속 몇 km? (약)",   ans:["30만","300000","3억"],  explain:"빛의 속도 = 약 30만 km/s"},
+  {q:"축구 경기 한 팀 선수 수는?",     ans:["11"],                  explain:"한 팀 11명 = 양팀 22명 ⚽"},
+  {q:"한글을 만든 왕은?",              ans:["세종대왕","세종"],       explain:"세종대왕이 1443년 훈민정음 창제"},
+  {q:"서울 지하철 몇 호선까지 있나요?",ans:["9"],                    explain:"1~9호선 + 경의중앙선 등 운영 중"},
+];
+
+/* ★ 캐치마인드 단어 뱅크 (70개) */
+const CM_WORDS=[
+  /* 동물 */  '강아지','고양이','토끼','코끼리','기린','사자','호랑이','펭귄','원숭이','돼지','닭','소','말','양','오리','독수리','상어','문어','거북이','나비',
+  /* 음식 */  '피자','햄버거','라면','치킨','초밥','아이스크림','케이크','떡볶이','짜장면','순대','삼겹살','김밥','빵','커피','수박',
+  /* 물건 */  '자전거','자동차','비행기','핸드폰','컴퓨터','책','연필','안경','시계','우산','의자','가방','신발','모자','거울',
+  /* 자연 */  '태양','달','별','구름','무지개','꽃','나무','산','바다','폭포',
+  /* 직업 */  '의사','선생님','경찰관','소방관','요리사','가수','우주비행사',
+  /* 캐릭터 */'피카추','헬로키티','뽀로로','스폰지밥','도라에몽',
+  /* 기타 */  '집','학교','병원','하트','유령','로봇','왕관','피아노',
+];
   {id:'feed_basic',  name:'기본 사료',   emoji:'🌾', cost:100,  xp:30,  desc:'XP +30, 기본 성장'},
   {id:'feed_dopamine',name:'도파민 특식',emoji:'🍗', cost:500,  xp:250,  desc:'XP +250, 댄스 이펙트!'},
   {id:'love_crystal',name:'진화의 결정', emoji:'💎', cost:2000, xp:1500, desc:'XP +1500 대폭 상승!'},
@@ -768,7 +919,7 @@ const BABY_CARE_ITEMS=[
 ];
 
 const XP_PER_LV=500;
-const MAX_LV=999;
+const MAX_LV=99;
 const BREED_LV=15;
 const BREED_AFFECTION=100;
 
@@ -776,8 +927,8 @@ const BREED_AFFECTION=100;
 const ATK_SKILLS=[
   {id:'basic', name:'기본 공격',       emoji:'⚔️',  mp:0,  dmgMult:1.0, desc:'기본 타격 (MP 소모 없음)'},
   {id:'power', name:'파워 스트라이크', emoji:'💥',  mp:20, dmgMult:2.0, desc:'강력한 일격 · MP -20'},
-  {id:'magic', name:'마법 폭발',       emoji:'✨',  mp:55, dmgMult:2.3, desc:'마법 타격 · MP -55'},
-  {id:'crit',  name:'크리티컬 히트',   emoji:'🗡️',  mp:100, dmgMult:3.0, desc:'치명타 확정 · MP -100'},
+  {id:'magic', name:'마법 폭발',       emoji:'✨',  mp:25, dmgMult:2.3, desc:'마법 타격 · MP -25'},
+  {id:'crit',  name:'크리티컬 히트',   emoji:'🗡️',  mp:50, dmgMult:3.0, desc:'치명타 확정 · MP -50'},
 ];
 const DEF_SKILLS=[
   {id:'guard', name:'철벽 가드',    emoji:'🛡️',  mp:15, defMult:2.5, desc:'방어력 2.5배 (이번 턴) · MP -15'},
@@ -790,32 +941,150 @@ const POTION_ITEMS=[
   {id:'mp_sm',  name:'MP 소형 물약',  emoji:'💧', cost:150,  mp:30,   desc:'MP +30 즉시 회복'},
   {id:'mp_lg',  name:'MP 대형 물약',  emoji:'🌊', cost:400,  mp:100,  desc:'MP +100 즉시 회복'},
 ];
+
+/* ★ 2세 육아 추가 액티비티 (부화 후) */
+const BABY_ACTIVITIES=[
+  {id:'bath',   label:'목욕시키기',   emoji:'🛁', cost:400,  xp:80,  type:'xp',   desc:'XP +80 · 청결 UP'},
+  {id:'nap',    label:'낮잠 재우기',  emoji:'😴', cost:600,  xp:50,  type:'hp',   val:10, desc:'최대HP +10 영구 · XP +50'},
+  {id:'toy',    label:'장난감 놀이',  emoji:'🧸', cost:800,  xp:150, type:'xp',   desc:'XP +150 · 친밀도 UP'},
+  {id:'walk',   label:'바깥 산책',    emoji:'🌳', cost:300,  xp:50,  type:'drop',  desc:'XP +50 · 랜덤 포인트 드롭'},
+  {id:'study',  label:'교육하기',     emoji:'📚', cost:1000, xp:100, type:'stat',  val:5,  desc:'랜덤 스탯 +5 영구 · XP +100'},
+  {id:'music',  label:'음악 감상',    emoji:'🎶', cost:500,  xp:120, type:'xp',   desc:'XP +120 · 감성 성장'},
+  {id:'story2', label:'동화 읽어주기',emoji:'📖', cost:700,  xp:100, type:'stat',  val:3,  desc:'스탯 +3 · XP +100'},
+  {id:'hug',    label:'꼭 안아주기',  emoji:'🤗', cost:200,  xp:40,  type:'bond',  desc:'XP +40 · 부모 애정도 +5'},
+];
+
+/* ★ 던전 쿨타임: 10층 전부 클리어 후 5분 */
+const DUNGEON_COOLDOWN_MS=5*60*1000;
+/* ★ 환생 주사위 보너스: 1회당 +20 */
+const REBIRTH_DICE_BONUS=20;
+
+/* ★ 장착 슬롯 */
+const EQUIP_SLOTS={head:{label:'머리',icon:'🪖'},weapon:{label:'무기',icon:'⚔️'},armor:{label:'방어구',icon:'🛡️'},accessory:{label:'장신구',icon:'💍'},wing:{label:'날개',icon:'🪽'},special:{label:'특수',icon:'🌀'}};
+
+/* ★ 장착 아이템 상점 20개 */
+const EQUIP_SHOP=[
+  {id:'en01',slot:'head',      name:'가죽 모자',        emoji:'🪖', grade:'normal', cost:500,   stats:{def:3}},
+  {id:'en02',slot:'weapon',    name:'나무 검',          emoji:'🗡️', grade:'normal', cost:500,   stats:{atk:5}},
+  {id:'en03',slot:'armor',     name:'가죽 조끼',        emoji:'🦺', grade:'normal', cost:600,   stats:{def:5,hp:10}},
+  {id:'en04',slot:'accessory', name:'구리 반지',        emoji:'💍', grade:'normal', cost:400,   stats:{hp:15}},
+  {id:'er01',slot:'head',      name:'강화 철 투구',     emoji:'⛏️', grade:'rare',   cost:3000,  stats:{def:12,hp:30}},
+  {id:'er02',slot:'weapon',    name:'은빛 단검',        emoji:'⚔️', grade:'rare',   cost:3500,  stats:{atk:15}},
+  {id:'er03',slot:'armor',     name:'강철 흉갑',        emoji:'🛡️', grade:'rare',   cost:4000,  stats:{def:18,hp:50}},
+  {id:'er04',slot:'accessory', name:'마나 목걸이',      emoji:'🔵', grade:'rare',   cost:3000,  stats:{mp:50}},
+  {id:'er05',slot:'wing',      name:'독수리 날개',      emoji:'🦅', grade:'rare',   cost:4500,  stats:{eva:12}},
+  {id:'ee01',slot:'head',      name:'용암의 왕관',      emoji:'👑', grade:'epic',   cost:10000, stats:{atk:18,hp:40}},
+  {id:'ee02',slot:'weapon',    name:'화염검',           emoji:'🔥', grade:'epic',   cost:12000, stats:{atk:28}},
+  {id:'ee03',slot:'armor',     name:'용암 갑옷',        emoji:'🌋', grade:'epic',   cost:11000, stats:{def:30,hp:100}},
+  {id:'ee04',slot:'accessory', name:'루비 반지',        emoji:'❤️',  grade:'epic',   cost:9000,  stats:{hp:100}},
+  {id:'ee05',slot:'wing',      name:'화염 봉황 날개',   emoji:'🔥', grade:'epic',   cost:13000, stats:{atk:18,eva:10}},
+  {id:'eu01',slot:'weapon',    name:'장미 검',          emoji:'🌹', grade:'unique', cost:25000, stats:{atk:32,hp:50}},
+  {id:'eu02',slot:'special',   name:'챔피언 오라',      emoji:'💫', grade:'unique', cost:30000, stats:{atk:8,def:8,hp:50,mp:50}},
+  {id:'el01',slot:'weapon',    name:'카오스 블레이드',  emoji:'⚡', grade:'legend', cost:80000, stats:{atk:60}},
+  {id:'el02',slot:'armor',     name:'드래곤 비늘 갑옷', emoji:'🐲', grade:'legend', cost:90000, stats:{def:60,hp:200}},
+  {id:'el03',slot:'special',   name:'드래곤의 심장',    emoji:'❤️‍🔥',grade:'legend', cost:100000,stats:{hp:200,mp:50}},
+  {id:'el04',slot:'accessory', name:'운명의 별자리',    emoji:'✨', grade:'legend', cost:120000,stats:{atk:20,def:20,hp:100,mp:100,eva:10}},
+];
+
+/* ★ 하우스 등급 */
+const HOUSE_TIERS=[
+  {id:'basic', name:'판잣집',   emoji:'🏚️',maxSlots:3, cost:0,     reqLv:1},
+  {id:'cabin', name:'오두막',   emoji:'🏡',maxSlots:6, cost:2000,  reqLv:5},
+  {id:'house', name:'일반 주택',emoji:'🏠',maxSlots:12,cost:8000,  reqLv:15},
+  {id:'villa', name:'전원주택', emoji:'🏡',maxSlots:20,cost:25000, reqLv:30},
+  {id:'castle',name:'러브몬 성',emoji:'🏰',maxSlots:30,cost:80000, reqLv:50},
+];
+const WALLPAPERS={
+  rose:  {name:'장미 벽지',  cost:800,  hex:'#FDEEF4',threeColor:0xFDEEF4},
+  night: {name:'별밤 벽지',  cost:1200, hex:'#1A237E',threeColor:0x283593},
+  forest:{name:'숲 벽지',    cost:1000, hex:'#E8F5E9',threeColor:0xC8E6C9},
+  gold:  {name:'황금 벽지',  cost:2000, hex:'#FFF8E1',threeColor:0xFFF9C4},
+  galaxy:{name:'우주 벽지',  cost:3000, hex:'#0D0D2B',threeColor:0x1A1A4E},
+};
+const FLOORS={
+  wood:  {name:'원목 바닥',   cost:600,  threeColor:0xD4A574},
+  marble:{name:'대리석 바닥', cost:1500, threeColor:0xF5F5F5},
+  grass: {name:'잔디 바닥',   cost:800,  threeColor:0x81C784},
+  dark:  {name:'다크 바닥',   cost:1000, threeColor:0x424242},
+};
+const FURNITURE_SHOP=[
+  {id:'f01',name:'나무 소파',     emoji:'🛋️',grade:'normal',cost:1000, type:'sofa',    w:2,h:1},
+  {id:'f02',name:'원목 침대',     emoji:'🛏️',grade:'normal',cost:1200, type:'bed',     w:2,h:1},
+  {id:'f03',name:'장미 화분',     emoji:'🌹',grade:'normal',cost:500,  type:'plant',   w:1,h:1},
+  {id:'f04',name:'침실 조명',     emoji:'💡',grade:'normal',cost:300,  type:'lamp',    w:1,h:1},
+  {id:'f05',name:'별빛 조명',     emoji:'✨',grade:'rare',  cost:2500, type:'lamp',    w:1,h:1},
+  {id:'f06',name:'마법 책상',     emoji:'🔮',grade:'rare',  cost:3500, type:'desk',    w:1,h:1},
+  {id:'f07',name:'장미 소파',     emoji:'🌸',grade:'rare',  cost:4000, type:'sofa',    w:2,h:1},
+  {id:'f08',name:'수족관',        emoji:'🐠',grade:'rare',  cost:5500, type:'aquarium',w:2,h:1},
+  {id:'f09',name:'드래곤 벽난로', emoji:'🐲',grade:'epic',  cost:15000,type:'fireplace',w:2,h:1},
+  {id:'f10',name:'마법 도서관',   emoji:'📖',grade:'epic',  cost:25000,type:'library', w:2,h:2},
+  {id:'f11',name:'대형 분수',     emoji:'⛲',grade:'epic',  cost:12000,type:'fountain',w:2,h:2},
+  {id:'f12',name:'황금 소파',     emoji:'👑',grade:'legend',cost:50000,type:'sofa',    w:2,h:1},
+  {id:'f13',name:'드래곤 조각상', emoji:'🐲',grade:'legend',cost:70000,type:'statue',  w:1,h:2},
+  {id:'f14',name:'교배 기념 액자',emoji:'💑',grade:'unique',cost:0,    type:'frame',   w:1,h:1},
+  {id:'f15',name:'던전 5층 깃발', emoji:'⚔️',grade:'epic',  cost:0,    type:'flag',    w:1,h:1},
+];
 const DUNGEON_FLOORS=[
+  /* 1층: reqLv.1  (Lv.1~4 대상) */
   {floor:1, name:'풀숲 입구',   emoji:'🌿', reqLv:1,
    mobs:[
-     {name:'풀 슬라임',    emoji:'🟢', hp:140,  atk:16,  def:12,  eva:10,  xp:10,  pts:255},
-     {name:'버섯 몬스터',  emoji:'🍄', hp:155,  atk:18,  def:23,  eva:10,  xp:15,  pts:255},
+     {name:'풀 슬라임',    emoji:'🟢', hp:90,  atk:20, def:5,  eva:8,  xp:45,  pts:30},
+     {name:'버섯 몬스터',  emoji:'🍄', hp:130, atk:26, def:7,  eva:5,  xp:60,  pts:40},
    ]},
+  /* 2층: reqLv.5 */
   {floor:2, name:'어두운 동굴', emoji:'🕳️', reqLv:5,
    mobs:[
-     {name:'박쥐 귀신',    emoji:'🦇', hp:380,  atk:54, def:35,  eva:12, xp:30,  pts:560},
-     {name:'돌 골렘',      emoji:'🪨', hp:520, atk:80, def:48, eva:15,  xp:50, pts:575},
+     {name:'박쥐 귀신',    emoji:'🦇', hp:260, atk:44, def:18, eva:26, xp:95,  pts:65},
+     {name:'돌 골렘',      emoji:'🪨', hp:420, atk:36, def:52, eva:3,  xp:120, pts:85},
    ]},
+  /* 3층: reqLv.10 */
   {floor:3, name:'용암 지대',   emoji:'🌋', reqLv:10,
    mobs:[
-     {name:'화염 도마뱀',  emoji:'🦎', hp:700, atk:102, def:40, eva:15, xp:100, pts:810},
-     {name:'불꽃 오크',    emoji:'👹', hp:1000, atk:120, def:50, eva:15,  xp:155, pts:830},
+     {name:'화염 도마뱀',  emoji:'🦎', hp:420, atk:62, def:30, eva:22, xp:165, pts:115},
+     {name:'불꽃 오크',    emoji:'👹', hp:560, atk:68, def:24, eva:10, xp:190, pts:135},
    ]},
+  /* 4층: reqLv.15 */
   {floor:4, name:'마왕의 성',   emoji:'🏰', reqLv:15,
    mobs:[
-     {name:'언데드 기사',  emoji:'💀', hp:1500, atk:150, def:60, eva:19, xp:200, pts:1000},
-     {name:'다크 위저드',  emoji:'🧙', hp:2000, atk:200, def:60, eva:18, xp:255, pts:1220},
+     {name:'언데드 기사',  emoji:'💀', hp:480, atk:85, def:48, eva:12, xp:260, pts:200},
+     {name:'다크 위저드',  emoji:'🧙', hp:380, atk:98, def:32, eva:26, xp:290, pts:225},
    ]},
+  /* 5층: reqLv.20 */
   {floor:5, name:'최후의 결전', emoji:'⚡', reqLv:20,
    mobs:[
-     {name:'카오스 드래곤',emoji:'🐲', hp:10000, atk:800, def:100, eva:20, xp:550, pts:5000},
+     {name:'카오스 드래곤',emoji:'🐲', hp:900, atk:125,def:65, eva:22, xp:700, pts:550},
+   ]},
+  /* ★ 6층: reqLv.30 */
+  {floor:6, name:'심연의 미로',  emoji:'🌀', reqLv:30,
+   mobs:[
+     {name:'미로 수호자',  emoji:'🗿', hp:1100,atk:140,def:80, eva:16, xp:900, pts:720},
+     {name:'심연 마귀',    emoji:'😈', hp:900, atk:160,def:58, eva:30, xp:980, pts:790},
+   ]},
+  /* ★ 7층: reqLv.40 */
+  {floor:7, name:'얼음 궁전',   emoji:'❄️', reqLv:40,
+   mobs:[
+     {name:'빙하 골렘',    emoji:'🧊', hp:1400,atk:175,def:110,eva:8,  xp:1200,pts:950},
+     {name:'눈보라 마녀',  emoji:'🧙‍♀️',hp:1100,atk:200,def:72, eva:38, xp:1300,pts:1050},
+   ]},
+  /* ★ 8층: reqLv.55 */
+  {floor:8, name:'폭풍 요새',   emoji:'⛈️', reqLv:55,
+   mobs:[
+     {name:'번개 골렘',    emoji:'⚡', hp:1700,atk:215,def:130,eva:18, xp:1600,pts:1300},
+     {name:'폭풍 황제',    emoji:'🌪️', hp:1400,atk:240,def:100,eva:42, xp:1700,pts:1400},
+   ]},
+  /* ★ 9층: reqLv.70 */
+  {floor:9, name:'지옥의 관문', emoji:'🔥', reqLv:70,
+   mobs:[
+     {name:'지옥 감시자',  emoji:'👿', hp:2200,atk:270,def:155,eva:22, xp:2100,pts:1800},
+     {name:'마왕의 분신',  emoji:'💀', hp:1900,atk:300,def:120,eva:48, xp:2300,pts:1950},
+   ]},
+  /* ★ 10층: reqLv.90 (최종 보스) */
+  {floor:10, name:'신의 시험장',emoji:'🌌', reqLv:90,
+   mobs:[
+     {name:'신의 수호자',  emoji:'👼', hp:3500,atk:350,def:200,eva:30, xp:4000,pts:3000},
    ]},
 ];
+const DUNGEON_ALL_FLOORS=[1,2,3,4,5,6,7,8,9,10];
 
 /* ═══════════════════════════════════════
    STATE
@@ -839,6 +1108,16 @@ let S={
   colorSlots:{},
   /* 던전 배틀 상태 */
   dungeonState:null,
+  /* ★ 신규 */
+  myHouse:null, houseEntries:[],
+  myGifts:[], unreadGifts:0,
+  visitingHouse:null,
+  equipTab:'shop',
+  lm_lbMode2:'rebirth',
+  /* ★ 퀴즈 */
+  quizMode:'chosung',
+  /* ★ 캐치마인드 */
+  catchmindState:null, cmStrokes:[], cmGuesses:[], cmTool:{color:'#000000',width:5,eraser:false},
 };
 /* Persist identity */
 (()=>{
@@ -900,6 +1179,23 @@ function getVisualEmoji(pet) {
   if (pet.level >= 10) return pet.petEmoji + "🌸";
   if (pet.level >= 5) return pet.petEmoji + "🌿";
   return pet.petEmoji + "🌱";
+}
+/* ★ 환생 횟수별 이름 색상 */
+function getRebirthColor(count){
+  if(!count||count<=0) return 'var(--rose2)';
+  if(count<=2)  return '#2196F3'; /* 파랑 */
+  if(count<=5)  return '#9C27B0'; /* 보라 */
+  if(count<=9)  return '#FF5722'; /* 주황 */
+  if(count<=14) return '#F44336'; /* 빨강 */
+  return '#FFD700';               /* 황금 15회+ */
+}
+function getRebirthGlow(count){
+  if(!count||count<=0) return '';
+  if(count<=2)  return 'glow-rare';
+  if(count<=5)  return 'glow-epic';
+  if(count<=9)  return 'glow-unique';
+  if(count<=14) return 'glow-legend';
+  return 'glow-rebirth';
 }
 function formatDateKo(dateStr){
   if(!dateStr)return'';
@@ -968,8 +1264,9 @@ function load(){
             const latestSnap = await gameStateCol.doc("chosung_current").get();
             if(!latestSnap.exists){window.__nextQuestionRunning = false;return;}
             const latest = latestSnap.data();
-            if(latest.solvedBy && latest.qIdx === state.qIdx){
-              await startChosungQuestion((latest.qIdx || 0) + 1);
+            if(latest.solvedBy){
+              /* ★ 랜덤 문제 + 현재 퀴즈 타입 유지 */
+              await startQuizQuestion(S.quizMode||latest.type||'chosung', latest.answer);
             }
           }catch(e){ console.error(e); }
           window.__nextQuestionRunning = false;
@@ -998,10 +1295,41 @@ function load(){
       S.babyPets=snap.docs.map(d=>({id:d.id,...d.data()}));
       if(S.screen==="board"&&(S.tab==="lm_baby"||S.tab==="lm_pet"))render();
     });
-
-    if(S.myEntry?.nick && !S.myPet){
-      initOrLoadPet(S.myEntry.nick, S.myEntry.gender, S.myEntry.mbti, S.myBalEntry?.answers);
+    /* ★ 하우스 리스너 */
+    houseCol.orderBy("timestamp","desc").onSnapshot(snap=>{
+      S.houseEntries=snap.docs.map(d=>({id:d.id,...d.data()}));
+      const myNick=S.myEntry?.nick;
+      if(myNick){ const h=S.houseEntries.find(h=>h.nick===myNick); if(h)S.myHouse=h; }
+      if(S.screen==="board"&&S.tab==="lm_house")render();
+    });
+    /* ★ 선물함 리스너 */
+    const myNickNow=S.myEntry?.nick;
+    if(myNickNow){
+      giftsCol.where("to","==",myNickNow).orderBy("timestamp","desc").limit(50).onSnapshot(snap=>{
+        S.myGifts=snap.docs.map(d=>({id:d.id,...d.data()}));
+        S.unreadGifts=S.myGifts.filter(g=>!g.read).length;
+        if(S.screen==="board")render();
+      });
     }
+
+    /* ★ 캐치마인드 리스너 */
+    gameStateCol.doc("catchmind").onSnapshot(snap=>{
+      S.catchmindState=snap.exists?snap.data():null;
+      if(S.screen==="board"&&S.tab==="lm_catchmind")render();
+    });
+    cmStrokesCol.orderBy("timestamp","asc").onSnapshot(snap=>{
+      S.cmStrokes=snap.docs.map(d=>({id:d.id,...d.data()}));
+      /* 캔버스 리드로우 */
+      const cv=document.getElementById("cm_canvas");
+      if(cv&&window.__cmCanvas)window.__cmCanvas.redrawAll(S.cmStrokes);
+    });
+    cmGuessesCol.orderBy("timestamp","desc").limit(40).onSnapshot(snap=>{
+      S.cmGuesses=snap.docs.map(d=>({id:d.id,...d.data()})).reverse();
+      if(S.screen==="board"&&S.tab==="lm_catchmind"){
+        const feed=document.getElementById("cm_chat_feed");
+        if(feed){feed.innerHTML=renderCMGuesses();feed.scrollTop=feed.scrollHeight;}
+      }
+    });
     setTimeout(()=>{ ensureChosungGame(); },1000);
     if(S.myPet){ checkDailyBonus(); }
   }catch(e){ console.error(e);S.loading=false;render(); }
@@ -1090,8 +1418,34 @@ async function updateParticipant(id,newData){
   catch(e){console.error(e);alert("정보 수정 중 오류가 발생했습니다.");}
 }
 
-/* ★ 관리자 승인 토글 (신규) */
-async function toggleAdminCheck(id,currentChecked){
+/* ★ 관리자용 펫 레벨 강제 초기화 */
+async function adminResetPetLevel(nick){
+  if(!S.isAdmin){alert("관리자만 사용 가능합니다.");return;}
+  if(!nick){alert("닉네임을 확인할 수 없습니다.");return;}
+  if(!confirm(`⚠️ [${nick}]의 펫 레벨을 MAX(${MAX_LV})로 초기화하겠습니까?\nXP는 0으로 리셋됩니다.`))return;
+  try{
+    const snap=await petCol.doc(nick).get();
+    if(!snap.exists){alert("해당 닉네임의 펫이 없습니다.");return;}
+    await petCol.doc(nick).update({level:MAX_LV, xp:0});
+    alert(`✅ [${nick}] 레벨 → Lv.${MAX_LV} 초기화 완료`);
+    render();
+  }catch(e){console.error(e);alert("초기화 중 오류 발생");}
+}
+
+/* ★ 관리자용 전체 레벨 캡 일괄 적용 */
+async function adminCapAllLevels(){
+  if(!S.isAdmin){alert("관리자만 사용 가능합니다.");return;}
+  const over=S.petEntries.filter(p=>(p.level||1)>MAX_LV);
+  if(over.length===0){alert("레벨 초과 유저가 없습니다.");return;}
+  if(!confirm(`⚠️ 레벨 초과 유저 ${over.length}명을 일괄 Lv.${MAX_LV}으로 초기화하겠습니까?\n대상: ${over.map(p=>p.nick).join(', ')}`))return;
+  try{
+    const batch=db.batch();
+    over.forEach(p=>batch.update(petCol.doc(p.nick),{level:MAX_LV,xp:0}));
+    await batch.commit();
+    alert(`✅ ${over.length}명 일괄 초기화 완료`);
+    render();
+  }catch(e){console.error(e);alert("일괄 초기화 중 오류 발생");}
+}
   try{
     await mbtiCol.doc(id).update({isAdminChecked:!currentChecked});
     const entry=S.entries.find(e=>e.id===id);
@@ -1219,6 +1573,7 @@ async function initOrLoadPet(nick,gender,mbti,balAnswers){
       lastLogin:todayStr(),loginStreak:1,
       nameChangeCount:0,
       affectionMap:{},
+      iq:100, /* ★ 초기 IQ */
     };
     await petCol.doc(nick).set({...petData,timestamp:TS()});
     S.myPet={id:nick,...petData};
@@ -1255,9 +1610,17 @@ async function checkAndLevelUp(nick){
     let xp=data.xp||0;
     let leveled=false;
     let levelsGained=0;
+    /* ★ 안전장치: 이미 MAX_LV 초과 시 강제 캡 */
+    if(lv>MAX_LV){
+      await petCol.doc(nick).update({level:MAX_LV,xp:0});
+      if(S.myPet?.nick===nick){S.myPet.level=MAX_LV;S.myPet.xp=0;}
+      return;
+    }
     while(xp>=XP_PER_LV && lv<MAX_LV){
       lv++;xp-=XP_PER_LV;leveled=true;levelsGained++;
     }
+    /* ★ 안전장치: while 이후에도 캡 보장 */
+    lv=Math.min(lv,MAX_LV);
     if(leveled){
       await petCol.doc(nick).update({level:lv, xp:xp});
       if(S.myPet?.nick===nick){S.myPet.level=lv;S.myPet.xp=xp;}
@@ -1307,7 +1670,11 @@ async function feedPet(itemId, targetNick = null){
     }
     await feedLogCol.add({from:myNick,to:feedTarget,item:item.name,emoji:item.emoji,xp:item.xp,timestamp:TS()});
     /* ★ 다른 펫에게 먹이 줄 때 호감도 +10 */
-    if(!isSelf){ await growAffection(myNick, feedTarget, 10); }
+    if(!isSelf){
+      await growAffection(myNick, feedTarget, 10);
+      /* ★ 선물 알림 */
+      await sendGiftNotification(feedTarget,'feed',item.name,item.emoji);
+    }
     const msg=isSelf?`${item.emoji} ${item.name} 급여 완료! XP +${item.xp}`:`${item.emoji} ${targetNick}님 펫에게 ${item.name}을 선물했습니다! 호감도 +10 🎁`;
     alert(msg);render();
   }catch(e){console.error(e);alert("오류가 발생했습니다.");}
@@ -1325,6 +1692,8 @@ async function giveRoseToPet(targetNick){
     S.myPet.points=(S.myPet.points||0)-cost;
     await growAffection(myNick, targetNick, 20);
     await feedLogCol.add({from:myNick,to:targetNick,item:'장미꽃',emoji:'🌹',xp:0,timestamp:TS()});
+    /* ★ 선물 알림 */
+    await sendGiftNotification(targetNick,'rose','장미꽃','🌹');
     alert(`🌹 ${targetNick}님 펫에게 장미꽃을 선물했습니다! 호감도 +20 💕`);
     render();
   }catch(e){console.error(e);alert("오류가 발생했습니다.");}
@@ -1528,16 +1897,73 @@ async function feedBaby(babyId, cost, xp){
   }catch(e){console.error(e);alert("오류가 발생했습니다.");}
 }
 
-/* ═══════════════════════════════════════
-   🎲 주사위 & 스탯 시스템
-═══════════════════════════════════════ */
+/* ★ 2세 액티비티 (부화 후) */
+async function doBabyActivity(babyId, actId){
+  const myNick=S.myEntry?.nick;
+  if(!myNick||!S.myPet){alert("MBTI 검사 완료 후 이용해주세요!");return;}
+  const act=BABY_ACTIVITIES.find(a=>a.id===actId);
+  if(!act)return;
+  const baby=S.babyPets.find(b=>b.id===babyId);
+  if(!baby){alert("아기 러브몬을 찾을 수 없어요.");return;}
+  if((S.myPet.points||0)<act.cost){alert(`포인트 부족! (필요: ${act.cost}P, 보유: ${S.myPet.points||0}P)`);return;}
+  if(!confirm(`${act.emoji} ${act.label}\n${act.desc}\n(-${act.cost}P)`))return;
+  try{
+    /* 포인트 차감 */
+    await petCol.doc(myNick).update({points:INC(-act.cost)});
+    S.myPet.points=(S.myPet.points||0)-act.cost;
+
+    let newXp=(baby.babyXp||0)+(act.xp||0);
+    let newLv=baby.babyLevel||1;
+    let leveled=false;
+    while(newXp>=XP_PER_LV&&newLv<MAX_LV){newLv++;newXp-=XP_PER_LV;leveled=true;}
+
+    const babyUpdate={babyXp:newXp,babyLevel:newLv};
+    let resultMsg=`${act.emoji} ${act.label} 완료!${act.xp?` XP +${act.xp}`:''}`;
+
+    /* 타입별 추가 효과 */
+    if(act.type==='hp'){
+      const newHp=(baby.babyStats?.maxHp||0)+(act.val||10);
+      babyUpdate['babyStats.maxHp']=newHp;
+      resultMsg+=`\n💗 최대 HP 영구 +${act.val}!`;
+    } else if(act.type==='stat'){
+      const statNames=['힘','마력','민첩','지능','매력'];
+      const rStat=statNames[Math.floor(Math.random()*statNames.length)];
+      const curVal=(baby.babyStats?.[rStat]||10)+(act.val||5);
+      babyUpdate[`babyStats.${rStat}`]=curVal;
+      resultMsg+=`\n📊 ${rStat} 영구 +${act.val}!`;
+    } else if(act.type==='drop'){
+      const bonus=Math.floor(Math.random()*100)+50;
+      await petCol.doc(myNick).update({points:INC(bonus)});
+      S.myPet.points+=bonus;
+      resultMsg+=`\n💰 산책 중 ${bonus}P 발견!`;
+    } else if(act.type==='bond'){
+      /* 부모 양쪽 애정도 +5 */
+      const partner=baby.parent1Nick===myNick?baby.parent2Nick:baby.parent1Nick;
+      if(partner)await growAffection(myNick,partner,5);
+      resultMsg+=`\n💕 ${partner}님과 애정도 +5!`;
+    }
+
+    /* 로그 추가 */
+    const feedLog=[...(baby.feedLog||[])];
+    feedLog.push({nick:shortNick(myNick),activity:act.label,xp:act.xp||0,time:Date.now()});
+    babyUpdate.feedLog=feedLog.slice(-30);
+
+    await babyPetCol.doc(babyId).update(babyUpdate);
+    if(baby){baby.babyXp=newXp;baby.babyLevel=newLv;}
+
+    if(leveled)resultMsg+=`\n🎉 레벨업! Lv.${newLv} 달성!`;
+    alert(resultMsg);render();
+  }catch(e){console.error(e);alert("오류가 발생했습니다.");}
+}
 function rollDiceStats(){
+  /* ★ 환생 횟수당 +20 보너스 */
+  const rb=(S.myPet?.rebirthCount||0)*REBIRTH_DICE_BONUS;
   return{
-    hp:  Math.floor(Math.random()*151)+50,  /* 50~200 */
-    mp:  Math.floor(Math.random()*121)+30,  /* 30~150 */
-    atk: Math.floor(Math.random()*41)+10,   /* 10~50  */
-    def: Math.floor(Math.random()*26)+5,    /* 5~30   */
-    eva: Math.floor(Math.random()*21)+5,    /* 5~25 % */
+    hp:  Math.floor(Math.random()*151)+50+rb,
+    mp:  Math.floor(Math.random()*121)+30+rb,
+    atk: Math.floor(Math.random()*41)+10+rb,
+    def: Math.floor(Math.random()*26)+5+rb,
+    eva: Math.min(40,Math.floor(Math.random()*21)+5+Math.floor(rb/4)),
   };
 }
 function getScaledStats(pet){
@@ -1551,6 +1977,20 @@ function getScaledStats(pet){
     eva:   Math.min(75,Math.round(d.eva+(lv-1)*0.5)),
     maxSp: 100,
   };
+}
+/* ★ 장착 아이템 포함 최종 스탯 */
+function getEquippedStats(pet){
+  const base=getScaledStats(pet);
+  const eq=pet.equipment||{};
+  Object.values(eq).forEach(item=>{
+    if(!item?.stats)return;
+    if(item.stats.atk) base.atk   +=item.stats.atk;
+    if(item.stats.def) base.def   +=item.stats.def;
+    if(item.stats.hp)  base.maxHp +=item.stats.hp;
+    if(item.stats.mp)  base.maxMp +=item.stats.mp;
+    if(item.stats.eva) base.eva=Math.min(75,base.eva+item.stats.eva);
+  });
+  return base;
 }
 async function rerollDice(){
   const myNick=S.myEntry?.nick;
@@ -1609,29 +2049,41 @@ function startDungeon(floorIdx, mobIdx){
   const myPet=S.myPet;
   if(!myPet){alert("펫이 없어요!");return;}
   if(!myPet.diceStats){alert("먼저 주사위를 굴려 기본 스탯을 설정해주세요! 🎲");return;}
+  /* ★ 쿨타임 체크 (5층 전부 클리어 후 시작) */
+  const cooldownStart=myPet.dungeonCooldownStart||0;
+  const cooldownEnd=cooldownStart+DUNGEON_COOLDOWN_MS;
+  if(Date.now()<cooldownEnd){
+    const rem=cooldownEnd-Date.now();
+    alert(`⏳ 던전 쿨타임 중!\n1~5층을 모두 클리어해서 발동된 쿨타임이에요.\n${Math.ceil(rem/60000)}분 ${Math.ceil((rem%60000)/1000)}초 후 다시 입장 가능합니다.`);
+    return;
+  }
+  /* ★ 해당 층 이미 클리어했는지 체크 */
+  const kills=myPet.dungeonKills||{};
+  const floorNum=floorIdx+1;
+  if(kills[floorNum]){
+    if(!confirm(`${floor.emoji} ${floorNum}층은 이번 라운드에 이미 클리어했어요!\n\n🏆 클리어 현황: ${DUNGEON_ALL_FLOORS.map(f=>`${f}층 ${kills[f]?'✅':'❌'}`).join(' ')}\n\n다시 입장하겠습니까? (기록에는 반영되지 않아요)`))return;
+  }
   const floor=DUNGEON_FLOORS[floorIdx];
   const mob={...floor.mobs[mobIdx]};
-  const scaled=getScaledStats(myPet);
-  /* 현재 HP/MP 가져오기 (DB 값 or 최대값) */
-  const curHp=Math.min(myPet.currentHp??scaled.maxHp, scaled.maxHp);
-  const curMp=Math.min(myPet.currentMp??scaled.maxMp, scaled.maxMp);
+  /* ★ 장착 아이템 포함 스탯 */
+  const scaled=getEquippedStats(myPet);
+  const curHp=Math.min(myPet.currentHp??scaled.maxHp,scaled.maxHp);
+  const curMp=Math.min(myPet.currentMp??scaled.maxMp,scaled.maxMp);
   const curSp=myPet.currentSp??100;
-  /* 2세 펫 지원 가능 여부 */
   const myNick=S.myEntry?.nick;
   const hatchedBaby=S.babyPets.find(b=>b.hatched&&(b.parent1Nick===myNick||b.parent2Nick===myNick));
+  /* ★ 쿨타임 기록 제거 (finalizeDungeon에서 처리) */
   S.dungeonState={
-    active:true, floorIdx, mobIdx,
-    floorName:floor.name, floorEmoji:floor.emoji,
-    mob:{...mob}, mobCurrentHp:mob.hp,
-    playerHp:curHp, playerMaxHp:scaled.maxHp,
-    playerMp:curMp, playerMaxMp:scaled.maxMp,
-    playerSp:curSp, playerMaxSp:100,
-    defBoost:1, evaBoost:1,
+    active:true,floorIdx,mobIdx,
+    floorName:floor.name,floorEmoji:floor.emoji,
+    mob:{...mob},mobCurrentHp:mob.hp,
+    playerHp:curHp,playerMaxHp:scaled.maxHp,
+    playerMp:curMp,playerMaxMp:scaled.maxMp,
+    playerSp:curSp,playerMaxSp:100,
+    defBoost:1,evaBoost:1,
     log:[`⚔️ ${floor.emoji} ${floor.name} ${floorIdx+1}층에 입장!`,`👾 ${mob.emoji} ${mob.name} 등장! (HP ${mob.hp})`],
-    turn:1, won:false, lost:false,
-    totalXp:0, totalPts:0,
-    baby:hatchedBaby,
-    babyCooldown:0,
+    turn:1,won:false,lost:false,totalXp:0,totalPts:0,
+    baby:hatchedBaby,babyCooldown:0,
     inventory:{...myPet.inventory||{}},
   };
   render();
@@ -1765,18 +2217,31 @@ async function finalizeDungeon(won){
       let newLv=S.myPet.level||1;
       let leveled=false;
       while(newXp>=XP_PER_LV&&newLv<MAX_LV){newLv++;newXp-=XP_PER_LV;leveled=true;}
-      await petCol.doc(myNick).update({
-        xp:newXp, level:newLv,
-        points:INC(ds.totalPts),
-        currentHp:ds.playerHp, currentMp:ds.playerMp,
-        currentSp:ds.playerSp,
-        inventory:ds.inventory,
-      });
+      /* ★ 층별 킬 기록 */
+      const kills={...(S.myPet.dungeonKills||{})};
+      const floorNum=ds.floorIdx+1;
+      kills[floorNum]=true;
+      const allCleared=DUNGEON_ALL_FLOORS.every(f=>kills[f]);
+      const dbUpdate={
+        xp:newXp,level:newLv,points:INC(ds.totalPts),
+        currentHp:ds.playerHp,currentMp:ds.playerMp,currentSp:ds.playerSp,
+        inventory:ds.inventory,dungeonKills:kills,
+      };
+      if(allCleared){
+        /* 전 층 클리어 → 쿨타임 시작 + 킬 초기화 */
+        dbUpdate.dungeonKills={};
+        dbUpdate.dungeonCooldownStart=Date.now();
+        S.myPet.dungeonKills={};
+        S.myPet.dungeonCooldownStart=Date.now();
+      }else{
+        S.myPet.dungeonKills=kills;
+      }
+      await petCol.doc(myNick).update(dbUpdate);
       S.myPet={...S.myPet,xp:newXp,level:newLv,
         points:(S.myPet.points||0)+ds.totalPts,
-        currentHp:ds.playerHp,currentMp:ds.playerMp,
-        currentSp:ds.playerSp,inventory:ds.inventory};
-      alert(`🏆 전투 승리!\n획득: XP +${ds.totalXp} · 포인트 +${ds.totalPts}${leveled?`\n🎉 레벨업! Lv.${newLv} 달성!`:''}`);
+        currentHp:ds.playerHp,currentMp:ds.playerMp,currentSp:ds.playerSp,inventory:ds.inventory};
+      const clearedStr=DUNGEON_ALL_FLOORS.map(f=>`${f}층 ${kills[f]?'✅':'❌'}`).join(' ');
+      alert(`🏆 전투 승리!\n획득: XP +${ds.totalXp} · 포인트 +${ds.totalPts}${leveled?`\n🎉 레벨업! Lv.${newLv} 달성!`:''}\n\n📊 클리어 현황: ${clearedStr}${allCleared?'\n\n🔥 전 층 클리어! 5분 쿨타임 시작!':''}`);
     }else{
       /* 패배: XP -100, 포인트 -1000, HP 1로 부활 */
       const penaltyXp=Math.min(100,S.myPet.xp||0);
@@ -1811,20 +2276,618 @@ async function restoreHpMp(){
   alert("✅ HP/MP/SP 완전 회복! (-500P)");
   render();
 }
+/* ═══════════════════════════════════════
+   🔥 환생 시스템
+═══════════════════════════════════════ */
+async function rebirthPet(){
+  const myNick=S.myEntry?.nick;
+  if(!myNick||!S.myPet){alert("펫이 없어요!");return;}
+  if((S.myPet.level||1)<MAX_LV){alert(`환생은 Lv.${MAX_LV} 달성 후 가능합니다!\n현재: Lv.${S.myPet.level}`);return;}
+  const rc=(S.myPet.rebirthCount||0)+1;
+  if(!confirm(`🔥 환생하겠습니까?\n\n레벨이 1로 초기화됩니다.\n대신 주사위 기본 스탯이 영구적으로 +${REBIRTH_DICE_BONUS} 증가!\n(환생 ${rc}회차)\n\n포인트·장착 아이템은 유지됩니다.`))return;
+  try{
+    await petCol.doc(myNick).update({level:1,xp:0,rebirthCount:rc,currentHp:80,currentMp:50,currentSp:100,diceStats:null});
+    S.myPet.level=1;S.myPet.xp=0;S.myPet.rebirthCount=rc;S.myPet.diceStats=null;
+    alert(`🎉 환생 완료! (${rc}회차)\n🎲 주사위를 다시 굴려 강화된 기본 스탯을 받으세요!\n보너스: 모든 스탯 +${rc*REBIRTH_DICE_BONUS}`);
+    render();
+  }catch(e){console.error(e);alert("환생 중 오류가 발생했습니다.");}
+}
+
+/* ═══════════════════════════════════════
+   ⚔️ 장착 아이템 시스템
+═══════════════════════════════════════ */
+async function buyEquipItem(itemId){
+  const item=EQUIP_SHOP.find(i=>i.id===itemId);
+  if(!item)return;
+  const myNick=S.myEntry?.nick;
+  if(!myNick||!S.myPet){alert("MBTI 검사 완료 후 이용해주세요!");return;}
+  if((S.myPet.points||0)<item.cost){alert(`포인트 부족! (필요: ${item.cost.toLocaleString()}P)`);return;}
+  if(!confirm(`${item.emoji} ${item.name} 구입?\n-${item.cost.toLocaleString()}P`))return;
+  try{
+    const inv=[...(S.myPet.petInventory||[]),{id:item.id,slot:item.slot,name:item.name,emoji:item.emoji,grade:item.grade,stats:item.stats}];
+    await petCol.doc(myNick).update({points:INC(-item.cost),petInventory:inv});
+    S.myPet.points=(S.myPet.points||0)-item.cost;S.myPet.petInventory=inv;
+    alert(`✅ ${item.emoji} ${item.name} 구입 완료!`);render();
+  }catch(e){console.error(e);}
+}
+async function equipItem(slot,itemId){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myPet)return;
+  const inv=[...(S.myPet.petInventory||[])];
+  const item=inv.find(i=>i.id===itemId&&i.slot===slot);if(!item)return;
+  const eq={...(S.myPet.equipment||{})};
+  const newInv=inv.filter(i=>!(i.id===itemId&&i.slot===slot));
+  if(eq[slot])newInv.push(eq[slot]);
+  eq[slot]=item;
+  await petCol.doc(myNick).update({equipment:eq,petInventory:newInv});
+  S.myPet.equipment=eq;S.myPet.petInventory=newInv;
+  alert(`✅ ${item.emoji} ${item.name} 장착!`);render();
+}
+async function unequipItem(slot){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myPet)return;
+  const eq={...(S.myPet.equipment||{})};if(!eq[slot])return;
+  const item=eq[slot];
+  const newInv=[...(S.myPet.petInventory||[]),item];
+  eq[slot]=null;
+  await petCol.doc(myNick).update({equipment:eq,petInventory:newInv});
+  S.myPet.equipment=eq;S.myPet.petInventory=newInv;
+  alert(`🔄 ${item.emoji} ${item.name} 해제`);render();
+}
+
+/* ═══════════════════════════════════════
+   🏠 하우스 시스템
+═══════════════════════════════════════ */
+async function initMyHouse(){
+  const myNick=S.myEntry?.nick;if(!myNick||S.myHouse)return;
+  try{
+    await houseCol.doc(myNick).set({nick:myNick,tier:'basic',wallpaper:'rose',floor:'wood',furniture:[],inventory:[],visitors:0,guestbook:[],isOpen:true,timestamp:TS()});
+    S.myHouse={nick:myNick,tier:'basic',wallpaper:'rose',floor:'wood',furniture:[],inventory:[],visitors:0,guestbook:[]};
+    render();
+  }catch(e){console.error(e);}
+}
+async function upgradeHouse(tierId){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myPet||!S.myHouse)return;
+  const tier=HOUSE_TIERS.find(t=>t.id===tierId);if(!tier)return;
+  if(tier.cost>0&&(S.myPet.points||0)<tier.cost){alert(`포인트 부족! (필요: ${tier.cost.toLocaleString()}P)`);return;}
+  if((S.myPet.level||1)<tier.reqLv){alert(`Lv.${tier.reqLv} 이상 필요!`);return;}
+  if(!confirm(`${tier.emoji} ${tier.name}으로 업그레이드? (-${tier.cost.toLocaleString()}P)`))return;
+  try{
+    if(tier.cost>0)await petCol.doc(myNick).update({points:INC(-tier.cost)});
+    await houseCol.doc(myNick).update({tier:tierId});
+    if(tier.cost>0)S.myPet.points=(S.myPet.points||0)-tier.cost;
+    S.myHouse.tier=tierId;alert(`✅ ${tier.emoji} ${tier.name} 업그레이드!`);render();
+  }catch(e){console.error(e);}
+}
+async function buyFurnitureItem(itemId){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myPet||!S.myHouse)return;
+  const item=FURNITURE_SHOP.find(f=>f.id===itemId);if(!item)return;
+  if(item.cost>0&&(S.myPet.points||0)<item.cost){alert(`포인트 부족! (필요: ${item.cost.toLocaleString()}P)`);return;}
+  if(!confirm(`${item.emoji} ${item.name} 구입? (-${item.cost.toLocaleString()}P)`))return;
+  try{
+    if(item.cost>0)await petCol.doc(myNick).update({points:INC(-item.cost)});
+    const inv=[...(S.myHouse.inventory||[]),{...item}];
+    await houseCol.doc(myNick).update({inventory:inv});
+    if(item.cost>0)S.myPet.points=(S.myPet.points||0)-item.cost;
+    S.myHouse.inventory=inv;alert(`✅ ${item.emoji} ${item.name} 구입!`);render();
+  }catch(e){console.error(e);}
+}
+async function placeFurnitureItem(itemId){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myHouse)return;
+  const tier=HOUSE_TIERS.find(t=>t.id===S.myHouse.tier)||HOUSE_TIERS[0];
+  const placed=S.myHouse.furniture||[];
+  if(placed.length>=tier.maxSlots){alert(`현재 집에 최대 ${tier.maxSlots}개까지 배치 가능해요!`);return;}
+  const inv=[...(S.myHouse.inventory||[])];
+  const idx=inv.findIndex(i=>i.id===itemId);if(idx===-1)return;
+  const item=inv.splice(idx,1)[0];
+  const furniture=[...placed,{...item,placedAt:Date.now()}];
+  await houseCol.doc(myNick).update({furniture,inventory:inv});
+  S.myHouse.furniture=furniture;S.myHouse.inventory=inv;render();
+}
+async function removeFurnitureFromHouse(itemId){
+  const myNick=S.myEntry?.nick;if(!myNick||!S.myHouse)return;
+  const furniture=(S.myHouse.furniture||[]).filter(f=>f.id!==itemId);
+  const removed=(S.myHouse.furniture||[]).find(f=>f.id===itemId);
+  const inv=[...(S.myHouse.inventory||[])];
+  if(removed)inv.push(removed);
+  await houseCol.doc(myNick).update({furniture,inventory:inv});
+  S.myHouse.furniture=furniture;S.myHouse.inventory=inv;render();
+}
+async function visitHouse(nick){
+  S.visitingHouse=nick;S.tab='lm_house';
+  houseCol.doc(nick).update({visitors:INC(1)}).catch(()=>{});
+  render();
+}
+async function leaveGuestbook(houseNick,msg){
+  if(!msg||!msg.trim())return;
+  const myNick=S.myEntry?.nick;if(!myNick)return;
+  const today=todayStr();
+  const h=S.houseEntries.find(h=>h.nick===houseNick);
+  const gb=[...((h||S.myHouse)?.guestbook||[])];
+  if(gb.some(g=>g.nick===myNick&&g.date===today)){alert("오늘 이미 방명록을 남겼어요! 내일 다시 방문해주세요 💕");return;}
+  gb.push({nick:myNick,msg:msg.trim(),date:today});
+  if(gb.length>30)gb.splice(0,gb.length-30);
+  await houseCol.doc(houseNick).update({guestbook:gb});
+  if(h)h.guestbook=gb;
+  alert("💕 방명록을 남겼습니다!");render();
+}
+
+/* ═══════════════════════════════════════
+   📬 선물함 시스템
+═══════════════════════════════════════ */
+async function sendGiftNotification(toNick,type,itemName,itemEmoji){
+  const myNick=S.myEntry?.nick;if(!myNick||!toNick||myNick===toNick)return;
+  try{await giftsCol.add({from:myNick,fromEmoji:S.myPet?.petEmoji||'🐾',to:toNick,type,itemName,itemEmoji,read:false,timestamp:TS()});}catch(e){}
+}
+async function markGiftsRead(){
+  const unread=S.myGifts.filter(g=>!g.read);if(!unread.length)return;
+  const batch=db.batch();unread.forEach(g=>batch.update(giftsCol.doc(g.id),{read:true}));
+  await batch.commit().catch(()=>{});
+  S.myGifts.forEach(g=>{g.read=true;});S.unreadGifts=0;render();
+}
+
+/* ═══════════════════════════════════════
+   🏰 Three.js 하우스 3D 렌더러
+═══════════════════════════════════════ */
+class HouseRenderer3D{
+  constructor(containerId,houseData,petEmoji){
+    this.container=document.getElementById(containerId);
+    if(!this.container||!window.THREE){return;}
+    this.houseData=houseData;this.petEmoji=petEmoji||'🐾';
+    this.meshes=[];this.isAlive=true;this.theta=0.3;this.isDrag=false;this.lastX=0;
+    this.init();
+  }
+  emojiTexture(emoji,bg='#FDEEF4'){
+    const c=document.createElement('canvas');c.width=c.height=128;
+    const ctx=c.getContext('2d');
+    ctx.fillStyle=bg;ctx.beginPath();ctx.roundRect(0,0,128,128,16);ctx.fill();
+    ctx.font='72px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(emoji,64,68);
+    return new THREE.CanvasTexture(c);
+  }
+  init(){
+    const W=this.container.clientWidth||340,H=360;
+    this.scene=new THREE.Scene();
+    this.scene.background=new THREE.Color(0x1a1a2e);
+    this.camera=new THREE.PerspectiveCamera(55,W/H,0.1,200);
+    this.camera.position.set(0,7,14);this.camera.lookAt(0,1,0);
+    this.renderer=new THREE.WebGLRenderer({antialias:true});
+    this.renderer.setSize(W,H);this.renderer.shadowMap.enabled=true;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    this.container.appendChild(this.renderer.domElement);
+    this.addLighting();this.buildRoom();this.placeFurniture3D();this.addPet3D();this.addOrbit();this.animate();
+  }
+  addLighting(){
+    this.scene.add(new THREE.AmbientLight(0xfff0f5,0.9));
+    const dl=new THREE.DirectionalLight(0xffffff,0.8);
+    dl.position.set(8,12,8);dl.castShadow=true;
+    dl.shadow.mapSize.width=dl.shadow.mapSize.height=512;
+    this.scene.add(dl);
+    const pl=new THREE.PointLight(0xFF9AA2,0.6,25);pl.position.set(0,5,0);this.scene.add(pl);
+  }
+  buildRoom(){
+    const wp=WALLPAPERS[this.houseData?.wallpaper||'rose'];
+    const fl=FLOORS[this.houseData?.floor||'wood'];
+    const wc=wp?.threeColor||0xFDEEF4;const fc=fl?.threeColor||0xD4A574;
+    const wm=new THREE.MeshLambertMaterial({color:wc});
+    const fm=new THREE.MeshLambertMaterial({color:fc});
+    /* 바닥 */const floor=new THREE.Mesh(new THREE.BoxGeometry(12,0.25,10),fm);floor.position.set(0,-0.12,0);floor.receiveShadow=true;this.scene.add(floor);
+    /* 뒷벽 */const bw=new THREE.Mesh(new THREE.BoxGeometry(12,6,0.25),wm);bw.position.set(0,3,-5);this.scene.add(bw);
+    /* 왼벽 */const lw=new THREE.Mesh(new THREE.BoxGeometry(0.25,6,10),wm);lw.position.set(-6,3,0);this.scene.add(lw);
+    /* 천장 약간 */const ceil=new THREE.Mesh(new THREE.BoxGeometry(12,0.2,10),new THREE.MeshLambertMaterial({color:0xffffff}));ceil.position.set(0,6,0);this.scene.add(ceil);
+  }
+  placeFurniture3D(){
+    const FH={sofa:[2,0.7,0.9,0xE8537A],bed:[2,0.8,1,0xF8BBD9],plant:[0.6,1,0.6,0x4CAF50],lamp:[0.3,1.5,0.3,0xFFD700],desk:[1,0.7,0.8,0x8D6E63],aquarium:[2,1,0.5,0x29B6F6],fireplace:[2,1.5,0.5,0xBF360C],library:[2,2,0.5,0x5D4037],fountain:[1.5,1.5,1.5,0x29B6F6],sofa2:[2,0.7,0.9,0xF06292],statue:[0.8,2,0.8,0x9E9E9E],frame:[0.8,1,0.15,0xBCAAA4],flag:[0.3,2,0.3,0xFF1744]};
+    const furniture=this.houseData?.furniture||[];
+    const cols=3;
+    furniture.slice(0,9).forEach((item,i)=>{
+      const cfg=FH[item.type]||[1,1,1,0xCCCCCC];
+      const[w,h,d,col]=cfg;
+      const materials=[new THREE.MeshLambertMaterial({color:col}),new THREE.MeshLambertMaterial({color:col}),new THREE.MeshLambertMaterial({map:this.emojiTexture(item.emoji)}),new THREE.MeshLambertMaterial({color:col-0x111111}),new THREE.MeshLambertMaterial({color:col}),new THREE.MeshLambertMaterial({color:col-0x222222})];
+      const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),materials);
+      const px=(i%cols)*3.5-3.5;const pz=Math.floor(i/cols)*3-3;
+      mesh.position.set(px,h/2,pz);mesh.castShadow=true;mesh.receiveShadow=true;
+      this.scene.add(mesh);this.meshes.push(mesh);
+    });
+  }
+  addPet3D(){
+    const tex=this.emojiTexture(this.petEmoji,'#FDEEF4');
+    const mats=[new THREE.MeshLambertMaterial({color:0xFDEEF4}),new THREE.MeshLambertMaterial({color:0xFDEEF4}),new THREE.MeshLambertMaterial({color:0xFDEEF4}),new THREE.MeshLambertMaterial({color:0xFDEEF4}),new THREE.MeshLambertMaterial({map:tex}),new THREE.MeshLambertMaterial({color:0xFDEEF4})];
+    this.pet=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2),mats);
+    this.pet.position.set(0,0.6,1);this.pet.castShadow=true;this.scene.add(this.pet);
+  }
+  addOrbit(){
+    const c=this.renderer.domElement;const R=16;
+    c.addEventListener('mousedown',e=>{this.isDrag=true;this.lastX=e.clientX;});
+    c.addEventListener('mouseup',()=>{this.isDrag=false;});
+    c.addEventListener('mousemove',e=>{if(!this.isDrag)return;this.theta+=(e.clientX-this.lastX)*0.012;this.lastX=e.clientX;this.camera.position.x=R*Math.sin(this.theta);this.camera.position.z=R*Math.cos(this.theta);this.camera.lookAt(0,1,0);});
+    c.addEventListener('touchstart',e=>{this.isDrag=true;this.lastX=e.touches[0].clientX;});
+    c.addEventListener('touchend',()=>{this.isDrag=false;});
+    c.addEventListener('touchmove',e=>{if(!this.isDrag)return;this.theta+=(e.touches[0].clientX-this.lastX)*0.012;this.lastX=e.touches[0].clientX;this.camera.position.x=R*Math.sin(this.theta);this.camera.position.z=R*Math.cos(this.theta);this.camera.lookAt(0,1,0);});
+  }
+  animate(){
+    if(!this.isAlive)return;
+    requestAnimationFrame(()=>this.animate());
+    if(this.pet){this.pet.position.y=0.6+Math.sin(Date.now()*0.002)*0.15;this.pet.rotation.y+=0.008;}
+    this.renderer.render(this.scene,this.camera);
+  }
+  destroy(){this.isAlive=false;if(this.renderer){this.renderer.dispose();if(this.container)this.container.innerHTML='';}}
+}
+function initHouse3D(containerId,houseData,petEmoji){
+  if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}
+  setTimeout(()=>{window.__houseR=new HouseRenderer3D(containerId,houseData,petEmoji);},50);
+}
+
+/* ═══════════════════════════════════════
+   ⚔️ PvP 시스템 (12시간 쿨타임)
+═══════════════════════════════════════ */
+const PVP_COOLDOWN_MS = 12 * 60 * 60 * 1000; /* 12시간 */
+const PVP_STEAL_RATE  = 0.10; /* 포인트 10% 탈취 */
+const PVP_MIN_STEAL   = 50;
+const PVP_MAX_STEAL   = 2000;
+
+function simulatePvP(myPet, targetPet){
+  const mySt  = getEquippedStats(myPet);
+  const tgSt  = getEquippedStats(targetPet);
+  let myHp    = mySt.maxHp;
+  let tgHp    = tgSt.maxHp;
+  const log   = [];
+
+  for(let t=0; t<30 && myHp>0 && tgHp>0; t++){
+    /* 내 공격 */
+    if(!checkEva(tgSt.eva)){
+      const dmg=calcDmg(mySt.atk,tgSt.def,1+(t===0?0.1:0)); /* 첫 턴 선공 보정 */
+      tgHp=Math.max(0,tgHp-dmg);
+      log.push(`⚔️ ${myPet.petEmoji}${shortNick(myPet.nick)} → ${dmg}피해 (상대HP ${tgHp})`);
+    }else{log.push(`💨 ${targetPet.petEmoji}${shortNick(targetPet.nick)} 회피!`);}
+    if(tgHp<=0)break;
+    /* 상대 반격 */
+    if(!checkEva(mySt.eva)){
+      const dmg=calcDmg(tgSt.atk,mySt.def);
+      myHp=Math.max(0,myHp-dmg);
+      log.push(`💥 ${targetPet.petEmoji}${shortNick(targetPet.nick)} → ${dmg}피해 (내HP ${myHp})`);
+    }else{log.push(`💨 ${myPet.petEmoji}${shortNick(myPet.nick)} 회피!`);}
+  }
+  return{winner:myHp>=tgHp?'me':'target', myHpLeft:myHp, tgHpLeft:tgHp, log:log.slice(-8)};
+}
+
+async function startPvP(targetNick){
+  const myNick=S.myEntry?.nick;
+  if(!myNick||!S.myPet){alert("MBTI 검사 완료 후 이용해주세요!");return;}
+  if(!S.myPet.diceStats){alert("먼저 주사위를 굴려 스탯을 설정해주세요! 🎲");return;}
+
+  /* 12시간 쿨타임 체크 */
+  const last=S.myPet.pvpCooldown||0;
+  const coolEnd=last+PVP_COOLDOWN_MS;
+  if(Date.now()<coolEnd){
+    const rem=coolEnd-Date.now();
+    alert(`⚔️ PvP 쿨타임 중!\n${msToHM(rem)} 후 다시 도전 가능합니다.`);
+    return;
+  }
+
+  const target=S.petEntries.find(p=>p.nick===targetNick);
+  if(!target){alert("상대 펫을 찾을 수 없어요!");return;}
+  if(!target.diceStats){alert("상대방이 아직 주사위 스탯을 설정하지 않았어요!");return;}
+
+  const mySt=getEquippedStats(S.myPet);
+  const tgSt=getEquippedStats(target);
+  const stealAmt=Math.min(PVP_MAX_STEAL,Math.max(PVP_MIN_STEAL,Math.round((target.points||0)*PVP_STEAL_RATE)));
+  const loseAmt =Math.min(PVP_MAX_STEAL,Math.max(PVP_MIN_STEAL,Math.round((S.myPet.points||0)*PVP_STEAL_RATE)));
+
+  if(!confirm(
+    `⚔️ PvP 도전!\n\n상대: ${target.petEmoji}${target.petName} Lv.${target.level||1} (${targetNick})\n\n` +
+    `내 스탯 — ATK:${mySt.atk} DEF:${mySt.def} HP:${mySt.maxHp}\n` +
+    `상대 스탯 — ATK:${tgSt.atk} DEF:${tgSt.def} HP:${tgSt.maxHp}\n\n` +
+    `🏆 승리 시 +${stealAmt}P 탈취\n💀 패배 시 -${loseAmt}P 손실\n\n⏰ 12시간 쿨타임 발동`
+  ))return;
+
+  const result=simulatePvP(S.myPet,target);
+  const iWon=result.winner==='me';
+  const myDelta=iWon?+stealAmt:-loseAmt;
+  const tgDelta=iWon?-stealAmt:+stealAmt;
+
+  try{
+    /* 내 펫 업데이트 */
+    await petCol.doc(myNick).update({
+      points:INC(myDelta),
+      pvpCooldown:Date.now(),
+      [`pvpRecord.${iWon?'win':'lose'}`]:INC(1),
+      pvpLastBattle:{
+        vs:targetNick, vsEmoji:target.petEmoji, vsName:target.petName,
+        result:iWon?'win':'lose', pointDelta:myDelta, at:Date.now()
+      }
+    });
+    /* 상대 펫 업데이트 */
+    await petCol.doc(targetNick).update({
+      points:INC(tgDelta),
+      [`pvpRecord.${iWon?'lose':'win'}`]:INC(1),
+    });
+    S.myPet.points=(S.myPet.points||0)+myDelta;
+    S.myPet.pvpCooldown=Date.now();
+
+    const battleLog=result.log.join('\n');
+    alert(
+      `${iWon?'🏆 승리!':'💀 패배...'}\n\n` +
+      `${iWon?`+${stealAmt}P 탈취!`:`-${loseAmt}P 손실`}\n\n` +
+      `📊 전투 로그:\n${battleLog}`
+    );
+    render();
+  }catch(e){console.error(e);alert("PvP 처리 중 오류가 발생했습니다.");}
+}
+async function startCatchmindRound(forcedDrawerNick){
+  const myNick=S.myEntry?.nick;
+  if(!myNick){alert("MBTI 검사 완료 후 이용해주세요!");return;}
+  /* 출제자 선정 */
+  let drawerNick=forcedDrawerNick||null;
+  if(!drawerNick){
+    const players=S.petEntries.filter(p=>p.nick&&p.nick!==myNick);
+    players.push({nick:myNick});
+    drawerNick=players[Math.floor(Math.random()*players.length)].nick;
+  }
+  const word=CM_WORDS[Math.floor(Math.random()*CM_WORDS.length)];
+  const prevWord=S.catchmindState?.word;
+  /* 연속 같은 단어 방지 */
+  const finalWord=(word===prevWord&&CM_WORDS.length>1)?
+    CM_WORDS[(CM_WORDS.indexOf(word)+1)%CM_WORDS.length]:word;
+
+  await gameStateCol.doc("catchmind").set({
+    status:'drawing',drawerNick,word:finalWord,
+    round:(S.catchmindState?.round||0)+1,
+    startedAt:Date.now(), roundTime:90,
+    solvedBy:null,solvedAt:null,timestamp:TS()
+  });
+  /* 스트로크 전체 삭제 */
+  await clearCMStrokes();
+}
+
+async function clearCMStrokes(){
+  try{
+    const snap=await cmStrokesCol.get();
+    if(snap.empty)return;
+    const b=db.batch();
+    snap.docs.forEach(d=>b.delete(d.ref));
+    await b.commit();
+    S.cmStrokes=[];
+    if(window.__cmCanvas)window.__cmCanvas.clearCanvas();
+  }catch(e){console.error(e);}
+}
+
+async function submitCMGuess(){
+  const inputEl=document.getElementById("cm_guess_input");
+  if(!inputEl)return;
+  const val=inputEl.value.trim();
+  if(!val)return;
+  const myNick=S.myEntry?.nick;
+  if(!myNick){alert("MBTI 검사 완료 후 참여하세요!");inputEl.value="";return;}
+  const state=S.catchmindState;
+  if(!state||state.status!=='drawing'){inputEl.value="";return;}
+  if(state.drawerNick===myNick){alert("출제자는 정답을 맞출 수 없어요! 🎨");inputEl.value="";return;}
+  if(state.solvedBy){alert("이미 정답이 나왔어요!");inputEl.value="";return;}
+
+  /* 정답 비교 (공백/대소문자 무관) */
+  const clean=val.replace(/\s/g,'');
+  const ansClean=(state.word||'').replace(/\s/g,'');
+  const isCorrect=clean===ansClean;
+
+  await cmGuessesCol.add({nick:shortNick(myNick),message:val,isCorrect,timestamp:TS()});
+  inputEl.value="";
+
+  if(isCorrect){
+    await gameStateCol.doc("catchmind").update({
+      solvedBy:shortNick(myNick),solvedAt:TS(),status:'reveal'
+    });
+    /* 보상 */
+    await addPoints(myNick,100);
+    await addIQ(myNick,5);
+    await addPoints(state.drawerNick,50);
+    await addIQ(state.drawerNick,2);
+    alert(`🎉 정답! +100P +5IQ!\n다음 라운드에서 당신이 출제자입니다!\n\n[정답: ${state.word}]`);
+    /* 5초 후 새 라운드 (맞춘 사람이 출제자) */
+    setTimeout(()=>startCatchmindRound(myNick),5000);
+  }
+}
+
+async function skipCMRound(){
+  const myNick=S.myEntry?.nick;
+  if(!myNick)return;
+  const state=S.catchmindState;
+  if(!state)return;
+  if(state.drawerNick!==myNick){alert("출제자만 넘길 수 있어요!");return;}
+  if(!confirm(`이번 라운드를 포기하겠습니까?\n(정답: ${state.word})`))return;
+  await gameStateCol.doc("catchmind").update({status:'reveal',solvedBy:null});
+  setTimeout(()=>startCatchmindRound(null),3000);
+}
+
+/* ═══ 캐치마인드 캔버스 클래스 ═══ */
+class CatchmindCanvas{
+  constructor(canvasId,isDrawer,tool){
+    this.el=document.getElementById(canvasId);
+    if(!this.el)return;
+    this.ctx=this.el.getContext('2d');
+    this.isDrawer=isDrawer;
+    this.tool=tool||{color:'#000000',width:5,eraser:false};
+    this.isDown=false;
+    this.curPoints=[];
+    this.setupSize();
+    this.clearCanvas();
+    if(isDrawer)this.setupEvents();
+  }
+  setupSize(){
+    const w=this.el.offsetWidth||340;
+    const h=this.el.offsetHeight||260;
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    this.el.width=w*dpr;this.el.height=h*dpr;
+    this.ctx.scale(dpr,dpr);
+    this.W=w;this.H=h;
+  }
+  clearCanvas(){
+    this.ctx.fillStyle='#FFFFFF';
+    this.ctx.fillRect(0,0,this.W,this.H);
+  }
+  norm(x,y){return{x:x/this.W,y:y/this.H};}
+  denorm(nx,ny){return{x:nx*this.W,y:ny*this.H};}
+  drawStroke(s){
+    if(!s.points||s.points.length<1)return;
+    const ctx=this.ctx;
+    ctx.beginPath();
+    ctx.strokeStyle=s.eraser?'#FFFFFF':s.color||'#000000';
+    ctx.lineWidth=s.width||5;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    const p0=this.denorm(s.points[0].x,s.points[0].y);
+    ctx.moveTo(p0.x,p0.y);
+    if(s.points.length===1){
+      ctx.arc(p0.x,p0.y,(s.width||5)/2,0,Math.PI*2);
+      ctx.fillStyle=s.eraser?'#FFFFFF':s.color||'#000000';
+      ctx.fill();return;
+    }
+    s.points.forEach((p,i)=>{if(i===0)return;const d=this.denorm(p.x,p.y);ctx.lineTo(d.x,d.y);});
+    ctx.stroke();
+  }
+  redrawAll(strokes){
+    this.clearCanvas();
+    strokes.forEach(s=>this.drawStroke(s));
+  }
+  getPos(e){
+    const rect=this.el.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{x:src.clientX-rect.left,y:src.clientY-rect.top};
+  }
+  setupEvents(){
+    const el=this.el;
+    el.style.cursor='crosshair';
+    el.addEventListener('mousedown',e=>{
+      this.isDown=true;
+      const pos=this.getPos(e);
+      this.curPoints=[this.norm(pos.x,pos.y)];
+    });
+    el.addEventListener('mousemove',e=>{
+      if(!this.isDown)return;
+      const pos=this.getPos(e);
+      this.curPoints.push(this.norm(pos.x,pos.y));
+      /* 실시간 로컬 그리기 */
+      const pts=this.curPoints;
+      if(pts.length>=2){
+        const ctx=this.ctx;
+        ctx.beginPath();
+        ctx.strokeStyle=this.tool.eraser?'#FFFFFF':this.tool.color;
+        ctx.lineWidth=this.tool.width;
+        ctx.lineCap='round';ctx.lineJoin='round';
+        const a=this.denorm(pts[pts.length-2].x,pts[pts.length-2].y);
+        const b=this.denorm(pts[pts.length-1].x,pts[pts.length-1].y);
+        ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    });
+    el.addEventListener('mouseup',()=>this.saveStroke());
+    el.addEventListener('mouseleave',()=>{if(this.isDown)this.saveStroke();});
+    el.addEventListener('touchstart',e=>{e.preventDefault();this.isDown=true;const pos=this.getPos(e);this.curPoints=[this.norm(pos.x,pos.y)];},{passive:false});
+    el.addEventListener('touchmove',e=>{e.preventDefault();if(!this.isDown)return;const pos=this.getPos(e);this.curPoints.push(this.norm(pos.x,pos.y));const pts=this.curPoints;if(pts.length>=2){const ctx=this.ctx;ctx.beginPath();ctx.strokeStyle=this.tool.eraser?'#FFFFFF':this.tool.color;ctx.lineWidth=this.tool.width;ctx.lineCap='round';const a=this.denorm(pts[pts.length-2].x,pts[pts.length-2].y);const b=this.denorm(pts[pts.length-1].x,pts[pts.length-1].y);ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}},{passive:false});
+    el.addEventListener('touchend',e=>{e.preventDefault();this.saveStroke();},{passive:false});
+  }
+  async saveStroke(){
+    if(!this.isDown)return;
+    this.isDown=false;
+    if(!this.curPoints.length)return;
+    const pts=[...this.curPoints];
+    this.curPoints=[];
+    await cmStrokesCol.add({
+      points:pts,
+      color:this.tool.eraser?'#FFFFFF':this.tool.color,
+      width:this.tool.width,
+      eraser:this.tool.eraser||false,
+      timestamp:TS()
+    }).catch(()=>{});
+  }
+  updateTool(t){this.tool={...this.tool,...t};}
+}
+
+function initCatchmindCanvas(){
+  const myNick=S.myEntry?.nick;
+  const state=S.catchmindState;
+  const isDrawer=state?.status==='drawing'&&state?.drawerNick===myNick;
+  if(window.__cmCanvas){
+    window.__cmCanvas.isDrawer=isDrawer;
+    window.__cmCanvas.redrawAll(S.cmStrokes);
+    return;
+  }
+  const inst=new CatchmindCanvas('cm_canvas',isDrawer,S.cmTool);
+  if(inst.el){
+    window.__cmCanvas=inst;
+    inst.redrawAll(S.cmStrokes);
+    /* 타이머 인터벌 */
+    if(window.__cmTimer)clearInterval(window.__cmTimer);
+    window.__cmTimer=setInterval(()=>{
+      const timerEl=document.getElementById('cm_timer');
+      if(!timerEl)return;
+      const st=S.catchmindState;
+      if(!st||st.status!=='drawing'){timerEl.textContent='';return;}
+      const elapsed=(Date.now()-(st.startedAt||0))/1000;
+      const rem=Math.max(0,Math.ceil((st.roundTime||90)-elapsed));
+      timerEl.textContent=rem+'초';
+      timerEl.style.color=rem<=10?'#C62828':rem<=30?'#FF5722':'var(--text1)';
+      if(rem===0&&!st.solvedBy){
+        timerEl.textContent='⏰ 시간 초과!';
+        clearInterval(window.__cmTimer);window.__cmTimer=null;
+      }
+    },500);
+  }
+}
+
+function renderCMGuesses(){
+  if(!S.cmGuesses.length)return`<p style="font-size:12px;color:var(--text3);text-align:center;padding:1rem">아직 추측이 없어요. 그림을 보고 정답을 맞춰보세요!</p>`;
+  return S.cmGuesses.map(g=>`<div style="padding:4px 8px;border-radius:6px;margin-bottom:3px;font-size:12.5px;${g.isCorrect?'background:rgba(232,83,122,.1);border:1px solid var(--border2)':''}">
+    <b style="color:var(--rose2)">${esc(g.nick)}</b>:
+    <span style="color:${g.isCorrect?'var(--rose2)':'var(--text1)'}">${esc(g.message)}</span>
+    ${g.isCorrect?'<span style="color:var(--rose);font-weight:700;float:right">✅ 정답! +100P +5IQ</span>':''}
+  </div>`).join('');
+}
 async function ensureChosungGame(){
   try{
     const snap=await gameStateCol.doc("chosung_current").get();
-    if(!snap.exists){await startChosungQuestion(0);}
+    if(!snap.exists){await startQuizQuestion(S.quizMode||'chosung',null);}
   }catch(e){}
 }
-async function startChosungQuestion(idx){
-  const q=CHOSUNG_QS[idx%CHOSUNG_QS.length];
-  await gameStateCol.doc("chosung_current").set({
-    qIdx:idx,chosung:q.cho,genre:q.genre,answer:q.ans,hint:q.hint,
-    solvedBy:null,solvedAt:null,startedAt:TS()
-  });
+
+/* 퀴즈 시작 - 랜덤 문제 선택 */
+async function startQuizQuestion(type, lastAns){
+  type=type||'chosung';
+  let pool,q,docData;
+  if(type==='chosung'){
+    pool=CHOSUNG_QS;
+    q=pool[Math.floor(Math.random()*pool.length)];
+    /* 연속 같은 문제 방지 */
+    if(lastAns&&pool.length>1){let t=q;while(t.ans===lastAns)t=pool[Math.floor(Math.random()*pool.length)];q=t;}
+    docData={type,genre:q.genre,chosung:q.cho,answer:q.ans,hint:q.hint,
+      solvedBy:null,solvedAt:null,startedAt:TS()};
+  } else if(type==='ox'){
+    pool=OX_QUESTIONS;
+    q=pool[Math.floor(Math.random()*pool.length)];
+    if(lastAns&&pool.length>1){let t=q;while(t.ans===lastAns)t=pool[Math.floor(Math.random()*pool.length)];q=t;}
+    docData={type,question:q.q,answer:q.ans,explain:q.explain,
+      solvedBy:null,solvedAt:null,startedAt:TS()};
+  } else if(type==='nonsense'){
+    pool=NONSENSE_QUESTIONS;
+    q=pool[Math.floor(Math.random()*pool.length)];
+    if(lastAns&&pool.length>1){let t=q;while(t.ans===lastAns)t=pool[Math.floor(Math.random()*pool.length)];q=t;}
+    docData={type,question:q.q,answer:q.ans,hint:q.hint,explain:q.explain,
+      solvedBy:null,solvedAt:null,startedAt:TS()};
+  } else { /* short */
+    pool=SHORT_QUESTIONS;
+    q=pool[Math.floor(Math.random()*pool.length)];
+    if(lastAns&&pool.length>1){let t=q;while(t.ans===lastAns&&t.ans[0]===lastAns)t=pool[Math.floor(Math.random()*pool.length)];q=t;}
+    docData={type,question:q.q,answers:q.ans,explain:q.explain,
+      solvedBy:null,solvedAt:null,startedAt:TS()};
+  }
+  await gameStateCol.doc("chosung_current").set(docData);
 }
-async function submitChosungAnswer(){
+
+/* IQ 추가 */
+async function addIQ(nick, amount){
+  try{
+    await petCol.doc(nick).update({iq:INC(amount)});
+    if(S.myPet?.nick===nick)S.myPet.iq=(S.myPet.iq||100)+amount;
+  }catch(e){}
+}
+
+/* 답변 제출 (모든 퀴즈 타입) */
+async function submitQuizAnswer(){
   const inputEl=document.getElementById("lm_chosung_input");
   if(!inputEl)return;
   const val=inputEl.value.trim();
@@ -1834,14 +2897,65 @@ async function submitChosungAnswer(){
   const state=S.chosungState;
   if(!state){inputEl.value="";return;}
   if(state.solvedBy){alert("이미 정답이 나왔어요! 다음 문제를 기다려주세요 ⏳");inputEl.value="";return;}
-  const isCorrect=val===state.answer;
-  await chatCol.add({nick:shortNick(myNick),message:val,isCorrect,timestamp:TS()});
+
+  let isCorrect=false;
+  const type=state.type||'chosung';
+
+  if(type==='chosung'){
+    isCorrect=(val===state.answer);
+  } else if(type==='ox'){
+    isCorrect=(val.toUpperCase()===state.answer||val==='O'&&state.answer==='O'||val==='X'&&state.answer==='X');
+  } else if(type==='nonsense'){
+    /* 공백 제거 후 비교 */
+    const clean=val.replace(/\s/g,'').toLowerCase();
+    const ansClean=(state.answer||'').replace(/\s/g,'').toLowerCase();
+    isCorrect=(clean===ansClean||clean.includes(ansClean)||ansClean.includes(clean));
+  } else { /* short */
+    const answers=state.answers||[];
+    const clean=val.replace(/\s/g,'').toLowerCase();
+    isCorrect=answers.some(a=>clean===a.replace(/\s/g,'').toLowerCase()||clean.includes(a.replace(/\s/g,'').toLowerCase()));
+  }
+
+  /* 채팅 로그 */
+  await chatCol.add({nick:shortNick(myNick),message:val,isCorrect,type,timestamp:TS()});
   inputEl.value="";S.chosungInput="";
+
   if(isCorrect){
-    try{await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS()});}catch(e){}
-    if(S.myPet){await addPoints(myNick,50);alert(`⚡ 정답! +50P 획득! 🎉`);}
+    /* 보상: 퀴즈 타입별 P + IQ */
+    const pReward=type==='chosung'?50:type==='ox'?20:type==='nonsense'?40:30;
+    const iqReward=type==='chosung'?3:type==='ox'?1:type==='nonsense'?2:2;
+    try{await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS(),explain:state.explain||''});}catch(e){}
+    if(S.myPet){
+      await addPoints(myNick,pReward);
+      await addIQ(myNick,iqReward);
+      alert(`⚡ 정답! +${pReward}P +${iqReward}IQ 획득! 🎉`);
+    }
   }
 }
+
+/* OX 버튼 전용 제출 */
+async function submitOXAnswer(choice){
+  const myNick=S.myEntry?.nick||S.myPet?.nick;
+  if(!myNick){alert("MBTI 검사를 완료 후 참여해주세요!");return;}
+  const state=S.chosungState;
+  if(!state||state.type!=='ox')return;
+  if(state.solvedBy){alert("이미 정답이 나왔어요!");return;}
+  const isCorrect=(choice===state.answer);
+  await chatCol.add({nick:shortNick(myNick),message:choice,isCorrect,type:'ox',timestamp:TS()});
+  if(isCorrect){
+    try{await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS()});}catch(e){}
+    if(S.myPet){
+      await addPoints(myNick,20);
+      await addIQ(myNick,1);
+      alert(`${choice} 정답! +20P +1IQ! 🎉`);
+    }
+  }else{
+    alert(`${choice} 오답! 힌트: ${state.explain||'다시 생각해봐요!'}`);
+  }
+}
+
+/* 다음 문제로 넘기는 감시 (기존 로직 유지) */
+async function submitChosungAnswer(){await submitQuizAnswer();}
 
 /* ═══════════════════════════════════════
    RENDER ENGINE
@@ -2092,31 +3206,56 @@ function rDatResult(){
 /* ─── BOARD WRAPPER (탭 확장) ─── */
 function rBoard(){
   const myNick=S.myEntry?.nick;
-  /* ★ 2세 육아 탭: 내가 부모인 미부화 알이 있을 때만 표시 */
-  const myActiveBaby=S.babyPets.find(b=>!b.hatched&&(b.parent1Nick===myNick||b.parent2Nick===myNick));
+  /* ★ 2세 육아 탭: 부화 여부 관계없이 부모면 표시 (trim 비교로 공백 버그 방지) */
+  const myActiveBaby=S.babyPets.find(b=>{
+    if(!myNick)return false;
+    const p1=(b.parent1Nick||'').trim();
+    const p2=(b.parent2Nick||'').trim();
+    return p1===myNick.trim()||p2===myNick.trim();
+  });
 
   const tabs=[
-    {id:"board",label:"👥\n참여자"},
-    {id:"compat",label:"💘\n궁합"},
-    {id:"rose",label:"🌹\n장미꽃"},
-    {id:"lm_pet",label:"🐾\n러브몬"},
+    {id:"board",  label:"👥\n참여자"},
+    {id:"compat", label:"💘\n궁합"},
+    {id:"rose",   label:"🌹\n장미꽃"},
+    {id:"lm_pet", label:"🐾\n러브몬"},
     {id:"lm_plaza",label:"⚡\n광장"},
+    {id:"lm_catchmind",label:"🎨\n캐치마인드"},
     {id:"lm_dungeon",label:"⚔️\n던전"},
+    {id:"lm_house",label:"🏠\n하우스"},
+    {id:"lm_gifts",label:`📬\n선물함${S.unreadGifts>0?`(${S.unreadGifts})`:''}` },
     {id:"lm_colors",label:"🎨\n색상표"},
-    {id:"admin",label:"⚙️\n관리"},
+    {id:"admin",  label:"⚙️\n관리"},
   ];
-  if(myActiveBaby)tabs.splice(4,0,{id:"lm_baby",label:"🥚\n2세육아"});
+  if(myActiveBaby){
+    const babyLabel=myActiveBaby.hatched?'🐣\n2세육아':'🥚\n2세육아';
+    tabs.splice(4,0,{id:'lm_baby',label:babyLabel});
+  }
 
   let content="";
-  if(S.tab==="board")content=rBoardTab();
+  if(S.tab==="board")      content=rBoardTab();
   else if(S.tab==="compat")content=rCompatTab();
-  else if(S.tab==="rose")content=rRoseTab();
+  else if(S.tab==="rose")  content=rRoseTab();
   else if(S.tab==="lm_pet")content=rLovemonTab();
   else if(S.tab==="lm_baby")content=rBabyTab();
   else if(S.tab==="lm_plaza")content=rPlazaTab();
+  else if(S.tab==="lm_catchmind"){
+    content=rCatchmindTab();
+    setTimeout(()=>initCatchmindCanvas(),80);
+  }
   else if(S.tab==="lm_dungeon")content=rDungeonTab();
+  else if(S.tab==="lm_house"){
+    content=rHouseTab();
+    setTimeout(()=>{
+      const hn=S.visitingHouse?S.visitingHouse:myNick;
+      const h=S.visitingHouse?S.houseEntries.find(h=>h.nick===hn):S.myHouse;
+      const pet=S.petEntries.find(p=>p.nick===hn)||S.myPet;
+      if(h)initHouse3D('house3d-canvas',h,pet?.petEmoji||'🐾');
+    },80);
+  }
+  else if(S.tab==="lm_gifts"){markGiftsRead();content=rGiftsTab();}
   else if(S.tab==="lm_colors")content=rColorTab();
-  else if(S.tab==="admin")content=rAdminTab();
+  else if(S.tab==="admin") content=rAdminTab();
 
   return`<div class="fadein">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
@@ -2305,75 +3444,44 @@ function rRoseTab(){
 
 /* ─── 🎨 색상표 (45 Color Chart) TAB ─── */
 function rColorTab() {
-  const COLOR_MAP = {
-    1:"#F7D02C", 2:"#E05252", 3:"#E87848", 4:"#E89030", 5:"#8BBF3C",
-    6:"#3A9E60", 7:"#40B898", 8:"#48AAB5", 9:"#5888B8", 10:"#4A5C8C",
-    11:"#6858A8", 12:"#8858A8", 13:"#CC5585", 14:"#B84055", 15:"#F5F0A0",
-    16:"#F0A0A0", 17:"#F0B078", 18:"#E8B875", 19:"#C8D078", 20:"#80C890",
-    21:"#70C8B5", 22:"#80B5D5", 23:"#88A5D8", 24:"#9898CE", 25:"#B0A0CE",
-    26:"#B088CE", 27:"#E888B0", 28:"#F0A0B5", 29:"#F8F0C5", 30:"#F8D0D5",
-    31:"#F8D8C5", 32:"#F8D0C5", 33:"#E8F0C5", 34:"#C8F0D5", 35:"#C8EEF0",
-    36:"#C8E8F0", 37:"#D8D8F0", 38:"#E0D8F0", 39:"#F0D8E8", 40:"#F8E8F0",
-    41:"#FAE0E0", 42:"#FAF0F0", 43:"#F8F8F8", 44:"#C8C8C8", 45:"#1A1A1A"
-  };
-
-  // 밝은 배경 번호 → 텍스트를 어둡게
-  const DARK_TEXT = new Set([15,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44]);
-
   let colorChartHtml = `
     <div class="card card-rose" style="margin-bottom:12px; padding: 10px; box-sizing: border-box; width: 100%;">
-      <div class="section-title" style="text-align:center;font-weight:bold;color:var(--rose2);margin-bottom:8px;font-size:1.1rem;">🎨 러브몬 45 컬러 차트</div>
+      <div class="section-title" style="text-align:center;font-weight:bold;color:var(--rose2);margin-bottom:6px;font-size:1.1rem;">🎨 러브몬 45 컬러 차트</div>
       <p style="text-align:center; font-size:0.75rem; color:var(--text2); margin-bottom:12px; line-height:1.4;">
         원하는 번호를 클릭해 닉네임을 등록해보세요!<br>(빈 자리에만 등록 가능, 관리자는 수정 가능)
       </p>
-      
       <div class="color-chart-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; background-color: #f1f3f5; padding: 6px; border-radius: 10px; width: 100%; box-sizing: border-box;">
   `;
-
-  for (let i = 1; i <= 45; i++) {
+  for(let i = 1; i <= 45; i++) {
     const nick = S.colorSlots[i] || "";
     const hasNameClass = nick ? "has-name" : "";
     const displayName = nick ? nick : "비어있음";
-
-    const tileColor = COLOR_MAP[i];
-    const isDark = DARK_TEXT.has(i);
-    
-    // 글자색 및 더 또렷하게 보이기 위한 4방향 글자 외곽선(Stroke) 효과 설정
-    let textColor = "";
-    let textShadowStyle = "";
-    let nickBg = "";
-
-    if (isDark) {
-      // 밝은 타일: 어두운 글씨(#111111) + 흰색 외곽선으로 선명하게
-      textColor = "#111111";
-      textShadowStyle = "text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;";
-      nickBg = "rgba(255,255,255,0.45)"; // 닉네임 배경도 밝고 투명하게 강화
+    let tileColor = "";
+    if (i === 45) {
+      tileColor = "#000000";
     } else {
-      // 어두운 타일: 흰색 글씨(#ffffff) + 검은색 외곽선으로 선명하게
-      textColor = "#ffffff";
-      textShadowStyle = "text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 1px 1px 2px rgba(0,0,0,0.8);";
-      nickBg = "rgba(0,0,0,0.35)"; // 닉네임 배경을 더 진하게 처리
+      const hue = (60 + (i - 1) * 7.5) % 360;
+      const saturation = Math.max(30, 95 - (i * 1.2));
+      const lightness = Math.max(5, 65 - (i * 1.3));
+      tileColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
-
+    const superSharpText = "text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 2px 2px 3px rgba(0,0,0,0.9);";
     colorChartHtml += `
-      <div class="color-slot ${hasNameClass}" 
-           data-a="setColorSlot" 
-           data-slot="${i}" 
-           style="background-color: ${tileColor}; ${textShadowStyle} color: ${textColor}; border: 1.5px solid #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); border-radius: 6px; aspect-ratio: 1 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 2px; box-sizing: border-box; min-width: 0;">
-        
-        <div class="slot-num" style="font-size: 0.95rem; font-weight: 800; line-height: 1.1; margin-bottom: 2px;">${i}</div>
-        
-        <div class="slot-nick" style="font-size: 0.62rem; font-weight: bold; background: ${nickBg}; padding: 1px 2px; border-radius: 3px; width: 92%; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.1; box-sizing: border-box;">
+      <div class="color-slot ${hasNameClass}"
+           data-a="setColorSlot"
+           data-slot="${i}"
+           style="background-color: ${tileColor}; ${superSharpText} color: #ffffff; border: 1.5px solid #ffffff; box-shadow: inset 0 0 4px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.15); border-radius: 6px; aspect-ratio: 1 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 2px; box-sizing: border-box; min-width: 0;">
+        <div class="slot-num" style="font-size: 0.95rem; font-weight: 800; line-height: 1.1; margin-bottom: 1px;">${i}</div>
+        <div class="slot-nick" style="font-size: 0.62rem; font-weight: bold; background: rgba(0,0,0,0.4); padding: 1px 2px; border-radius: 3px; width: 92%; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.1; box-sizing: border-box;">
           ${esc(displayName)}
         </div>
-        
       </div>
     `;
   }
-
   colorChartHtml += `</div></div>`;
   return colorChartHtml;
 }
+
 /* ─── ADMIN TAB ─── */
 /* ★ 승인 버튼 + 연동 삭제 추가 */
 function rAdminTab(){
@@ -2409,7 +3517,21 @@ function rAdminTab(){
       <button class="btn btn-danger" style="padding:5px 10px;font-size:12px;flex-shrink:0" data-a="del" data-id="${e.id}">🗑️</button>
     </div>`;
   }).join("");
+  const overLevelPets=S.petEntries.filter(p=>(p.level||1)>MAX_LV);
   return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><p style="margin:0;font-weight:600">참여자 관리 (${S.entries.length}명)</p><div style="display:flex;gap:6px"><button class="btn btn-danger" style="padding:6px 12px;font-size:12px" data-a="delAll">전체삭제</button><button class="btn" style="padding:6px 12px;font-size:12px" data-a="logout">로그아웃</button></div></div>
+
+  ${overLevelPets.length>0?`
+  <div style="background:#FFF3E0;border:2px solid #FF9800;border-radius:12px;padding:12px 14px;margin-bottom:12px">
+    <p style="font-size:13px;font-weight:700;color:#E65100;margin:0 0 8px">⚠️ 레벨 초과 유저 발견 (${overLevelPets.length}명)</p>
+    <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px">
+      ${overLevelPets.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,152,0,.2)">
+        <span>${p.petEmoji||'🐾'} <b>${esc(p.nick)}</b> — <span style="color:#C62828;font-weight:700">Lv.${p.level}</span> (MAX: ${MAX_LV})</span>
+        <button class="btn btn-danger" style="padding:3px 10px;font-size:11px" data-a="adminResetLevel" data-nick="${esc(p.nick)}">🔧 초기화</button>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-danger" style="width:100%;padding:8px;font-size:12.5px" data-a="adminCapAll">⚡ 전체 일괄 초기화 (Lv.${MAX_LV})</button>
+  </div>`:''}
+
   <p style="font-size:11.5px;color:var(--text3);margin:0 0 10px;line-height:1.6">💡 ✅ 승인된 참여자만 커뮤니티에 정보가 공개됩니다. 🗑️ 삭제 시 펫·2세 데이터도 함께 삭제됩니다.</p>
   ${rows}`;
 }
@@ -2449,7 +3571,7 @@ function rLovemonTab(){
   <div class="lm-pet-card" style="margin-bottom:12px">
     <div class="pet-evolution-stage" style="font-size:11px;color:var(--text3);margin-bottom:4px">[ ${evoInfo.stage} ]</div>
     <div style="font-size:68px;margin:4px 0 6px;animation:float 2.5s ease-in-out infinite">${getVisualEmoji(myPet)}</div>
-    <div style="font-size:21px;font-weight:700;color:var(--rose2);margin-bottom:3px">${esc(myPet.petName)}</div>
+    <div style="font-size:21px;font-weight:700;margin-bottom:3px;color:${getRebirthColor(myPet.rebirthCount)};${(myPet.rebirthCount||0)>=15?'text-shadow:0 0 10px rgba(255,215,0,.8)':''}">${esc(myPet.petName)} ${(myPet.rebirthCount||0)>0?`<span style="font-size:12px" class="rebirth-badge">🔥${myPet.rebirthCount}</span>`:''}</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:14px">${esc(myPet.petDesc||'')}</div>
 
     <div class="lm-stat-row">
@@ -2457,7 +3579,19 @@ function rLovemonTab(){
       <div class="lm-stat"><div class="val" style="color:var(--gold)">${myPoints.toLocaleString()}</div><div class="lbl">💰 포인트</div></div>
       <div class="lm-stat"><div class="val" style="color:var(--plum)">${myPet.xp||0}</div><div class="lbl">경험치</div></div>
       <div class="lm-stat"><div class="val" style="color:var(--mint)">${myPet.loginStreak||1}</div><div class="lbl">🔥 연속</div></div>
+      <div class="lm-stat"><div class="val" style="color:#E53935;font-size:16px">${myPet.pvpRecord?.win||0}/${myPet.pvpRecord?.lose||0}</div><div class="lbl">⚔️ PvP</div></div>
     </div>
+
+    <!-- PvP 쿨타임 표시 -->
+    ${(()=>{
+      const pvpCd=myPet.pvpCooldown||0;
+      const coolEnd=pvpCd+PVP_COOLDOWN_MS;
+      if(Date.now()<coolEnd){
+        const rem=coolEnd-Date.now();
+        return`<div style="font-size:11.5px;color:#C62828;background:rgba(244,67,54,.07);border:1px solid rgba(244,67,54,.2);border-radius:8px;padding:5px 10px;margin-top:6px;text-align:center">⚔️ PvP 쿨타임: ${msToHM(rem)} 남음</div>`;
+      }
+      return`<div style="font-size:11.5px;color:var(--mint);background:rgba(46,196,182,.07);border:1px solid rgba(46,196,182,.2);border-radius:8px;padding:5px 10px;margin-top:6px;text-align:center">⚔️ PvP 가능 상태</div>`;
+    })()}
 
     <div style="margin:10px 0 4px">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px">
@@ -2569,6 +3703,14 @@ function rLovemonTab(){
           <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
             <button class="btn btn-plum" style="padding:5px 10px;font-size:11px;min-width:56px" data-a="lm_feedOther" data-nick="${esc(p.nick)}">🍖+10</button>
             <button class="btn btn-primary" style="padding:5px 10px;font-size:11px;min-width:56px" data-a="lm_giveRoseToPet" data-nick="${esc(p.nick)}">🌹+20</button>
+            ${(()=>{
+              const pvpCd=S.myPet?.pvpCooldown||0;
+              const pvpReady=Date.now()>pvpCd+PVP_COOLDOWN_MS;
+              const remH=Math.ceil((pvpCd+PVP_COOLDOWN_MS-Date.now())/3600000);
+              return pvpReady
+                ?`<button class="btn btn-danger" style="padding:5px 10px;font-size:11px;min-width:56px" data-a="lm_pvp" data-nick="${esc(p.nick)}">⚔️PvP</button>`
+                :`<span style="font-size:9px;color:#C62828;text-align:center">⚔️${remH}h후</span>`;
+            })()}
             ${canBreedFull&&!alreadyReq?`<button class="btn" style="padding:5px 10px;font-size:11px;min-width:56px;border-color:var(--rose2);color:var(--rose2)" data-a="lm_breedReq" data-nick="${esc(p.nick)}">💍 교배</button>`:''}
             ${alreadyReq?`<span style="font-size:10px;color:var(--rose);text-align:center">신청중</span>`:''}
             <button class="btn" style="padding:5px 10px;font-size:11px;min-width:56px;border-color:var(--gold);color:var(--gold)" data-a="lm_sendPoints" data-nick="${esc(p.nick)}">💰 송금</button>
@@ -2593,7 +3735,94 @@ function rLovemonTab(){
     </div>`;
   }
 
-  return myPetHTML+marketHTML+otherPetsHTML+familyHTML;
+  /* ★ 환생 버튼 */
+  let rebirthHTML='';
+  if((myPet.level||1)>=MAX_LV){
+    rebirthHTML=`<div class="card" style="margin-bottom:12px;text-align:center;padding:1.5rem">
+      <div style="font-size:44px;margin-bottom:6px">🔥</div>
+      <p style="font-size:14px;font-weight:700;color:var(--text1);margin-bottom:4px">Lv.${MAX_LV} 최고 레벨 달성!</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.7">환생하면 레벨 1로 돌아가지만<br>주사위 굴림 시 모든 스탯 +${REBIRTH_DICE_BONUS} 영구 보너스!</p>
+      <button class="rebirth-btn" data-a="lm_rebirth">🔥 환생하기 (${((myPet.rebirthCount||0)+1)}회차)</button>
+    </div>`;
+  }
+
+  /* ★ 장착 아이템 섹션 */
+  const eq=myPet.equipment||{};
+  const inv=myPet.petInventory||[];
+  const equipmentHTML=`
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <p style="font-size:13.5px;font-weight:700;color:var(--rose2);margin:0">⚔️ 장착 아이템</p>
+      <div style="display:flex;gap:6px">
+        <button class="btn ${S.equipTab==='equip'?'btn-sel':''}" style="padding:5px 10px;font-size:11px" data-a="setEquipTab" data-v="equip">장착 슬롯</button>
+        <button class="btn ${S.equipTab==='shop'?'btn-sel':''}" style="padding:5px 10px;font-size:11px" data-a="setEquipTab" data-v="shop">상점</button>
+        <button class="btn ${S.equipTab==='inv'?'btn-sel':''}" style="padding:5px 10px;font-size:11px" data-a="setEquipTab" data-v="inv">인벤(${inv.length})</button>
+      </div>
+    </div>
+    ${S.equipTab==='equip'?`
+    <!-- 장착 슬롯 시각화 (개선) -->
+    <div style="background:linear-gradient(135deg,rgba(253,238,244,.5),rgba(240,230,255,.5));border-radius:12px;padding:10px;margin-bottom:10px">
+      <div class="equip-grid">
+        ${Object.entries(EQUIP_SLOTS).map(([slot,info])=>{
+          const equipped=eq[slot];
+          const gradeGlow=equipped?`glow-${equipped.grade||'normal'}`:'' ;
+          return`<div class="equip-slot ${equipped?'filled':''} ${gradeGlow}"
+            data-a="${equipped?'lm_unequip':''}" data-slot="${slot}"
+            title="${equipped?`클릭하면 ${equipped.name} 해제`:info.label+' 비어있음'}">
+            <div class="slot-emoji">${equipped?equipped.emoji:info.icon}</div>
+            <div class="slot-name">${info.label}</div>
+            ${equipped?`
+              <div class="slot-item grade-${equipped.grade}">${esc(equipped.name)}</div>
+              <div style="font-size:9px;color:var(--text3)">${Object.entries(equipped.stats||{}).map(([k,v])=>k.toUpperCase()+'+'+v).join(' ')}</div>
+              <div style="font-size:9px;color:#C62828;margin-top:2px">클릭 → 해제</div>
+            `:`<div style="font-size:9px;color:var(--text3)">비어있음</div>`}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <!-- 합산 스탯 표시 -->
+    ${(()=>{
+      const es=getEquippedStats(myPet);
+      const bs=getScaledStats(myPet);
+      const bonuses=[];
+      if(es.atk>bs.atk)bonuses.push(`ATK +${es.atk-bs.atk}`);
+      if(es.def>bs.def)bonuses.push(`DEF +${es.def-bs.def}`);
+      if(es.maxHp>bs.maxHp)bonuses.push(`HP +${es.maxHp-bs.maxHp}`);
+      if(es.maxMp>bs.maxMp)bonuses.push(`MP +${es.maxMp-bs.maxMp}`);
+      if(es.eva>bs.eva)bonuses.push(`EVA +${es.eva-bs.eva}%`);
+      return bonuses.length?`<div style="background:rgba(46,196,182,.08);border:1px solid rgba(46,196,182,.25);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--mint);font-weight:600;text-align:center">⚔️ 장착 보너스: ${bonuses.join(' · ')}</div>`:'<p style="font-size:11px;color:var(--text3);text-align:center">장착 아이템 없음</p>';
+    })()}`
+    :S.equipTab==='shop'?`
+    <!-- 장비 상점 -->
+    <div style="display:flex;flex-direction:column;gap:6px">
+      ${EQUIP_SHOP.map(item=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:10px;background:white">
+          <span style="font-size:26px;flex-shrink:0">${item.emoji}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12.5px;font-weight:700" class="grade-${item.grade}">${esc(item.name)}</div>
+            <div style="font-size:10.5px;color:var(--text3)">${item.slot} · ${Object.entries(item.stats).map(([k,v])=>k.toUpperCase()+'+'+v).join(' ')}</div>
+          </div>
+          <button class="btn btn-gold" style="padding:5px 10px;font-size:11px;flex-shrink:0" data-a="lm_buyEquip" data-id="${item.id}">${item.cost.toLocaleString()}P</button>
+        </div>
+      `).join('')}
+    </div>`:`
+    <!-- 인벤토리 -->
+    ${inv.length===0?`<p style="text-align:center;color:var(--text3);font-size:13px;padding:1rem">인벤토리가 비어있어요.<br>상점에서 아이템을 구매하세요!</p>`:''}
+    <div style="display:flex;flex-direction:column;gap:6px">
+      ${inv.map(item=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:10px;background:white">
+          <span style="font-size:26px">${item.emoji}</span>
+          <div style="flex:1">
+            <div style="font-size:12.5px;font-weight:700" class="grade-${item.grade}">${esc(item.name)}</div>
+            <div style="font-size:10.5px;color:var(--text3)">${item.slot}</div>
+          </div>
+          <button class="btn btn-primary" style="padding:5px 10px;font-size:11px" data-a="lm_equip" data-slot="${item.slot}" data-id="${item.id}">장착</button>
+        </div>
+      `).join('')}
+    </div>`}
+  </div>`;
+
+  return rebirthHTML+myPetHTML+equipmentHTML+marketHTML+otherPetsHTML+familyHTML;
 }
 
 /* ═══════════════════════════════════════
@@ -2687,11 +3916,9 @@ function rHatchedBabyUI(baby, myNick){
   const xpPct=Math.min(100,Math.round((babyXp/XP_PER_LV)*100));
   const partnerNick=baby.parent1Nick===myNick?baby.parent2Nick:baby.parent1Nick;
   const myPoints=S.myPet?.points||0;
+  const recentLog=(baby.feedLog||[]).slice(-5).reverse();
 
-  /* 최근 먹이 기록 */
-  const recentFeed=(baby.feedLog||[]).slice(-5).reverse();
-
-  /* 공동 육아 먹이 아이템 */
+  /* 먹이 아이템 */
   const BABY_FEED=[
     {label:'아기 사료',emoji:'🍼',cost:100,xp:30},
     {label:'영양 간식',emoji:'🧁',cost:300,xp:100},
@@ -2699,14 +3926,87 @@ function rHatchedBabyUI(baby, myNick){
   ];
 
   return`
-  <!-- ★ 공동 육아 펫 카드 -->
+  <!-- ★ 2세 펫 카드 -->
   <div style="background:linear-gradient(160deg,rgba(253,238,244,.98),rgba(240,230,255,.98));border:2px solid rgba(155,89,182,.3);border-radius:18px;padding:1.4rem;text-align:center;box-shadow:0 6px 28px rgba(155,89,182,.15);margin-bottom:12px">
-
     <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(155,89,182,.1);border:1px solid rgba(155,89,182,.2);border-radius:99px;padding:4px 14px;font-size:11px;font-weight:700;color:var(--lm-purple);margin-bottom:12px">
-      🍼 공동 육아 공간
+      🍼 공동 육아 공간 · Lv.${babyLevel}
     </div>
+    <div style="font-size:72px;margin:4px 0 8px;animation:float 2.5s ease-in-out infinite">${baby.babyEmoji||'🐣'}</div>
+    <div style="font-size:20px;font-weight:700;color:var(--rose2);margin-bottom:4px">${esc(baby.babyName||'아기몬')}</div>
+    <div style="display:inline-block;background:${rc};color:white;padding:2px 14px;border-radius:99px;font-size:12px;font-weight:700;margin-bottom:12px">✨ ${baby.rarity||'일반'}</div>
+    <!-- XP 바 -->
+    <div style="margin:0 0 12px">
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-bottom:4px"><span>XP</span><span>${babyXp}/${XP_PER_LV}</span></div>
+      <div class="lm-xp-bar"><div class="lm-xp-fill" style="width:${xpPct}%"></div></div>
+    </div>
+    <!-- 스탯 -->
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:10px;background:rgba(255,255,255,.6);border-radius:10px;margin-bottom:12px">
+      ${statNames.map(s=>`<div style="text-align:center"><div style="font-size:16px;font-weight:700;color:var(--text1)">${stats[s]||0}</div><div style="font-size:10px;color:var(--text3)">${s}</div></div>`).join('')}
+    </div>
+    <!-- 부모 정보 -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:12px;padding:8px 14px;background:rgba(232,83,122,.06);border-radius:10px;border:1px solid var(--border)">
+      <span>${esc(baby.parent1Emoji||'🐾')} <b>${esc(baby.parent1Nick)}</b></span>
+      <span style="color:var(--rose)">💕</span>
+      <span>${esc(baby.parent2Emoji||'🐾')} <b>${esc(baby.parent2Nick)}</b></span>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:6px">파트너 <b>${esc(partnerNick)}</b>와 공동육아 중 · 보유: <b style="color:var(--gold)">${myPoints.toLocaleString()}P</b></div>
+  </div>
 
-    <div style="font-size:72px;margin:6px 0 8px;animation:float 2.5s ease-in-out infinite">${baby.babyEmoji||'🐣'}</div>
+  <!-- ★ 먹이 주기 -->
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:13px;font-weight:700;color:var(--rose2);margin:0 0 10px">🍼 먹이 주기</p>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      ${BABY_FEED.map(f=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:white">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:26px">${f.emoji}</span>
+            <div><div style="font-size:13px;font-weight:700">${esc(f.label)}</div>
+            <div style="font-size:11px;color:var(--mint)">XP +${f.xp}</div></div>
+          </div>
+          <button class="btn ${myPoints>=f.cost?'btn-primary':'btn-danger'}" style="padding:6px 12px;font-size:12px"
+            data-a="lm_feedBaby" data-id="${baby.id}" data-cost="${f.cost}" data-xp="${f.xp}" ${myPoints<f.cost?'disabled':''}>
+            ${myPoints>=f.cost?`${f.cost}P`:'부족'}
+          </button>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <!-- ★ 추가 액티비티 (신규) -->
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:13px;font-weight:700;color:var(--rose2);margin:0 0 4px">🎮 아기 액티비티</p>
+    <p style="font-size:11.5px;color:var(--text3);margin:0 0 10px">특별한 활동으로 스탯·XP를 올려줘요! 부모 양쪽 모두 참여 가능 💕</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      ${BABY_ACTIVITIES.map(act=>`
+        <div style="border:1.5px solid ${myPoints>=act.cost?'var(--border)':'#FFCDD2'};border-radius:12px;background:white;padding:10px;text-align:center;cursor:${myPoints>=act.cost?'pointer':'not-allowed'};opacity:${myPoints>=act.cost?1:0.6};transition:all .15s"
+          data-a="${myPoints>=act.cost?'lm_babyActivity':''}" data-id="${baby.id}" data-act="${act.id}"
+          style="cursor:${myPoints>=act.cost?'pointer':'default'}">
+          <div style="font-size:28px;margin-bottom:4px">${act.emoji}</div>
+          <div style="font-size:11.5px;font-weight:700;margin-bottom:2px">${esc(act.label)}</div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;line-height:1.4">${esc(act.desc)}</div>
+          <div style="font-size:12px;font-weight:700;color:${myPoints>=act.cost?'var(--gold)':'#C62828'}">${act.cost}P</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <!-- 육아 기록 -->
+  ${recentLog.length>0?`
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:12px;font-weight:700;color:var(--text2);margin:0 0 8px">📋 최근 육아 기록</p>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      ${recentLog.map(f=>{
+        const ago=Math.round((Date.now()-f.time)/60000);
+        const agoStr=ago<60?`${ago}분 전`:`${Math.round(ago/60)}시간 전`;
+        return`<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)">
+          <span><b>${esc(f.nick)}</b>님 · ${esc(f.activity||'먹이')}</span>
+          <span style="color:var(--mint);font-weight:600">+${f.xp||0}XP</span>
+          <span style="color:var(--text3);font-size:10.5px">${agoStr}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`:''}`;
+}
     <div style="font-size:20px;font-weight:700;color:var(--rose2);margin-bottom:6px">${esc(baby.babyName||'아기몬')}</div>
     <div style="font-size:11px;color:var(--text2);margin-bottom:10px">${esc(baby.babyDesc||'')}</div>
 
@@ -2785,6 +4085,166 @@ function rHatchedBabyUI(baby, myNick){
 /* ═══════════════════════════════════════
    ⚔️ 던전 탭 렌더
 ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   🏠 하우스 탭
+═══════════════════════════════════════ */
+function rHouseTab(){
+  const myNick=S.myEntry?.nick;
+  const isVisiting=!!S.visitingHouse;
+  const targetNick=isVisiting?S.visitingHouse:myNick;
+  const houseData=isVisiting?S.houseEntries.find(h=>h.nick===targetNick):S.myHouse;
+  const tier=houseData?HOUSE_TIERS.find(t=>t.id===houseData.tier)||HOUSE_TIERS[0]:null;
+
+  /* 처음 방문 or 내 집 없으면 생성 */
+  if(!isVisiting&&!S.myHouse){
+    return`<div class="card" style="text-align:center;padding:2rem">
+      <div style="font-size:64px;margin-bottom:12px" class="float">🏚️</div>
+      <p style="font-size:16px;font-weight:700;margin-bottom:8px">아직 집이 없어요!</p>
+      <p style="font-size:12.5px;color:var(--text3);margin-bottom:16px;line-height:1.7">내 러브몬만의 집을 만들어봐요!<br>판잣집은 무료예요 🎁</p>
+      <button class="btn btn-primary" style="padding:12px 28px;font-size:14px" data-a="lm_initHouse">🏚️ 집 만들기 (무료)</button>
+    </div>`;
+  }
+  if(isVisiting&&!houseData){
+    return`<div class="card" style="text-align:center;padding:2rem">
+      <div style="font-size:48px;margin-bottom:8px">🏚️</div>
+      <p style="font-size:13px;color:var(--text2)">${targetNick}님은 아직 집이 없어요.</p>
+      <button class="btn btn-mint" style="margin-top:12px;padding:8px 18px" data-a="lm_backFromHouse">← 돌아가기</button>
+    </div>`;
+  }
+
+  const guestbook=houseData?.guestbook||[];
+  const furniture=houseData?.furniture||[];
+  const inventory=houseData?.inventory||[];
+  const myPoints=S.myPet?.points||0;
+
+  return`
+  ${isVisiting?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <button class="btn" style="padding:6px 12px;font-size:12px" data-a="lm_backFromHouse">← 돌아가기</button>
+    <span style="font-size:13px;font-weight:600">${esc(targetNick)}님의 집 방문 중</span>
+    <span style="font-size:11px;color:var(--text3)">👣 ${houseData?.visitors||0}명 방문</span>
+  </div>`:''}
+
+  <!-- ★ Three.js 3D 집 -->
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:10px;border-radius:16px">
+    <div class="house-canvas-wrap">
+      <div id="house3d-canvas" style="width:100%;height:360px"></div>
+      <div class="house-ctrl-hint">← 드래그로 회전 →</div>
+    </div>
+    <div style="padding:10px 14px;background:white">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <span style="font-size:22px">${tier?.emoji||'🏚️'}</span>
+          <span style="font-size:14px;font-weight:700;margin-left:6px">${tier?.name||'판잣집'}</span>
+          <span style="font-size:11px;color:var(--text3);margin-left:6px">가구 ${furniture.length}/${tier?.maxSlots||3}개</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3)">
+          🎨 ${WALLPAPERS[houseData?.wallpaper||'rose']?.name||'기본'} · ${FLOORS[houseData?.floor||'wood']?.name||'원목'}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  ${!isVisiting?`
+  <!-- 내 집: 꾸미기 컨트롤 -->
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:13px;font-weight:700;color:var(--rose2);margin:0 0 10px">🎨 집 꾸미기</p>
+    <!-- 집 업그레이드 -->
+    <p style="font-size:11.5px;color:var(--text2);margin:0 0 6px;font-weight:600">집 등급 업그레이드</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      ${HOUSE_TIERS.map(t=>{
+        const isCurrent=t.id===houseData?.tier;
+        const canUpgrade=(S.myPet?.level||1)>=t.reqLv&&(t.cost===0||(myPoints>=t.cost));
+        return`<button class="house-tier-card ${isCurrent?'current':''}" style="min-width:80px" data-a="lm_upgradeHouse" data-tier="${t.id}" ${isCurrent?'disabled':''}>
+          <div style="font-size:20px">${t.emoji}</div>
+          <div style="font-size:11px;font-weight:600">${t.name}</div>
+          <div style="font-size:10px;color:${isCurrent?'var(--rose2)':canUpgrade?'var(--mint)':'#C62828'}">${isCurrent?'현재':`${t.cost===0?'무료':`${t.cost.toLocaleString()}P`} · Lv.${t.reqLv}+`}</div>
+        </button>`;
+      }).join('')}
+    </div>
+    <!-- 벽지/바닥 -->
+    <p style="font-size:11.5px;color:var(--text2);margin:0 0 6px;font-weight:600">🎨 벽지 / 바닥재</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+      ${Object.entries(WALLPAPERS).map(([k,v])=>`<button class="btn ${houseData?.wallpaper===k?'btn-sel':''}" style="padding:5px 10px;font-size:11px" data-a="lm_setWallpaper" data-v="${k}">${v.name} ${v.cost>0?`(${v.cost}P)`:''}</button>`).join('')}
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      ${Object.entries(FLOORS).map(([k,v])=>`<button class="btn ${houseData?.floor===k?'btn-sel':''}" style="padding:5px 10px;font-size:11px" data-a="lm_setFloor" data-v="${k}">${v.name} (${v.cost}P)</button>`).join('')}
+    </div>
+    <!-- 가구 배치 -->
+    ${furniture.length>0?`<p style="font-size:11.5px;color:var(--text2);margin:0 0 6px;font-weight:600">🛋️ 배치된 가구 (클릭 시 제거)</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      ${furniture.map(f=>`<button class="btn btn-danger" style="padding:5px 10px;font-size:12px" data-a="lm_removeFurniture" data-id="${f.id}">${f.emoji} ${esc(f.name)} ×</button>`).join('')}
+    </div>`:''}
+    <!-- 인벤토리 배치 -->
+    ${inventory.length>0?`<p style="font-size:11.5px;color:var(--text2);margin:0 0 6px;font-weight:600">📦 보관 중인 가구 (클릭 시 배치)</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      ${inventory.map(f=>`<button class="btn btn-mint" style="padding:5px 10px;font-size:12px" data-a="lm_placeFurniture" data-id="${f.id}">${f.emoji} ${esc(f.name)}</button>`).join('')}
+    </div>`:''}
+  </div>
+
+  <!-- 가구 상점 -->
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:13px;font-weight:700;color:var(--rose2);margin:0 0 10px">🛋️ 가구 상점</p>
+    <div class="furniture-grid">
+      ${FURNITURE_SHOP.map(f=>`
+        <div class="furniture-item" data-a="lm_buyFurniture" data-id="${f.id}">
+          <div style="font-size:32px;margin-bottom:4px">${f.emoji}</div>
+          <div style="font-size:12px;font-weight:700" class="grade-${f.grade}">${esc(f.name)}</div>
+          <div style="font-size:10px;color:var(--text3);margin:2px 0">${esc(f.grade)}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--gold)">${f.cost===0?'무료':f.cost.toLocaleString()+'P'}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`:''}
+
+  <!-- 방명록 -->
+  <div class="card" style="margin-bottom:10px">
+    <p style="font-size:13px;font-weight:700;color:var(--rose2);margin:0 0 10px">💬 방명록 (${guestbook.length}개)</p>
+    ${isVisiting&&myNick?`<div style="display:flex;gap:6px;margin-bottom:10px">
+      <input id="guestbookInput" class="inp" placeholder="방명록 한 마디..." style="flex:1">
+      <button class="btn btn-primary" style="padding:0 14px;flex-shrink:0" data-a="lm_leaveGuestbook" data-nick="${esc(targetNick)}">남기기</button>
+    </div>`:''}
+    ${guestbook.length===0?`<p style="font-size:12px;color:var(--text3);text-align:center;padding:1rem">아직 방명록이 없어요. 첫 번째 방문자가 되어보세요! 💕</p>`:''}
+    <div style="max-height:200px;overflow-y:auto">
+      ${[...guestbook].reverse().map(g=>`<div style="padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px">
+        <span style="font-weight:700;color:var(--rose2)">${esc(g.nick)}</span>
+        <span style="font-size:10.5px;color:var(--text3);margin-left:6px">${g.date||''}</span>
+        <div style="color:var(--text1);margin-top:2px">${esc(g.msg)}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════
+   📬 선물함 탭
+═══════════════════════════════════════ */
+function rGiftsTab(){
+  const myNick=S.myEntry?.nick;
+  if(!myNick){return`<div class="card" style="text-align:center;padding:2rem"><p style="color:var(--text3)">MBTI 검사 완료 후 이용 가능합니다.</p></div>`;}
+  return`
+  <div style="margin-bottom:10px">
+    <p style="font-size:13.5px;font-weight:700;color:var(--rose2)">📬 받은 선물함</p>
+    <p style="font-size:11.5px;color:var(--text3)">다른 유저가 보낸 먹이·장미꽃 선물이 여기에 쌓입니다 💕</p>
+  </div>
+  ${S.myGifts.length===0?`<div class="card" style="text-align:center;padding:2rem">
+    <div style="font-size:48px;margin-bottom:10px">📭</div>
+    <p style="font-size:13px;color:var(--text3)">아직 받은 선물이 없어요.<br>다른 사람의 펫과 교류해보세요! 💕</p>
+  </div>`:`<div style="display:flex;flex-direction:column;gap:1px">
+    ${S.myGifts.map(g=>{
+      const typeLabel=g.type==='feed'?'먹이를':g.type==='rose'?'장미꽃을':'선물을';
+      const timeAgo=g.timestamp?.toDate?Math.round((Date.now()-g.timestamp.toDate().getTime())/60000)+'분 전':'방금 전';
+      return`<div class="gift-card ${g.read?'':'unread'}">
+        ${!g.read?`<div class="gift-unread-dot"></div>`:''}
+        <span style="font-size:28px">${g.itemEmoji||'🎁'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;color:var(--text1)">${esc(g.fromEmoji||'🐾')} ${esc(g.from)}님이 ${typeLabel} 선물했어요!</div>
+          <div style="font-size:11.5px;color:var(--text2);margin-top:2px">${esc(g.itemName||'')} ${g.type==='feed'?'· XP+30':g.type==='rose'?'· 호감도+20':''}</div>
+        </div>
+        <div style="font-size:10.5px;color:var(--text3);flex-shrink:0">${timeAgo}</div>
+      </div>`;
+    }).join('')}
+  </div>`}`;
+}
+
 function rDungeonTab(){
   const myPet=S.myPet;
   if(!myPet){
@@ -2793,10 +4253,10 @@ function rDungeonTab(){
       <p style="font-size:13px;color:var(--text2)">MBTI 검사 완료 후 이용 가능합니다.</p>
     </div>`;
   }
-  /* 배틀 중이면 배틀 UI 표시 */
   if(S.dungeonState?.active)return rBattleUI();
 
-  const scaled=getScaledStats(myPet);
+  /* ★ 장착 아이템 포함 스탯 */
+  const scaled=getEquippedStats(myPet);
   const hasDice=!!myPet.diceStats;
   const myNick=S.myEntry?.nick;
   const hatchedBaby=S.babyPets.find(b=>b.hatched&&(b.parent1Nick===myNick||b.parent2Nick===myNick));
@@ -2807,10 +4267,41 @@ function rDungeonTab(){
   const hpPct=Math.round((curHp/scaled.maxHp)*100);
   const mpPct=Math.round((curMp/scaled.maxMp)*100);
   const spPct=Math.round((curSp/100)*100);
+  /* ★ 쿨타임 계산 */
+  const lastDungeon=myPet.lastDungeonAt||0;
+  const cooldownEnd=lastDungeon+DUNGEON_COOLDOWN_MS;
+  const isCooldown=Date.now()<cooldownEnd;
+  const coolRemain=Math.max(0,cooldownEnd-Date.now());
+
+  /* ★ 쿨타임 / 층별 진행도 계산 */
+  const cooldownStart=myPet.dungeonCooldownStart||0;
+  const cooldownEnd=cooldownStart+DUNGEON_COOLDOWN_MS;
+  const isCooldown=Date.now()<cooldownEnd;
+  const coolRemain=Math.max(0,cooldownEnd-Date.now());
+  const kills=myPet.dungeonKills||{};
+  const clearedCount=DUNGEON_ALL_FLOORS.filter(f=>kills[f]).length;
 
   return`
-  <!-- ★ 내 펫 전투 스탯 -->
-  <div class="card" style="margin-bottom:12px">
+  <!-- ★ 쿨타임 / 진행도 -->
+  ${isCooldown?`<div class="dungeon-cooltime">
+    <span style="font-size:28px">⏳</span>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#E64A19;margin-bottom:2px">5층 전부 클리어! 쿨타임 중</div>
+      <div class="cooltime-timer">${Math.floor(coolRemain/60000)}분 ${Math.floor((coolRemain%60000)/1000)}초</div>
+    </div>
+  </div>`:`<div class="card card-mint" style="margin-bottom:12px;padding:10px 14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-size:12px;font-weight:700;color:var(--mint)">⚔️ 이번 라운드 클리어 현황 (${clearedCount}/5)</span>
+      ${clearedCount>0?`<button class="btn" style="padding:3px 8px;font-size:10.5px;color:#C62828;border-color:#FFCDD2" data-a="lm_resetDungeonKills">초기화</button>`:''}
+    </div>
+    <div style="display:flex;gap:6px">
+      ${DUNGEON_ALL_FLOORS.map(f=>`<div style="flex:1;text-align:center;padding:6px 4px;border-radius:8px;background:${kills[f]?'rgba(46,196,182,.15)':'rgba(0,0,0,.04)'};border:1px solid ${kills[f]?'rgba(46,196,182,.4)':'var(--border)'}">
+        <div style="font-size:14px">${kills[f]?'✅':'⚔️'}</div>
+        <div style="font-size:10px;color:${kills[f]?'var(--mint)':'var(--text3)'};">${f}층</div>
+      </div>`).join('')}
+    </div>
+    ${clearedCount===5?`<p style="font-size:11px;color:var(--rose2);font-weight:700;margin:6px 0 0;text-align:center">🔥 마지막 층만 남았어요! 클리어하면 5분 쿨타임 시작!</p>`:''}
+  </div>`}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
       <div style="font-size:44px">${myPet.petEmoji||'🐾'}</div>
       <div style="flex:1">
@@ -2915,16 +4406,17 @@ function rDungeonTab(){
   ${hasDice?`
   <div class="card" style="margin-bottom:12px">
     <p style="font-size:13.5px;font-weight:700;color:var(--rose2);margin:0 0 4px">⚔️ 던전 입장</p>
-    <p style="font-size:11.5px;color:var(--text3);margin:0 0 12px;line-height:1.6">층이 높을수록 강한 몹 · 더 많은 보상 · 최소 레벨 조건 있음</p>
-    <div class="dungeon-floor-grid">
+    <p style="font-size:11.5px;color:var(--text3);margin:0 0 12px;line-height:1.6">층이 높을수록 강한 몹 · 더 많은 보상 · 최소 레벨 조건 있음<br>1~10층 전부 클리어 후 5분 쿨타임!</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:520px;overflow-y:auto;padding-right:2px">
       ${DUNGEON_FLOORS.map((fl,fi)=>{
         const locked=(myPet.level||1)<fl.reqLv;
-        return`<div class="dungeon-floor-card ${locked?'locked':''}" data-a="lm_selectFloor" data-floor="${fi}">
-          <div style="font-size:32px;margin-bottom:4px">${fl.emoji}</div>
+        const cleared=kills[fi+1];
+        return`<div class="dungeon-floor-card ${locked?'locked':''}" style="${cleared?'border-color:var(--mint);background:rgba(46,196,182,.06)':''}" data-a="lm_selectFloor" data-floor="${fi}">
+          <div style="font-size:28px;margin-bottom:3px">${fl.emoji}</div>
           <div style="font-size:13px;font-weight:700">${fl.floor}층</div>
-          <div style="font-size:12px;color:var(--text2);margin:2px 0">${esc(fl.name)}</div>
-          <div style="font-size:10.5px;color:${locked?'#C62828':'var(--mint)'};font-weight:600">${locked?`🔒 Lv.${fl.reqLv} 필요`:'✅ 입장 가능'}</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:3px">XP ${fl.mobs.map(m=>m.xp).join('/')} · P ${fl.mobs.map(m=>m.pts).join('/')}</div>
+          <div style="font-size:11.5px;color:var(--text2);margin:2px 0">${esc(fl.name)}</div>
+          <div style="font-size:10px;color:${locked?'#C62828':cleared?'var(--mint)':'var(--mint)'};font-weight:600">${locked?`🔒 Lv.${fl.reqLv}`:cleared?'✅ 클리어':'✅ 입장 가능'}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">XP ${fl.mobs.map(m=>m.xp).join('/')} · ${fl.mobs.map(m=>m.pts).join('/')}P</div>
         </div>`;
       }).join('')}
     </div>
@@ -2951,7 +4443,8 @@ function rBattleUI(){
   const ds=S.dungeonState;
   if(!ds)return'';
   const myPet=S.myPet;
-  const scaled=getScaledStats(myPet);
+  /* ★ 장착 아이템 포함 스탯 */
+  const scaled=getEquippedStats(myPet);
   const hpPct=Math.round((ds.playerHp/ds.playerMaxHp)*100);
   const mpPct=Math.round((ds.playerMp/ds.playerMaxMp)*100);
   const spPct=Math.round((ds.playerSp/100)*100);
@@ -3048,13 +4541,323 @@ function rBattleUI(){
     </div>
   </div>`}`;
 }
+/* ═══════════════════════════════════════
+   🎨 캐치마인드 탭
+═══════════════════════════════════════ */
+function rCatchmindTab(){
+  const myNick=S.myEntry?.nick;
+  const state=S.catchmindState;
+  const isDrawer=state?.status==='drawing'&&state?.drawerNick===myNick;
+  const isIdle=!state||state.status==='idle';
+  const isReveal=state?.status==='reveal';
+  const tool=S.cmTool;
+
+  /* 마스킹: 출제자에게만 단어 보임 */
+  const wordMasked=state?.word?
+    (isDrawer?state.word:'❓'.repeat(state.word.length)):'';
+
+  const COLORS=['#000000','#E53935','#1E88E5','#FDD835','#43A047','#FB8C00','#8E24AA','#FFFFFF'];
+  const WIDTHS=[{v:3,l:'S'},{v:6,l:'M'},{v:10,l:'L'},{v:20,l:'XL'}];
+
+  return`
+  <!-- 게임 상태 헤더 -->
+  <div class="card card-rose" style="margin-bottom:10px;padding:12px 14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--rose2)">🎨 캐치마인드</div>
+        <div style="font-size:11.5px;color:var(--text3);margin-top:2px">
+          ${state?.status==='drawing'?`✏️ 출제자: <b>${esc(state.drawerNick)}</b>`:
+            isReveal?`✅ 정답: <b>${esc(state?.word||'')}</b> (${esc(state?.solvedBy||'시간초과')})`:
+            '대기 중...'}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        ${state?.status==='drawing'?`
+          <div id="cm_timer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;min-width:48px;text-align:right">--초</div>
+          <div style="font-size:11px;color:var(--text3)">라운드 ${state.round||1}</div>`:''}
+        ${isDrawer&&state?.status==='drawing'?`<button class="btn btn-danger" style="padding:5px 10px;font-size:11px" data-a="lm_cm_skip">⏭ 포기</button>`:''}
+      </div>
+    </div>
+    ${isDrawer&&state?.status==='drawing'?`
+      <div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.8);border-radius:10px;border:1.5px dashed var(--rose2);text-align:center">
+        <p style="font-size:11px;color:var(--text3);margin-bottom:4px">📝 내가 그릴 주제어 (다른 사람에게 보이지 않아요)</p>
+        <p style="font-size:22px;font-weight:700;color:var(--rose2);letter-spacing:3px">${esc(state.word)}</p>
+      </div>`:''}
+    ${!isDrawer&&state?.status==='drawing'?`
+      <div style="margin-top:8px;text-align:center;letter-spacing:6px;font-size:18px">
+        ${'⬜'.repeat(state?.word?.length||0)}
+        <span style="font-size:11px;color:var(--text3);letter-spacing:0;margin-left:8px">${state?.word?.length||0}글자</span>
+      </div>`:''}
+  </div>
+
+  <!-- ★ 캔버스 -->
+  <div style="background:white;border-radius:14px;border:2px solid ${isDrawer?'var(--rose2)':'var(--border)'};overflow:hidden;margin-bottom:${isDrawer?'8px':'10px'};position:relative;touch-action:none">
+    <canvas id="cm_canvas" style="display:block;width:100%;height:260px;cursor:${isDrawer?'crosshair':'default'}"></canvas>
+    ${!state||isIdle?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.9);flex-direction:column;gap:8px">
+      <div style="font-size:48px">🎨</div>
+      <p style="font-size:14px;font-weight:700;color:var(--text1)">캐치마인드</p>
+      <p style="font-size:12px;color:var(--text3)">아래 버튼으로 게임을 시작해요!</p>
+    </div>`:''}
+    ${isReveal?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(253,238,244,.92);flex-direction:column;gap:8px">
+      <div style="font-size:44px">${state?.solvedBy?'🎉':'⏰'}</div>
+      <p style="font-size:18px;font-weight:700;color:var(--rose2)">${state?.solvedBy?`${esc(state.solvedBy)}님 정답!`:'시간 초과!'}</p>
+      <p style="font-size:16px;font-weight:600">정답: <b>${esc(state?.word||'')}</b></p>
+      <p style="font-size:12px;color:var(--text3)">잠시 후 다음 라운드...</p>
+    </div>`:''}
+  </div>
+
+  <!-- 그리기 도구 (출제자 전용) -->
+  ${isDrawer?`
+  <div class="card" style="margin-bottom:10px;padding:10px 12px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <!-- 색상 팔레트 -->
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        ${COLORS.map(c=>`<div style="width:26px;height:26px;border-radius:50%;background:${c};border:2px solid ${tool.color===c&&!tool.eraser?'var(--rose2)':'rgba(0,0,0,.2)'};cursor:pointer;flex-shrink:0;box-shadow:${tool.color===c&&!tool.eraser?'0 0 0 2px white,0 0 0 4px var(--rose2)':''}" data-a="lm_cm_color" data-v="${c}"></div>`).join('')}
+        <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff0,#f00,#00f);border:2px solid ${tool.eraser?'var(--rose2)':'rgba(0,0,0,.2)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px" data-a="lm_cm_eraser" title="지우개">🧹</div>
+      </div>
+      <!-- 굵기 -->
+      <div style="display:flex;gap:4px">
+        ${WIDTHS.map(w=>`<button class="btn" style="padding:4px 8px;font-size:11px;min-width:28px;${tool.width===w.v&&!tool.eraser?'background:var(--rose);color:white;':''}font-weight:700" data-a="lm_cm_width" data-v="${w.v}">${w.l}</button>`).join('')}
+      </div>
+      <!-- 전체 지우기 -->
+      <button class="btn btn-danger" style="padding:4px 10px;font-size:11.5px;margin-left:auto" data-a="lm_cm_clearAll">🗑️ 전체</button>
+    </div>
+    <!-- 현재 도구 미리보기 -->
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text3)">
+      <div style="width:${tool.width}px;height:${tool.width}px;border-radius:50%;background:${tool.eraser?'#ccc':tool.color};flex-shrink:0"></div>
+      <span>${tool.eraser?'🧹 지우개':`🎨 색상 · 굵기 ${tool.width}px`}</span>
+    </div>
+  </div>`:
+  /* 정답 입력 (비출제자 + 게임 중) */
+  state?.status==='drawing'&&myNick?`
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <input id="cm_guess_input" class="inp" placeholder="그림을 보고 정답을 입력하세요..." style="flex:1">
+    <button class="btn btn-primary" style="padding:0 16px;font-size:13px;flex-shrink:0" data-a="lm_cm_guess">✏️ 제출</button>
+  </div>`:''}
+
+  <!-- 시작 / 대기 버튼 -->
+  ${isIdle||isReveal?`
+  <button class="btn btn-primary" style="width:100%;padding:13px;font-size:14.5px;margin-bottom:10px" data-a="lm_cm_start">
+    🎨 ${isIdle?'게임 시작 (랜덤 출제자 선정)':'다음 라운드 시작'}
+  </button>`:''}
+
+  <!-- 추측 채팅 -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <p style="font-size:12.5px;font-weight:700;color:var(--text2);margin:0">💬 추측 피드</p>
+      <span style="font-size:10.5px;color:var(--text3)">${S.cmGuesses.length}개</span>
+    </div>
+    <div id="cm_chat_feed" style="max-height:180px;overflow-y:auto;font-size:12.5px">${renderCMGuesses()}</div>
+  </div>
+
+  <!-- 보상 안내 -->
+  <div class="card card-gold" style="margin-bottom:10px">
+    <p style="font-size:12.5px;font-weight:700;margin:0 0 8px">🏆 보상 안내</p>
+    <div style="font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between"><span>✅ 정답 맞추기 (추측자)</span><span class="gold-badge">+100P +5IQ</span></div>
+      <div style="display:flex;justify-content:space-between"><span>🎨 그림 출제 (다음 라운드 출제자)</span><span class="gold-badge">+50P +2IQ</span></div>
+    </div>
+  </div>`;
+}
+
 function renderChatMessages(){
   if(S.chosungChat.length===0)return`<p style="font-size:12.5px;color:var(--text3);text-align:center;padding:1.5rem">아직 채팅이 없어요. 첫 번째로 정답을 맞춰보세요!</p>`;
-  return S.chosungChat.map(m=>`<div class="lm-chat-msg ${m.isCorrect?'correct':''}">
-    <span class="lm-chat-nick">${esc(m.nick||'')}</span>
-    <span style="font-size:13px;color:${m.isCorrect?'var(--rose2)':'var(--text1)'}">${esc(m.message||'')}</span>
-    ${m.isCorrect?`<span style="font-size:11px;color:var(--rose);margin-left:auto">+50P ⚡</span>`:''}
-  </div>`).join('');
+  return S.chosungChat.map(m=>{
+    const type=m.type||'chosung';
+    const pMap={chosung:'+50P +3IQ',ox:'+20P +1IQ',nonsense:'+40P +2IQ',short:'+30P +2IQ'};
+    const reward=pMap[type]||'+50P';
+    return`<div class="lm-chat-msg ${m.isCorrect?'correct':''}">
+      <span class="lm-chat-nick">${esc(m.nick||'')}</span>
+      <span style="font-size:13px;color:${m.isCorrect?'var(--rose2)':'var(--text1)'}">${esc(m.message||'')}</span>
+      ${m.isCorrect?`<span style="font-size:11px;color:var(--rose);margin-left:auto">⚡ ${reward}</span>`:''}
+    </div>`;
+  }).join('');
+}
+
+function rPlazaTab(){
+  const state=S.chosungState;
+  const myNick=S.myEntry?.nick;
+  const qMode=S.quizMode||state?.type||'chosung';
+  const myPet=S.myPet;
+  const myIQ=myPet?.iq||100;
+
+  /* ── 퀴즈 타입 선택 탭 ── */
+  const quizTypeTabs=`
+  <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap">
+    ${[
+      {id:'chosung', label:'🔤 초성퀴즈', reward:'+50P +3IQ'},
+      {id:'ox',      label:'⭕ OX퀴즈',   reward:'+20P +1IQ'},
+      {id:'nonsense',label:'🤪 넌센스',   reward:'+40P +2IQ'},
+      {id:'short',   label:'✏️ 주관식',   reward:'+30P +2IQ'},
+    ].map(t=>`<button class="btn ${qMode===t.id?'btn-sel':''}" style="padding:6px 10px;font-size:11.5px;flex:1"
+      data-a="lm_setQuizMode" data-v="${t.id}">${t.label}<br><span style="font-size:9.5px;opacity:.7">${t.reward}</span></button>`).join('')}
+  </div>`;
+
+  /* ── 문제 표시 ── */
+  let questionHTML='';
+  let inputHTML='';
+
+  if(!state){
+    questionHTML=`<div style="text-align:center;padding:2rem 0;color:var(--text3)">
+      <div style="font-size:40px;margin-bottom:10px">🎉</div>
+      <p style="font-size:13px">퀴즈 준비 중... 잠시 후 시작됩니다!</p>
+    </div>`;
+  } else {
+    const solved=state.solvedBy;
+    const solvedBox=solved?`<div style="text-align:center;padding:10px;background:var(--rose-lt);border-radius:10px;margin-top:10px;border:1px solid var(--border2)">
+      <p style="font-size:14px;font-weight:700;color:var(--rose2)">⚡ ${esc(state.solvedBy)}님이 먼저 정답!</p>
+      <p style="font-size:12px;color:var(--text2);margin:4px 0 0">정답: <b>${esc(state.answer||state.answers?.[0]||'')}</b></p>
+      ${state.explain?`<p style="font-size:11px;color:var(--text3);margin:3px 0 0">${esc(state.explain)}</p>`:''}
+      <p style="font-size:11px;color:var(--text3);margin:3px 0 0">다음 문제 준비 중...</p>
+    </div>`:'';
+
+    if(state.type==='chosung'){
+      questionHTML=`
+        <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:8px">🔤 초성 퀴즈 [${esc(state.genre||'일반')}]</p>
+        <div style="display:flex;justify-content:center;gap:8px;margin:8px 0 12px;flex-wrap:wrap">
+          ${(state.chosung||[]).map(c=>`<div class="lm-cho-char">${c}</div>`).join('')}
+        </div>
+        <p style="font-size:12px;color:var(--text3);text-align:center">💡 힌트: ${esc(state.hint||'')}</p>
+        ${solvedBox}`;
+      if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
+        <input id="lm_chosung_input" class="inp" placeholder="정답을 입력하세요..." style="flex:1">
+        <button class="btn btn-mint" style="padding:0 18px;font-size:13px" data-a="lm_submitAnswer">⚡ 입력</button>
+      </div>`;
+
+    } else if(state.type==='ox'){
+      questionHTML=`
+        <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">⭕ OX 퀴즈</p>
+        <div style="background:white;border-radius:12px;padding:14px 16px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px">
+          <p style="font-size:16px;font-weight:600;line-height:1.6">${esc(state.question||'')}</p>
+        </div>
+        ${solvedBox}`;
+      if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:10px;margin-top:10px">
+        <button class="btn" style="flex:1;padding:18px;font-size:32px;border-color:rgba(76,175,80,.5);background:rgba(76,175,80,.05)" data-a="lm_submitOX" data-v="O">⭕</button>
+        <button class="btn" style="flex:1;padding:18px;font-size:32px;border-color:rgba(244,67,54,.5);background:rgba(244,67,54,.05)" data-a="lm_submitOX" data-v="X">❌</button>
+      </div>`;
+
+    } else if(state.type==='nonsense'){
+      questionHTML=`
+        <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">🤪 넌센스 퀴즈</p>
+        <div style="background:linear-gradient(135deg,rgba(253,238,244,.6),rgba(240,230,255,.6));border-radius:12px;padding:16px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px">
+          <p style="font-size:15px;font-weight:600;line-height:1.7">${esc(state.question||'')}</p>
+          ${state.hint?`<p style="font-size:11.5px;color:var(--text3);margin-top:6px">💡 ${esc(state.hint)}</p>`:''}
+        </div>
+        ${solvedBox}`;
+      if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
+        <input id="lm_chosung_input" class="inp" placeholder="정답을 입력하세요..." style="flex:1">
+        <button class="btn btn-mint" style="padding:0 18px;font-size:13px" data-a="lm_submitAnswer">⚡ 입력</button>
+      </div>`;
+
+    } else { /* short */
+      questionHTML=`
+        <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">✏️ 주관식 퀴즈</p>
+        <div style="background:white;border-radius:12px;padding:16px;border:2px solid rgba(232,83,122,.3);text-align:center;margin-bottom:10px">
+          <p style="font-size:16px;font-weight:600;line-height:1.6">${esc(state.question||'')}</p>
+        </div>
+        ${solvedBox}`;
+      if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
+        <input id="lm_chosung_input" class="inp" placeholder="답변을 입력하세요..." style="flex:1">
+        <button class="btn btn-primary" style="padding:0 18px;font-size:13px" data-a="lm_submitAnswer">✏️ 제출</button>
+      </div>`;
+    }
+  }
+
+  if(!myNick&&!inputHTML){
+    inputHTML=`<p style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px;padding:10px;background:var(--rose-lt);border-radius:8px">포인트·IQ를 받으려면 MBTI 검사를 먼저 완료해주세요!</p>`;
+  }
+
+  /* ── 랭킹: 포인트/레벨/환생/IQ ── */
+  const lbMode=S.lbMode||'points';
+  const sortedByPoints=[...S.petEntries].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,10);
+  const sortedByLevel=[...S.petEntries].sort((a,b)=>(b.level||1)-(a.level||1)||(b.xp||0)-(a.xp||0)).slice(0,10);
+  const sortedByRebirth=[...S.petEntries].sort((a,b)=>(b.rebirthCount||0)-(a.rebirthCount||0)||(b.level||1)-(a.level||1)).slice(0,10);
+  const sortedByIQ=[...S.petEntries].sort((a,b)=>(b.iq||100)-(a.iq||100)).slice(0,10);
+  const sortedByPvP=[...S.petEntries].sort((a,b)=>(b.pvpRecord?.win||0)-(a.pvpRecord?.win||0)).slice(0,10);
+  const sortedPets=lbMode==='level'?sortedByLevel:lbMode==='rebirth'?sortedByRebirth:lbMode==='iq'?sortedByIQ:lbMode==='pvp'?sortedByPvP:sortedByPoints;
+
+  const lbToggle=`
+    <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
+      <button class="lb-mode-btn ${lbMode==='points'?'active':''}" data-a="setLbMode" data-v="points">💰 포인트</button>
+      <button class="lb-mode-btn ${lbMode==='level'?'active':''}" data-a="setLbMode" data-v="level">⭐ 레벨</button>
+      <button class="lb-mode-btn ${lbMode==='rebirth'?'active':''}" data-a="setLbMode" data-v="rebirth">🔥 환생</button>
+      <button class="lb-mode-btn ${lbMode==='iq'?'active':''}" data-a="setLbMode" data-v="iq">🧠 IQ</button>
+      <button class="lb-mode-btn ${lbMode==='pvp'?'active':''}" data-a="setLbMode" data-v="pvp">⚔️ PvP</button>
+    </div>`;
+
+  const lbHTML=sortedPets.length===0
+    ?`<p style="font-size:13px;color:var(--text3);text-align:center;padding:1rem">아직 데이터가 없어요</p>`
+    :sortedPets.map((p,i)=>{
+      const rankEmoji=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+      const rebirthBadge=(p.rebirthCount||0)>0?`<span class="rebirth-badge" style="font-size:9px">🔥${p.rebirthCount}</span>`:'';
+      const iqColor=(p.iq||100)>=150?'#FFD700':(p.iq||100)>=130?'#F44336':(p.iq||100)>=110?'#9C27B0':'var(--text2)';
+      const rightVal=lbMode==='level'
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:var(--plum)">Lv.${p.level||1}</div><div style="font-size:10px;color:var(--text3)">${(p.points||0).toLocaleString()}P</div></div>`
+        :lbMode==='rebirth'
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#FF6B35">🔥 ${p.rebirthCount||0}회</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`
+        :lbMode==='iq'
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:${iqColor}">🧠 ${p.iq||100}</div><div style="font-size:10px;color:var(--text3)">IQ</div></div>`
+        :lbMode==='pvp'
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#E53935">⚔️ ${p.pvpRecord?.win||0}승</div><div style="font-size:10px;color:var(--text3)">${p.pvpRecord?.lose||0}패</div></div>`
+        :`<div style="text-align:right"><div class="lm-lb-pts">${(p.points||0).toLocaleString()}P</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`;
+      return`<div class="lm-lb-row">
+        <div class="lm-lb-rank">${rankEmoji}</div>
+        <div class="lm-lb-pet">${getVisualEmoji(p)}</div>
+        <div class="lm-lb-nick">${esc(p.nick)} ${rebirthBadge} <span style="font-size:10px;color:var(--text3);font-weight:400">${esc(p.petName||'')}</span></div>
+        ${rightVal}
+      </div>`;
+    }).join('');
+
+  return`
+  <!-- ★ 내 IQ 표시 -->
+  ${myPet?`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(155,89,182,.08),rgba(33,150,243,.06));border:1px solid rgba(155,89,182,.2);border-radius:12px;margin-bottom:12px">
+    <span style="font-size:28px">🧠</span>
+    <div>
+      <div style="font-size:11px;color:var(--text3)">내 IQ</div>
+      <div style="font-size:22px;font-weight:700;color:${(myIQ>=150?'#FFD700':myIQ>=130?'#F44336':myIQ>=110?'#9C27B0':'var(--plum)')}">${myIQ}</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="font-size:11px;color:var(--text3);text-align:right">퀴즈 정답마다<br>IQ가 올라요 📈</div>
+  </div>`:''}
+
+  <div class="card card-mint" style="margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <p style="font-size:14.5px;font-weight:700;color:var(--text1);margin:0">⚡ 실시간 퀴즈 광장</p>
+      <span style="display:flex;align-items:center;gap:5px;background:rgba(232,83,122,.1);color:var(--rose2);font-size:11.5px;padding:3px 10px;border-radius:99px;font-weight:600">
+        <span class="live-dot"></span> LIVE
+      </span>
+    </div>
+    <!-- 퀴즈 타입 선택 -->
+    ${quizTypeTabs}
+    <!-- 문제 표시 -->
+    ${questionHTML}
+    ${inputHTML}
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <p style="font-size:13px;font-weight:700;color:var(--text2);margin:0">💬 실시간 답변 피드</p>
+      <span style="font-size:11px;color:var(--text3)">${S.chosungChat.length}개</span>
+    </div>
+    <div class="lm-chosung-chat" id="lm_chat_feed">${renderChatMessages()}</div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <p style="font-size:13.5px;font-weight:700;color:var(--rose2);margin:0 0 10px">🏆 랭킹</p>
+    ${lbToggle}
+    ${lbHTML}
+  </div>
+
+  <div class="card card-gold" style="margin-bottom:12px">
+    <p style="font-size:13px;font-weight:700;color:var(--text1);margin:0 0 8px">⚡ 포인트 & IQ 획득 방법</p>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--text2)">
+      <div style="display:flex;justify-content:space-between"><span>🔤 초성 퀴즈 정답</span><span class="gold-badge">+50P +3IQ</span></div>
+      <div style="display:flex;justify-content:space-between"><span>⭕ OX 퀴즈 정답</span><span class="gold-badge">+20P +1IQ</span></div>
+      <div style="display:flex;justify-content:space-between"><span>🤪 넌센스 퀴즈 정답</span><span class="gold-badge">+40P +2IQ</span></div>
+      <div style="display:flex;justify-content:space-between"><span>✏️ 주관식 퀴즈 정답</span><span class="gold-badge">+30P +2IQ</span></div>
+      <div style="display:flex;justify-content:space-between"><span>📅 매일 출석</span><span class="gold-badge">+10P</span></div>
+    </div>
+  </div>`;
 }
 
 /* ★ 랭킹: 레벨순/포인트순 2가지 방식 */
@@ -3086,28 +4889,34 @@ function rPlazaTab(){
     :(!myNick?`<p style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px;padding:10px;background:var(--rose-lt);border-radius:8px">포인트를 받으려면 MBTI 검사를 먼저 완료해주세요!</p>`:
       state?.solvedBy?`<p style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px">다음 문제를 기다려주세요...</p>`:'');
 
-  /* ★ 랭킹: 레벨순 / 포인트순 */
+  /* ★ 랭킹: 레벨순 / 포인트순 / 환생순 */
   const sortedByPoints=[...S.petEntries].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,10);
   const sortedByLevel=[...S.petEntries].sort((a,b)=>(b.level||1)-(a.level||1)||(b.xp||0)-(a.xp||0)).slice(0,10);
-  const sortedPets=S.lbMode==='level'?sortedByLevel:sortedByPoints;
+  const sortedByRebirth=[...S.petEntries].sort((a,b)=>(b.rebirthCount||0)-(a.rebirthCount||0)||(b.level||1)-(a.level||1)).slice(0,10);
+  const lbMode=S.lbMode||'points';
+  const sortedPets=lbMode==='level'?sortedByLevel:lbMode==='rebirth'?sortedByRebirth:sortedByPoints;
 
   const lbToggle=`
     <div class="lb-mode-tabs">
-      <button class="lb-mode-btn ${S.lbMode==='points'?'active':''}" data-a="setLbMode" data-v="points">💰 포인트순</button>
-      <button class="lb-mode-btn ${S.lbMode==='level'?'active':''}" data-a="setLbMode" data-v="level">⭐ 레벨순</button>
+      <button class="lb-mode-btn ${lbMode==='points'?'active':''}" data-a="setLbMode" data-v="points">💰 포인트순</button>
+      <button class="lb-mode-btn ${lbMode==='level'?'active':''}" data-a="setLbMode" data-v="level">⭐ 레벨순</button>
+      <button class="lb-mode-btn ${lbMode==='rebirth'?'active':''}" data-a="setLbMode" data-v="rebirth">🔥 환생순</button>
     </div>`;
 
   const lbHTML=sortedPets.length===0
     ?`<p style="font-size:13px;color:var(--text3);text-align:center;padding:1rem">아직 데이터가 없어요</p>`
     :sortedPets.map((p,i)=>{
       const rankEmoji=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-      const rightVal=S.lbMode==='level'
+      const rebirthBadge=(p.rebirthCount||0)>0?`<span class="rebirth-badge" style="font-size:10px">🔥${p.rebirthCount}</span>`:'';
+      const rightVal=lbMode==='level'
         ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:var(--plum)">Lv.${p.level||1}</div><div style="font-size:10px;color:var(--text3)">${(p.points||0).toLocaleString()}P</div></div>`
+        :lbMode==='rebirth'
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#FF6B35">🔥 ${p.rebirthCount||0}회</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`
         :`<div style="text-align:right"><div class="lm-lb-pts">${(p.points||0).toLocaleString()}P</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`;
       return`<div class="lm-lb-row">
         <div class="lm-lb-rank">${rankEmoji}</div>
         <div class="lm-lb-pet">${getVisualEmoji(p)}</div>
-        <div class="lm-lb-nick">${esc(p.nick)} <span style="font-size:10px;color:var(--text3);font-weight:400">${esc(p.petName||'')}</span></div>
+        <div class="lm-lb-nick">${esc(p.nick)} ${rebirthBadge} <span style="font-size:10px;color:var(--text3);font-weight:400">${esc(p.petName||'')}</span></div>
         ${rightVal}
       </div>`;
     }).join('');
@@ -3165,8 +4974,11 @@ function attachEvents(){
   const chosungI=app.querySelector("#lm_chosung_input");
   if(chosungI){
     chosungI.addEventListener("input",e=>{S.chosungInput=e.target.value;});
-    chosungI.addEventListener("keydown",e=>{if(e.key==="Enter")submitChosungAnswer();});
+    chosungI.addEventListener("keydown",e=>{if(e.key==="Enter")submitQuizAnswer();});
   }
+  /* ★ 캐치마인드 정답 Enter */
+  const cmGuessI=app.querySelector("#cm_guess_input");
+  if(cmGuessI)cmGuessI.addEventListener("keydown",e=>{if(e.key==="Enter")submitCMGuess();});
 
   const feed=app.querySelector("#lm_chat_feed");
   if(feed)feed.scrollTop=feed.scrollHeight;
@@ -3202,6 +5014,46 @@ function attachEvents(){
       else if(a==="giveRose"){if(S.myEntry)giveRose(S.myEntry.nick,S.myEntry.gender,el.dataset.recv,el.dataset.rg);}
       else if(a==="login")login();
       else if(a==="logout"){S.isAdmin=false;S.pwErr="";render();}
+      else if(a==="adminResetLevel"){adminResetPetLevel(el.dataset.nick);}
+      else if(a==="adminCapAll"){adminCapAllLevels();}
+      /* ★ 환생 */
+      else if(a==="lm_rebirth"){rebirthPet();}
+      /* ★ 장착 아이템 */
+      else if(a==="setEquipTab"){S.equipTab=el.dataset.v;render();}
+      else if(a==="lm_buyEquip"){buyEquipItem(el.dataset.id);}
+      else if(a==="lm_equip"){equipItem(el.dataset.slot,el.dataset.id);}
+      else if(a==="lm_unequip"){if(confirm(`장착 해제하시겠습니까?`))unequipItem(el.dataset.slot);}
+      /* ★ 하우스 */
+      else if(a==="lm_initHouse"){initMyHouse();}
+      else if(a==="lm_upgradeHouse"){upgradeHouse(el.dataset.tier);}
+      else if(a==="lm_buyFurniture"){buyFurnitureItem(el.dataset.id);}
+      else if(a==="lm_placeFurniture"){placeFurnitureItem(el.dataset.id);}
+      else if(a==="lm_removeFurniture"){if(confirm("가구를 제거하고 인벤토리로 돌려보낼까요?"))removeFurnitureFromHouse(el.dataset.id);}
+      else if(a==="lm_visitHouse"){visitHouse(el.dataset.nick);}
+      else if(a==="lm_backFromHouse"){S.visitingHouse=null;if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();}
+      else if(a==="lm_leaveGuestbook"){
+        const input=document.getElementById('guestbookInput');
+        if(input&&input.value.trim())leaveGuestbook(el.dataset.nick,input.value);
+        else alert("한 마디를 입력해주세요!");
+      }
+      else if(a==="lm_setWallpaper"){
+        const wp=WALLPAPERS[el.dataset.v];
+        if(wp&&wp.cost>0&&(S.myPet?.points||0)<wp.cost){alert(`포인트 부족! (필요: ${wp.cost}P)`);return;}
+        if(wp?.cost>0&&!confirm(`${wp.name} 구입? (-${wp.cost}P)`))return;
+        if(wp?.cost>0)petCol.doc(S.myEntry.nick).update({points:INC(-wp.cost)}).then(()=>{S.myPet.points-=wp.cost;});
+        houseCol.doc(S.myEntry.nick).update({wallpaper:el.dataset.v});
+        if(S.myHouse)S.myHouse.wallpaper=el.dataset.v;
+        if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();
+      }
+      else if(a==="lm_setFloor"){
+        const fl=FLOORS[el.dataset.v];
+        if(fl&&fl.cost>0&&(S.myPet?.points||0)<fl.cost){alert(`포인트 부족! (필요: ${fl.cost}P)`);return;}
+        if(fl?.cost>0&&!confirm(`${fl.name} 구입? (-${fl.cost}P)`))return;
+        if(fl?.cost>0)petCol.doc(S.myEntry.nick).update({points:INC(-fl.cost)}).then(()=>{S.myPet.points-=fl.cost;});
+        houseCol.doc(S.myEntry.nick).update({floor:el.dataset.v});
+        if(S.myHouse)S.myHouse.floor=el.dataset.v;
+        if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();
+      }
       else if(a==="del")deleteParticipant(el.dataset.id);
       else if(a==="delAll"){if(confirm("정말 전체 삭제하시겠어요?"))delAllMBTI();}
       else if(a==="edit"){S.editId=el.dataset.id;render();}
@@ -3237,10 +5089,54 @@ function attachEvents(){
       else if(a==="lm_sendPoints"){transferPoints(el.dataset.nick);}
       else if(a==="lm_breedReq"){requestBreed(el.dataset.nick);}
       else if(a==="lm_breedAccept"){acceptBreed(el.dataset.id,el.dataset.from);}
-      else if(a==="lm_submitAnswer"){submitChosungAnswer();}
+      else if(a==="lm_submitAnswer"){submitQuizAnswer();}
+      /* ★ OX 버튼 제출 */
+      else if(a==="lm_submitOX"){submitOXAnswer(el.dataset.v);}
+      /* ★ 퀴즈 타입 변경 */
+      else if(a==="lm_setQuizMode"){
+        S.quizMode=el.dataset.v;
+        startQuizQuestion(el.dataset.v,null).catch(()=>{});render();
+      }
+      /* ★ 캐치마인드 핸들러 */
+      else if(a==="lm_cm_start"){startCatchmindRound(null);}
+      else if(a==="lm_cm_skip"){skipCMRound();}
+      else if(a==="lm_cm_guess"){submitCMGuess();}
+      else if(a==="lm_cm_color"){
+        S.cmTool={...S.cmTool,color:el.dataset.v,eraser:false};
+        if(window.__cmCanvas)window.__cmCanvas.updateTool(S.cmTool);
+        render();
+      }
+      else if(a==="lm_cm_eraser"){
+        S.cmTool={...S.cmTool,eraser:true};
+        if(window.__cmCanvas)window.__cmCanvas.updateTool(S.cmTool);
+        render();
+      }
+      else if(a==="lm_cm_width"){
+        S.cmTool={...S.cmTool,width:parseInt(el.dataset.v),eraser:false};
+        if(window.__cmCanvas)window.__cmCanvas.updateTool(S.cmTool);
+        render();
+      }
+      else if(a==="lm_cm_clearAll"){
+        if(confirm("캔버스를 전체 지우겠습니까?"))clearCMStrokes();
+      }
       /* ★ 2세 공동 육아 먹이 주기 */
       else if(a==="lm_feedBaby"){
         feedBaby(el.dataset.id, parseInt(el.dataset.cost), parseInt(el.dataset.xp));
+      }
+      /* ★ 2세 액티비티 (신규) */
+      else if(a==="lm_babyActivity"){
+        doBabyActivity(el.dataset.id, el.dataset.act);
+      }
+      /* ★ 던전 킬 초기화 */
+      else if(a==="lm_resetDungeonKills"){
+        if(confirm("이번 라운드 클리어 기록을 초기화하겠습니까?")){{
+          const myNick=S.myEntry?.nick;
+          if(myNick){
+            petCol.doc(myNick).update({dungeonKills:{}}).catch(()=>{});
+            if(S.myPet)S.myPet.dungeonKills={};
+            render();
+          }
+        }}
       }
       /* ★ 던전 진입: 층 선택 */
       else if(a==="lm_selectFloor"){
@@ -3276,6 +5172,8 @@ function attachEvents(){
         if(!chosen)return;
         dungeonAction('potion',chosen.id);
       }
+      /* ★ PvP 도전 */
+      else if(a==="lm_pvp"){startPvP(el.dataset.nick);}
       /* ★ 물약 구매 */
       else if(a==="lm_buyPotion"){buyPotion(el.dataset.id);}
       /* ★ 주사위 재굴림 */
