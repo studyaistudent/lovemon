@@ -1677,6 +1677,34 @@ let S={
     const p=JSON.parse(localStorage.getItem("lmg_pet")||"null");if(p)S.myPet=p;
   }catch(e){}
 })();
+
+
+/* 던전 쿨타임 라이브 카운트다운 */
+function initDungeonCoolTimer(){
+  if(window.__dungeonCoolTimer){clearInterval(window.__dungeonCoolTimer);window.__dungeonCoolTimer=null;}
+  const myPet=S.myPet;
+  if(!myPet)return;
+  const cooldownEnd=(myPet.dungeonCooldownStart||0)+DUNGEON_COOLDOWN_MS;
+  if(Date.now()>=cooldownEnd)return; // 이미 쿨타임 아님
+
+  window.__dungeonCoolTimer=setInterval(()=>{
+    const rem=cooldownEnd-Date.now();
+    const timerEl=document.getElementById('dungeon_cool_timer');
+    if(!timerEl){
+      // 탭에서 벗어남 → 인터벌 정리
+      clearInterval(window.__dungeonCoolTimer);window.__dungeonCoolTimer=null;return;
+    }
+    if(rem<=0){
+      // 쿨타임 만료 → 인터벌 정리 후 재렌더
+      clearInterval(window.__dungeonCoolTimer);window.__dungeonCoolTimer=null;
+      if(S.screen==='board'&&S.tab==='lm_dungeon')render();
+      return;
+    }
+    timerEl.textContent=`${Math.floor(rem/60000)}분 ${Math.floor((rem%60000)/1000)}초`;
+  },1000);
+}
+
+  
 /* ═══════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════ */
@@ -3773,7 +3801,10 @@ function rBoard(){
     content=rCatchmindTab();
     setTimeout(()=>initCatchmindCanvas(),80);
   }
-  else if(S.tab==="lm_dungeon")content=rDungeonTab();
+  else if(S.tab==="lm_dungeon"){
+  content=rDungeonTab();
+  setTimeout(()=>initDungeonCoolTimer(),50);
+}
   else if(S.tab==="lm_house"){
     content=rHouseTab();
     setTimeout(()=>{
@@ -4717,9 +4748,10 @@ function rDungeonTab(){
   return `
   ${isCooldown?`<div class="dungeon-cooltime">
     <span style="font-size:28px">⏳</span>
-    <div>
-      <div style="font-size:12px;font-weight:700;color:#E64A19;margin-bottom:2px">5층 전부 클리어! 쿨타임 중</div>
-      <div class="cooltime-timer">${Math.floor(coolRemain/60000)}분 ${Math.floor((coolRemain%60000)/1000)}초</div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:700;color:#E64A19;margin-bottom:4px">전 층 클리어! 쿨타임 중</div>
+      <div id="dungeon_cool_timer" class="cooltime-timer">${Math.floor(coolRemain/60000)}분 ${Math.floor((coolRemain%60000)/1000)}초</div>
+      <div style="font-size:10.5px;color:#BF360C;margin-top:4px">쿨타임이 끝나면 자동으로 입장 가능해집니다</div>
     </div>
   </div>`:`<div class="card card-mint" style="margin-bottom:12px;padding:10px 14px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
