@@ -3419,7 +3419,7 @@ async function startQuizQuestion(type, lastAns){
 async function addIQ(nick, amount){
   try{
     await petCol.doc(nick).update({iq:INC(amount)});
-    if(S.myPet?.nick===nick)S.myPet.iq=(S.myPet.iq||100)+amount;
+    if(S.myPet?.nick===nick)S.myPet.iq=(S.myPet.iq||0)+amount;
   }catch(e){}
 }
 
@@ -3516,8 +3516,8 @@ function rHome(){
   return `<div style="max-width:480px;margin:0 auto;padding:.5rem 0" class="fadein">
     <div style="text-align:center;padding:1.5rem 0 1rem">
       <div style="font-size:52px;margin-bottom:6px" class="float">💕</div>
-      <h1 class="title-deco" style="font-size:26px;color:var(--rose2);margin-bottom:4px">연애 미니게임 × 러브몬</h1>
-      <p style="font-size:12.5px;color:var(--text3)">MBTI · 밸런스 · 연애성향 · 펫 육성 · 초성광장</p>
+      <h1 class="title-deco" style="font-size:26px;color:var(--rose2);margin-bottom:4px">너를담아 연애 미니게임</h1>
+      <p style="font-size:12.5px;color:var(--text3)">MBTI · 밸런스 · 연애성향 · 펫 육성 · 퀴즈</p>
     </div>
 
     ${myPet?`<div class="card card-gold" style="margin-bottom:10px;display:flex;align-items:center;gap:14px">
@@ -5090,7 +5090,7 @@ function rPlazaTab(){
   const myNick=S.myEntry?.nick;
   const qMode=S.quizMode||state?.type||'chosung';
   const myPet=S.myPet;
-  const myIQ=myPet?.iq||100;
+  const myIQ=myPet?.iq||0;
   
   const quizTypeTabs=`
   <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap">
@@ -5176,7 +5176,7 @@ function rPlazaTab(){
   const sortedByPoints=[...S.petEntries].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,10);
   const sortedByLevel=[...S.petEntries].sort((a,b)=>(b.level||1)-(a.level||1)||(b.xp||0)-(a.xp||0)).slice(0,10);
   const sortedByRebirth=[...S.petEntries].sort((a,b)=>(b.rebirthCount||0)-(a.rebirthCount||0)||(b.level||1)-(a.level||1)).slice(0,10);
-  const sortedByIQ=[...S.petEntries].sort((a,b)=>(b.iq||100)-(a.iq||100)).slice(0,10);
+  const sortedByIQ=[...S.petEntries].sort((a,b)=>(b.iq||0)-(a.iq||0)).slice(0,10);
   const sortedByPvP=[...S.petEntries].sort((a,b)=>(b.pvpRecord?.win||0)-(a.pvpRecord?.win||0)).slice(0,10);
   const sortedPets=lbMode==='level'?sortedByLevel:lbMode==='rebirth'?sortedByRebirth:lbMode==='iq'?sortedByIQ:lbMode==='pvp'?sortedByPvP:sortedByPoints;
 
@@ -5194,13 +5194,13 @@ function rPlazaTab(){
     :sortedPets.map((p,i)=>{
       const rankEmoji=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
       const rebirthBadge=(p.rebirthCount||0)>0?`<span class="rebirth-badge" style="font-size:9px">🔥${p.rebirthCount}</span>`:'';
-      const iqColor=(p.iq||100)>=150?'#FFD700':(p.iq||100)>=130?'#F44336':(p.iq||100)>=110?'#9C27B0':'var(--text2)';
+      const iqColor=(p.iq||0)>=150?'#FFD700':(p.iq||0)>=130?'#F44336':(p.iq||0)>=110?'#9C27B0':'var(--text2)';
       const rightVal=lbMode==='level'
         ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:var(--plum)">Lv.${p.level||1}</div><div style="font-size:10px;color:var(--text3)">${(p.points||0).toLocaleString()}P</div></div>`
         :lbMode==='rebirth'
         ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#FF6B35">🔥 ${p.rebirthCount||0}회</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`
         :lbMode==='iq'
-        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:${iqColor}">🧠 ${p.iq||100}</div><div style="font-size:10px;color:var(--text3)">IQ</div></div>`
+        ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:${iqColor}">🧠 ${p.iq||0}</div><div style="font-size:10px;color:var(--text3)">IQ</div></div>`
         :lbMode==='pvp'
         ?`<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#E53935">⚔️ ${p.pvpRecord?.win||0}승</div><div style="font-size:10px;color:var(--text3)">${p.pvpRecord?.lose||0}패</div></div>`
         :`<div style="text-align:right"><div class="lm-lb-pts">${(p.points||0).toLocaleString()}P</div><div style="font-size:10px;color:var(--text3)">Lv.${p.level||1}</div></div>`;
