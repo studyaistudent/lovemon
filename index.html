@@ -2333,347 +2333,7 @@ function msToHM(ms){
   if(h>0)return`${h}시간 ${m}분`;
   return`${m}분`;
 }
-function degToRad(deg) {
-  return (Number(deg) || 0) * Math.PI / 180;
-}
 
-function radToDeg(rad) {
-  return (Number(rad) || 0) * 180 / Math.PI;
-}
-
-function normalizeDeg(deg) {
-  let d = Math.round(Number(deg) || 0) % 360;
-  if (d < 0) d += 360;
-  return d;
-}
-
-function syncHouseEditInputs() {
-  const e = S.editingFurniture;
-  if (!e) return;
-
-  const x = Number(e.x) || 0;
-  const z = Number(e.z) || 0;
-  const rDeg = normalizeDeg(radToDeg(e.rotation || 0));
-
-  const setText = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val;
-  };
-
-  const setValue = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-  };
-
-  setValue('edit_slider_x', x.toFixed(1));
-  setValue('edit_slider_z', z.toFixed(1));
-  setValue('edit_slider_r', String(rDeg));
-
-  setText('edit_val_x', x.toFixed(1));
-  setText('edit_val_z', z.toFixed(1));
-  setText('edit_val_r', `${rDeg}°`);
-
-  document.querySelectorAll('.rot-preset').forEach(btn => {
-    btn.classList.toggle('active', Number(btn.dataset.v) === rDeg);
-  });
-}
-
-function clearHouseEditState() {
-  S.editingFurniture = null;
-  if (window.__houseR) window.__houseR.setEditingItem(null);
-}
-
-function setHouseEditState(itemId) {
-  if (!S.myHouse) return;
-
-  const item = (S.myHouse.furniture || []).find(f => f.id === itemId);
-  if (!item) return;
-
-  const pos = item.position || {};
-  const rotation = typeof item.rotation === 'number' ? item.rotation : 0;
-
-  S.editingFurniture = {
-    id: item.id,
-    x: Number(pos.x ?? 0),
-    z: Number(pos.z ?? 0),
-    rotation: Number(rotation) || 0,
-  };
-
-  S._decoTab = 'mine';
-
-  if (window.__houseR) {
-    window.__houseR.setEditingItem(item.id);
-    window.__houseR.updateEditingTransform(
-      S.editingFurniture.x,
-      S.editingFurniture.z,
-      S.editingFurniture.rotation
-    );
-  }
-
-  syncHouseEditInputs();
-}
-
-function applyHouseEdit(field, rawValue) {
-  const e = S.editingFurniture;
-  if (!e) return;
-
-  if (field === 'rotation') {
-    e.rotation = degToRad(Number(rawValue));
-  } else {
-    e[field] = Number(rawValue);
-  }
-
-  e.x = Math.max(-6, Math.min(6, Number(e.x) || 0));
-  e.z = Math.max(-5, Math.min(5, Number(e.z) || 0));
-
-  if (window.__houseR) {
-    window.__houseR.updateEditingTransform(e.x, e.z, e.rotation);
-  }
-
-  syncHouseEditInputs();
-}
-
-async function saveHouseEdit() {
-  const myNick = S.myEntry?.nick;
-  const house = S.myHouse;
-  const e = S.editingFurniture;
-
-  if (!myNick || !house || !e) return;
-
-  const furniture = [...(house.furniture || [])];
-  const idx = furniture.findIndex(f => f.id === e.id);
-  if (idx === -1) return;
-
-  const prev = furniture[idx];
-  furniture[idx] = {
-    ...prev,
-    position: {
-      x: Number(e.x) || 0,
-      z: Number(e.z) || 0,
-    },
-    rotation: Number(e.rotation) || 0,
-  };
-
-  await houseCol.doc(myNick).update({ furniture });
-  S.myHouse.furniture = furniture;
-}
-2) attachEvents() 안의 [data-a] 클릭 처리 부분을 통째로 교체
-
-지금 있는 이 부분:
-
-app.querySelectorAll("[data-a]").forEach(el=>{
-  el.addEventListener("click",()=>{
-    ...
-  });
-});
-
-이걸 아래처럼 바꿔주세요.
-포인트는 두 가지입니다.
-
-click 콜백을 async로 바꿈
-lm_editSlide는 click이 아니라 input 이벤트로 받아야 함
-  // ✅ 편집 슬라이더는 input 이벤트로 받아야 함
-  app.querySelectorAll('[data-a="lm_editSlide"]').forEach(el => {
-    el.addEventListener('input', () => {
-      if (!S.editingFurniture) return;
-      applyHouseEdit(el.dataset.field, el.value);
-    });
-  });
-
-  app.querySelectorAll("[data-a]").forEach(el => {
-    el.addEventListener("click", async () => {
-      const a = el.dataset.a;
-
-      if (a === "gender") { S.gender = el.dataset.v; render(); }
-      else if (a === "startMBTI") startMBTI();
-      else if (a === "startBal") startBal();
-      else if (a === "startDat") startDat();
-      else if (a === "loadMyInfo") loadMyInfo();
-      else if (a === "goHome") { S.screen = "home"; render(); }
-      else if (a === "goBoard") { S.screen = "board"; S.tab = "board"; render(); }
-      else if (a === "goCompat") { S.screen = "board"; S.tab = "compat"; render(); }
-      else if (a === "retry") {
-        S.nick = ""; S.area = ""; S.pin = ""; S.gender = ""; S.height = ""; S.freeTime = ""; S.idealType = ""; S.appeal = ""; S.giDol = "";
-        S.myEntry = null; S.myBalEntry = null; S.myDatEntry = null; S.myPet = null;
-        localStorage.removeItem("lmg_user");
-        localStorage.removeItem("lmg_bal");
-        localStorage.removeItem("lmg_dat");
-        localStorage.removeItem("lmg_pet");
-        S.screen = "home";
-        render();
-      }
-      else if (a === "testBack") { if (S.qIdx > 0) { S.qIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "mbtiAns") mbtiAns(parseInt(el.dataset.v));
-      else if (a === "balBack") { if (S.balIdx > 0) { S.balIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "balAns") balAns(el.dataset.v);
-      else if (a === "datBack") { if (S.datIdx > 0) { S.datIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "datAns") datAns(el.dataset.v);
-      else if (a === "tab") { S.tab = el.dataset.v; render(); }
-      else if (a === "selM") { const e = S.entries.find(x => x.id === el.dataset.id); S.selM = S.selM?.id === el.dataset.id ? null : e; render(); }
-      else if (a === "selF") { const e = S.entries.find(x => x.id === el.dataset.id); S.selF = S.selF?.id === el.dataset.id ? null : e; render(); }
-      else if (a === "giveRose") { if (S.myEntry) giveRose(S.myEntry.nick, S.myEntry.gender, el.dataset.recv, el.dataset.rg); }
-      else if (a === "login") login();
-      else if (a === "logout") { S.isAdmin = false; S.pwErr = ""; render(); }
-      else if (a === "lm_setDecoTab") { S._decoTab = el.dataset.v; render(); }
-      else if (a === "adminResetLevel") { adminResetPetLevel(el.dataset.nick); }
-      else if (a === "adminCapAll") { adminCapAllLevels(); }
-
-      /* ★ 환생 */
-      else if (a === "lm_rebirth") { rebirthPet(); }
-
-      /* ★ 장착 아이템 */
-      else if (a === "setEquipTab") { S.equipTab = el.dataset.v; render(); }
-      else if (a === "lm_buyEquip") { buyEquipItem(el.dataset.id); }
-      else if (a === "lm_equip") { equipItem(el.dataset.slot, el.dataset.id); }
-      else if (a === "lm_unequip") { if (confirm(`장착 해제하시겠습니까?`)) unequipItem(el.dataset.slot); }
-
-      /* ★ 하우스 */
-      else if (a === "lm_initHouse") { initMyHouse(); }
-      else if (a === "lm_upgradeHouse") { upgradeHouse(el.dataset.tier); }
-      else if (a === "lm_buyFurniture") { buyFurnitureItem(el.dataset.id); }
-      else if (a === "lm_placeFurniture") { placeFurnitureItem(el.dataset.id); }
-      else if (a === "lm_removeFurniture") { removeFurnitureFromHouse(el.dataset.id); }
-      else if (a === "lm_visitHouse") { visitHouse(el.dataset.nick); }
-      else if (a === "lm_backFromHouse") {
-        S.visitingHouse = null;
-        if (window.__houseR) {
-          window.__houseR.destroy();
-          window.__houseR = null;
-        }
-        render();
-      }
-      else if (a === "lm_leaveGuestbook") {
-        const input = document.getElementById('guestbookInput');
-        if (input && input.value.trim()) leaveGuestbook(el.dataset.nick, input.value);
-        else alert("한 마디를 입력해주세요!");
-      }
-
-      /* ✅ 가구 편집 시작 */
-      else if (a === "lm_editFurniture") {
-        setHouseEditState(el.dataset.id);
-        render();
-      }
-
-      /* ✅ 슬라이더용 미세 조정 */
-      else if (a === "lm_editStep") {
-        if (!S.editingFurniture) return;
-
-        const field = el.dataset.field;
-        const delta = Number(el.dataset.v) || 0;
-
-        if (field === "rotation") {
-          const curDeg = normalizeDeg(radToDeg(S.editingFurniture.rotation || 0));
-          applyHouseEdit("rotation", curDeg + delta);
-        } else {
-          applyHouseEdit(field, (Number(S.editingFurniture[field]) || 0) + delta);
-        }
-      }
-
-      /* ✅ 회전 프리셋 */
-      else if (a === "lm_editSetRot") {
-        applyHouseEdit("rotation", Number(el.dataset.v) || 0);
-      }
-
-      /* ✅ 저장 */
-      else if (a === "lm_editConfirm") {
-        await saveHouseEdit();
-        clearHouseEditState();
-        render();
-      }
-
-      /* ✅ 취소 */
-      else if (a === "lm_editCancel") {
-        clearHouseEditState();
-        render();
-      }
-
-      /* ✅ 보관 */
-      else if (a === "lm_editRemove") {
-        if (!S.editingFurniture?.id) return;
-        await removeFurnitureFromHouse(S.editingFurniture.id);
-        clearHouseEditState();
-      }
-
-      else if (a === "lm_setWallpaper") {
-        const wp = WALLPAPERS[el.dataset.v];
-        if (wp && wp.cost > 0 && (S.myPet?.points || 0) < wp.cost) { alert(`포인트 부족! (필요: ${wp.cost}P)`); return; }
-        if (wp?.cost > 0 && !confirm(`${wp.name} 구입? (-${wp.cost}P)`)) return;
-        if (wp?.cost > 0) petCol.doc(S.myEntry.nick).update({ points: INC(-wp.cost) }).then(() => { S.myPet.points -= wp.cost; });
-        houseCol.doc(S.myEntry.nick).update({ wallpaper: el.dataset.v });
-        if (S.myHouse) S.myHouse.wallpaper = el.dataset.v;
-        if (window.__houseR) { window.__houseR.destroy(); window.__houseR = null; }
-        render();
-      }
-      else if (a === "lm_setFloor") {
-        const fl = FLOORS[el.dataset.v];
-        if (fl && fl.cost > 0 && (S.myPet?.points || 0) < fl.cost) { alert(`포인트 부족! (필요: ${fl.cost}P)`); return; }
-        if (fl?.cost > 0 && !confirm(`${fl.name} 구입? (-${fl.cost}P)`)) return;
-        if (fl?.cost > 0) petCol.doc(S.myEntry.nick).update({ points: INC(-fl.cost) }).then(() => { S.myPet.points -= fl.cost; });
-        houseCol.doc(S.myEntry.nick).update({ floor: el.dataset.v });
-        if (S.myHouse) S.myHouse.floor = el.dataset.v;
-        if (window.__houseR) { window.__houseR.destroy(); window.__houseR = null; }
-        render();
-      }
-      else if (a === "del") deleteParticipant(el.dataset.id);
-      else if (a === "delAll") { if (confirm("정말 전체 삭제하시겠어요?")) delAllMBTI(); }
-      else if (a === "edit") { S.editId = el.dataset.id; render(); }
-      else if (a === "cancelEdit") { S.editId = null; render(); }
-      else if (a === "saveEdit") {
-        const id = el.dataset.id;
-        const newData = {
-          nick: document.getElementById(`edit_nick_${id}`).value.trim(),
-          area: document.getElementById(`edit_area_${id}`).value.trim(),
-          gender: document.getElementById(`edit_gender_${id}`).value.trim(),
-          height: document.getElementById(`edit_height_${id}`).value.trim(),
-          freeTime: document.getElementById(`edit_freeTime_${id}`).value.trim(),
-          idealType: document.getElementById(`edit_idealType_${id}`).value.trim(),
-          appeal: document.getElementById(`edit_appeal_${id}`).value.trim(),
-          giDol: document.getElementById(`edit_giDol_${id}`).value.trim(),
-          mbti: document.getElementById(`edit_mbti_${id}`).value.trim(),
-          pin: document.getElementById(`edit_pin_${id}`).value.trim()
-        };
-        updateParticipant(id, newData);
-      }
-
-      /* ── 러브몬 액션 ── */
-      else if (a === "goLovemon") { S.screen = "board"; S.tab = "lm_pet"; render(); }
-      else if (a === "goPlaza") { S.screen = "board"; S.tab = "lm_plaza"; render(); }
-      else if (a === "lm_createPet") { initOrLoadPet(S.myEntry.nick, S.myEntry.gender, S.myEntry.mbti, S.myBalEntry?.answers); }
-      else if (a === "lm_buyFeed") { feedPet(el.dataset.item); }
-      else if (a === "lm_feedOther") {
-        const itemId = prompt("어떤 아이템을 선물하시겠습니까?\n1. 기본 사료 (100P) — 호감도 +10\n2. 도파민 특식 (500P) — 호감도 +10\n번호를 입력해주세요:", "1");
-        if (itemId === "1") feedPet('feed_basic', el.dataset.nick);
-        else if (itemId === "2") feedPet('feed_dopamine', el.dataset.nick);
-      }
-      else if (a === "lm_giveRoseToPet") { giveRoseToPet(el.dataset.nick); }
-      else if (a === "lm_sendPoints") { transferPoints(el.dataset.nick); }
-      else if (a === "lm_breedReq") { requestBreed(el.dataset.nick); }
-      else if (a === "lm_breedAccept") { acceptBreed(el.dataset.id, el.dataset.from); }
-      else if (a === "lm_submitAnswer") { submitQuizAnswer(); }
-      else if (a === "lm_submitOX") { submitOXAnswer(el.dataset.v); }
-      else if (a === "lm_setQuizMode") {
-        S.quizMode = el.dataset.v;
-        startQuizQuestion(el.dataset.v, null).catch(() => {});
-        render();
-      }
-      else if (a === "lm_cm_start") { startCatchmindRound(S.myEntry?.nick); }
-      else if (a === "lm_cm_skip") { skipCMRound(); }
-      else if (a === "lm_cm_guess") { submitCMGuess(); }
-      else if (a === "lm_cm_color") {
-        S.cmTool = { ...S.cmTool, color: el.dataset.v, eraser: false };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-      else if (a === "lm_cm_width") {
-        S.cmTool = { ...S.cmTool, width: Number(el.dataset.v), eraser: false };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-      else if (a === "lm_cm_eraser") {
-        S.cmTool = { ...S.cmTool, eraser: true };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-    });
-  });
-}
 /* ═══════════════════════════════════════
    FIREBASE REALTIME SYNC (기존 + 러브몬)
 ═══════════════════════════════════════ */
@@ -3906,54 +3566,23 @@ const batch=db.batch();unread.forEach(g=>batch.update(giftsCol.doc(g.id),{read:t
    - 편집 중인 가구는 위아래로 떠오르며 노란 글로우 (방향 화살표 표시)
 ═══════════════════════════════════════ */
 class HouseRenderer3D {
-constructor(containerId, houseData, petEmoji) {
-
-  this.container = document.getElementById(containerId);
-
-  if (!this.container || !window.THREE) return;
-
-  this.houseData = houseData;
-  this.petEmoji = petEmoji || '🐾';
-
-  this.meshes = [];
-  this.animated = [];
-
-  /* ★ 가구 맵 */
-  this.furnitureMap = new Map();
-
-  /* ★ 편집 상태 */
-  this.editingId = null;
-  this.editArrow = null;
-
-  /* ★ 드래그 상태 */
-  this.draggingFurniture = null;
-  this.isPointerDown = false;
-
-  /* ★ Raycaster */
-  this.raycaster = new THREE.Raycaster();
-  this.pointer = new THREE.Vector2();
-
-  /* ★ 바닥 드래그용 평면 */
-  this.dragPlane = new THREE.Plane(
-    new THREE.Vector3(0, 1, 0),
-    0
-  );
-
-  /* 기존 카메라 회전 상태 */
-  this.isAlive = true;
-
-  this.theta = 0.6;
-  this.targetTheta = 0.6;
-
-  this.isDrag = false;
-  this.lastX = 0;
-
-  this.autoRotate = true;
-
-  this.init();
-}
-```
-it();
+  constructor(containerId, houseData, petEmoji) {
+    this.container = document.getElementById(containerId);
+    if (!this.container || !window.THREE) return;
+    this.houseData = houseData;
+    this.petEmoji = petEmoji || '🐾';
+    this.meshes = [];
+    this.animated = [];
+    this.furnitureMap = new Map(); // itemId → THREE.Group
+    this.editingId = null;
+    this.editArrow = null; // 방향 표시 화살표
+    this.isAlive = true;
+    this.theta = 0.6;
+    this.targetTheta = 0.6;
+    this.isDrag = false;
+    this.lastX = 0;
+    this.autoRotate = true;
+    this.init();
   }
  
   /* 이모지 텍스처 */
@@ -4115,7 +3744,6 @@ it();
     this.addLighting();
     this.buildRoom();
     this.placeFurniture3D();
-    this.bindFurnitureEditorEvents();
     this.addPet3D();
     this.addOrbit();
     this.animate();
@@ -4597,42 +4225,24 @@ it();
       this.scene.add(fGroup);
       this.meshes.push(fGroup);
       this.furnitureMap.set(item.id, fGroup);
-      group.userData.itemId = item.id; 
-      this.meshes.push(group);
     });
   }
  
   /* 편집 모드 진입 */
-  /* 편집 모드 진입 */
-setEditingItem(itemId) {
-  /* 이전 편집 가구 원위치 복귀 */
-  if (this.editingId && this.furnitureMap.has(this.editingId)) {
-    const prev = this.furnitureMap.get(this.editingId);
-    prev.userData.editing = false;
-    prev.position.y = prev.userData.baseY || 0;
+  setEditingItem(itemId) {
+    /* 이전 편집 가구 원위치 복귀 */
+    if (this.editingId && this.furnitureMap.has(this.editingId)) {
+      const prev = this.furnitureMap.get(this.editingId);
+      prev.userData.editing = false;
+      prev.position.y = prev.userData.baseY || 0;
+    }
+    this.editingId = itemId;
+    if (itemId && this.furnitureMap.has(itemId)) {
+      this.furnitureMap.get(itemId).userData.editing = true;
+      this.autoRotate = false; // 편집 중에는 자동회전 멈춤
+    }
+    this.updateEditArrow();
   }
-
-  this.editingId = itemId;
-
-  if (itemId && this.furnitureMap.has(itemId)) {
-    const g = this.furnitureMap.get(itemId);
-    g.userData.editing = true;
-
-    /* 편집 시작 시 카메라 둘러보기 정지 */
-    this.autoRotate = false;
-    this.isDrag = false;
-    this.draggingFurniture = null;
-    this.targetTheta = this.theta;
-  } else {
-    /* 편집 종료 시 자동회전 복구 */
-    this.autoRotate = true;
-    this.isDrag = false;
-    this.draggingFurniture = null;
-    this.targetTheta = this.theta;
-  }
-
-  this.updateEditArrow();
-}
  
   /* 편집 중인 가구 위치/회전 실시간 업데이트 */
   updateEditingTransform(x, z, rotation) {
@@ -4792,78 +4402,6 @@ setEditingItem(itemId) {
       if (this.container) this.container.innerHTML = '';
     }
   }
-
-
-  /* ★ 가구 드래그 편집 이벤트 */
-bindFurnitureEditorEvents(){
-
-  const canvas = this.renderer.domElement;
-
-  canvas.addEventListener('pointerdown',(e)=>{
-
-    if(!this.editingId) return;
-
-    this.pointer.x = (e.offsetX / canvas.clientWidth) * 2 - 1;
-    this.pointer.y = -(e.offsetY / canvas.clientHeight) * 2 + 1;
-
-    this.raycaster.setFromCamera(this.pointer, this.camera);
-
-    const intersects = this.raycaster.intersectObjects(
-      this.meshes,
-      true
-    );
-
-    if(!intersects.length) return;
-
-    let obj = intersects[0].object;
-
-    while(obj.parent && !obj.userData.itemId){
-      obj = obj.parent;
-    }
-
-    if(obj.userData.itemId !== this.editingId) return;
-
-    this.draggingFurniture = obj;
-    this.isPointerDown = true;
-
-  });
-
-  canvas.addEventListener('pointermove',(e)=>{
-
-    if(!this.isPointerDown || !this.draggingFurniture) return;
-
-    this.pointer.x = (e.offsetX / canvas.clientWidth) * 2 - 1;
-    this.pointer.y = -(e.offsetY / canvas.clientHeight) * 2 + 1;
-
-    this.raycaster.setFromCamera(this.pointer, this.camera);
-
-    const pos = new THREE.Vector3();
-
-    this.raycaster.ray.intersectPlane(this.dragPlane,pos);
-
-    this.draggingFurniture.position.x = Math.max(-6,Math.min(6,pos.x));
-    this.draggingFurniture.position.z = Math.max(-6,Math.min(6,pos.z));
-
-    /* 상태 저장 */
-    if(S.editingFurniture){
-
-      S.editingFurniture.x =
-        this.draggingFurniture.position.x;
-
-      S.editingFurniture.z =
-        this.draggingFurniture.position.z;
-    }
-
-  });
-
-  canvas.addEventListener('pointerup',()=>{
-
-    this.isPointerDown = false;
-    this.draggingFurniture = null;
-
-  });
-
-}
 }
  
 function initHouse3D(containerId, houseData, petEmoji) {
@@ -6620,15 +6158,19 @@ function rHouseTab(){
           🏠 Placed (${furniture.length}/${tier?.maxSlots || 3})
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
-  ${furniture.map(f => `
-    <div class="furn-chip ${editing?.id===f.id ? 'editing' : 'placed'}"
-         data-a="lm_editFurniture" data-id="${f.id}">
-      <span class="chip-emoji">${esc(f.emoji)}</span>
-      <span>${esc(f.name)}</span>
-      ${editing?.id===f.id ? '<span class="chip-edit">편집중</span>' : ''}
-    </div>
-  `).join('')}
-</div>` : ''}
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+          ${furniture.map(f => `
+            <div class="furn-chip ${editing?.id === f.id ? 'editing' : 'placed'}" style="padding:0; display:inline-flex; align-items:stretch; overflow:hidden;">
+              <div style="padding:7px 8px; cursor:pointer; display:flex; align-items:center; gap:5px;" data-a="lm_removeFurniture" data-id="${f.id}" title="클릭 시 인벤토리로 보관">
+                <span class="chip-emoji">${f.emoji}</span>
+                <span>${esc(f.name)}</span>
+              </div>
+              <div style="padding:7px 10px; background:rgba(0,0,0,0.08); cursor:pointer; display:flex; align-items:center; border-left:1px solid rgba(0,0,0,0.05);" data-a="lm_editFurniture" data-id="${f.id}" title="가구 배치/회전 편집">
+                <span class="chip-edit" style="margin:0; font-size:14px;">${editing?.id === f.id ? '🎯' : '✎'}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>` : ''}
  
       ${inventory.length > 0 ? `
         <p style="font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">
@@ -7353,208 +6895,108 @@ function attachEvents(){
 
   const feed=app.querySelector("#lm_chat_feed");
   if(feed)feed.scrollTop=feed.scrollHeight;
-  // ✅ 편집 슬라이더는 input 이벤트로 받아야 함
-  app.querySelectorAll('[data-a="lm_editSlide"]').forEach(el => {
-    el.addEventListener('input', () => {
-      if (!S.editingFurniture) return;
-      applyHouseEdit(el.dataset.field, el.value);
-    });
-  });
+  app.querySelectorAll("[data-a]").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const a=el.dataset.a;
 
-  app.querySelectorAll("[data-a]").forEach(el => {
-    el.addEventListener("click", async () => {
-      const a = el.dataset.a;
-
-      if (a === "gender") { S.gender = el.dataset.v; render(); }
-      else if (a === "startMBTI") startMBTI();
-      else if (a === "startBal") startBal();
-      else if (a === "startDat") startDat();
-      else if (a === "loadMyInfo") loadMyInfo();
-      else if (a === "goHome") { S.screen = "home"; render(); }
-      else if (a === "goBoard") { S.screen = "board"; S.tab = "board"; render(); }
-      else if (a === "goCompat") { S.screen = "board"; S.tab = "compat"; render(); }
-      else if (a === "retry") {
-        S.nick = ""; S.area = ""; S.pin = ""; S.gender = ""; S.height = ""; S.freeTime = ""; S.idealType = ""; S.appeal = ""; S.giDol = "";
-        S.myEntry = null; S.myBalEntry = null; S.myDatEntry = null; S.myPet = null;
-        localStorage.removeItem("lmg_user");
-        localStorage.removeItem("lmg_bal");
-        localStorage.removeItem("lmg_dat");
-        localStorage.removeItem("lmg_pet");
-        S.screen = "home";
-        render();
+      if(a==="gender"){S.gender=el.dataset.v;render();}
+      else if(a==="startMBTI")startMBTI();
+      else if(a==="startBal")startBal();
+      else if(a==="startDat")startDat();
+      else if(a==="loadMyInfo")loadMyInfo();
+      else if(a==="goHome"){S.screen="home";render();}
+      else if(a==="goBoard"){S.screen="board";S.tab="board";render();}
+      else if(a==="goCompat"){S.screen="board";S.tab="compat";render();}
+      else if(a==="retry"){
+        S.nick="";S.area="";S.pin="";S.gender="";S.height="";S.freeTime="";S.idealType="";S.appeal="";S.giDol="";
+        S.myEntry=null;S.myBalEntry=null;S.myDatEntry=null;S.myPet=null;
+        localStorage.removeItem("lmg_user");localStorage.removeItem("lmg_bal");
+        localStorage.removeItem("lmg_dat");localStorage.removeItem("lmg_pet");
+        S.screen="home";render();
       }
-      else if (a === "testBack") { if (S.qIdx > 0) { S.qIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "mbtiAns") mbtiAns(parseInt(el.dataset.v));
-      else if (a === "balBack") { if (S.balIdx > 0) { S.balIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "balAns") balAns(el.dataset.v);
-      else if (a === "datBack") { if (S.datIdx > 0) { S.datIdx--; render(); } else { S.screen = "home"; render(); } }
-      else if (a === "datAns") datAns(el.dataset.v);
-      else if (a === "tab") { S.tab = el.dataset.v; render(); }
-      else if (a === "selM") { const e = S.entries.find(x => x.id === el.dataset.id); S.selM = S.selM?.id === el.dataset.id ? null : e; render(); }
-      else if (a === "selF") { const e = S.entries.find(x => x.id === el.dataset.id); S.selF = S.selF?.id === el.dataset.id ? null : e; render(); }
-      else if (a === "giveRose") { if (S.myEntry) giveRose(S.myEntry.nick, S.myEntry.gender, el.dataset.recv, el.dataset.rg); }
-      else if (a === "login") login();
-      else if (a === "logout") { S.isAdmin = false; S.pwErr = ""; render(); }
-      else if (a === "lm_setDecoTab") { S._decoTab = el.dataset.v; render(); }
-      else if (a === "adminResetLevel") { adminResetPetLevel(el.dataset.nick); }
-      else if (a === "adminCapAll") { adminCapAllLevels(); }
-
+      else if(a==="testBack"){if(S.qIdx>0){S.qIdx--;render();}else{S.screen="home";render();}}
+      else if(a==="mbtiAns")mbtiAns(parseInt(el.dataset.v));
+      else if(a==="balBack"){if(S.balIdx>0){S.balIdx--;render();}else{S.screen="home";render();}}
+      else if(a==="balAns")balAns(el.dataset.v);
+      else if(a==="datBack"){if(S.datIdx>0){S.datIdx--;render();}else{S.screen="home";render();}}
+      else if(a==="datAns")datAns(el.dataset.v);
+      else if(a==="tab"){S.tab=el.dataset.v;render();}
+      else if(a==="selM"){const e=S.entries.find(x=>x.id===el.dataset.id);S.selM=S.selM?.id===el.dataset.id?null:e;render();}
+      else if(a==="selF"){const e=S.entries.find(x=>x.id===el.dataset.id);S.selF=S.selF?.id===el.dataset.id?null:e;render();}
+      else if(a==="giveRose"){if(S.myEntry)giveRose(S.myEntry.nick,S.myEntry.gender,el.dataset.recv,el.dataset.rg);}
+      else if(a==="login")login();
+      else if(a==="logout"){S.isAdmin=false;S.pwErr="";render();}
+      else if(a==="lm_setDecoTab"){ S._decoTab = el.dataset.v; render(); }
+      else if(a==="adminResetLevel"){adminResetPetLevel(el.dataset.nick);}
+      else if(a==="adminCapAll"){adminCapAllLevels();}
       /* ★ 환생 */
-      else if (a === "lm_rebirth") { rebirthPet(); }
-
+      else if(a==="lm_rebirth"){rebirthPet();}
       /* ★ 장착 아이템 */
-      else if (a === "setEquipTab") { S.equipTab = el.dataset.v; render(); }
-      else if (a === "lm_buyEquip") { buyEquipItem(el.dataset.id); }
-      else if (a === "lm_equip") { equipItem(el.dataset.slot, el.dataset.id); }
-      else if (a === "lm_unequip") { if (confirm(`장착 해제하시겠습니까?`)) unequipItem(el.dataset.slot); }
-
+      else if(a==="setEquipTab"){S.equipTab=el.dataset.v;render();}
+      else if(a==="lm_buyEquip"){buyEquipItem(el.dataset.id);}
+      else if(a==="lm_equip"){equipItem(el.dataset.slot,el.dataset.id);}
+      else if(a==="lm_unequip"){if(confirm(`장착 해제하시겠습니까?`))unequipItem(el.dataset.slot);}
       /* ★ 하우스 */
-      else if (a === "lm_initHouse") { initMyHouse(); }
-      else if (a === "lm_upgradeHouse") { upgradeHouse(el.dataset.tier); }
-      else if (a === "lm_buyFurniture") { buyFurnitureItem(el.dataset.id); }
-      else if (a === "lm_placeFurniture") { placeFurnitureItem(el.dataset.id); }
-      else if (a === "lm_removeFurniture") { removeFurnitureFromHouse(el.dataset.id); }
-      else if (a === "lm_visitHouse") { visitHouse(el.dataset.nick); }
-      else if (a === "lm_backFromHouse") {
-        S.visitingHouse = null;
-        if (window.__houseR) {
-          window.__houseR.destroy();
-          window.__houseR = null;
-        }
-        render();
-      }
-      else if (a === "lm_leaveGuestbook") {
-        const input = document.getElementById('guestbookInput');
-        if (input && input.value.trim()) leaveGuestbook(el.dataset.nick, input.value);
+      else if(a==="lm_initHouse"){initMyHouse();}
+      else if(a==="lm_upgradeHouse"){upgradeHouse(el.dataset.tier);}
+      else if(a==="lm_buyFurniture"){buyFurnitureItem(el.dataset.id);}
+      else if(a==="lm_placeFurniture"){placeFurnitureItem(el.dataset.id);}
+      else if(a==="lm_removeFurniture"){ removeFurnitureFromHouse(el.dataset.id); }
+      else if(a==="lm_visitHouse"){visitHouse(el.dataset.nick);}
+      else if(a==="lm_backFromHouse"){S.visitingHouse=null;if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();}
+      else if(a==="lm_leaveGuestbook"){
+        const input=document.getElementById('guestbookInput');
+        if(input&&input.value.trim())leaveGuestbook(el.dataset.nick,input.value);
         else alert("한 마디를 입력해주세요!");
       }
-
-      /* ✅ 가구 편집 시작 */
-      else if (a === "lm_editFurniture") {
-        setHouseEditState(el.dataset.id);
-        render();
+      else if(a==="lm_setWallpaper"){
+        const wp=WALLPAPERS[el.dataset.v];
+        if(wp&&wp.cost>0&&(S.myPet?.points||0)<wp.cost){alert(`포인트 부족! (필요: ${wp.cost}P)`);return;}
+        if(wp?.cost>0&&!confirm(`${wp.name} 구입? (-${wp.cost}P)`))return;
+        if(wp?.cost>0)petCol.doc(S.myEntry.nick).update({points:INC(-wp.cost)}).then(()=>{S.myPet.points-=wp.cost;});
+        houseCol.doc(S.myEntry.nick).update({wallpaper:el.dataset.v});
+        if(S.myHouse)S.myHouse.wallpaper=el.dataset.v;
+        if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();
       }
-
-      /* ✅ 슬라이더용 미세 조정 */
-      else if (a === "lm_editStep") {
-        if (!S.editingFurniture) return;
-
-        const field = el.dataset.field;
-        const delta = Number(el.dataset.v) || 0;
-
-        if (field === "rotation") {
-          const curDeg = normalizeDeg(radToDeg(S.editingFurniture.rotation || 0));
-          applyHouseEdit("rotation", curDeg + delta);
-        } else {
-          applyHouseEdit(field, (Number(S.editingFurniture[field]) || 0) + delta);
-        }
+      else if(a==="lm_setFloor"){
+        const fl=FLOORS[el.dataset.v];
+        if(fl&&fl.cost>0&&(S.myPet?.points||0)<fl.cost){alert(`포인트 부족! (필요: ${fl.cost}P)`);return;}
+        if(fl?.cost>0&&!confirm(`${fl.name} 구입? (-${fl.cost}P)`))return;
+        if(fl?.cost>0)petCol.doc(S.myEntry.nick).update({points:INC(-fl.cost)}).then(()=>{S.myPet.points-=fl.cost;});
+        houseCol.doc(S.myEntry.nick).update({floor:el.dataset.v});
+        if(S.myHouse)S.myHouse.floor=el.dataset.v;
+        if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();
       }
-
-      /* ✅ 회전 프리셋 */
-      else if (a === "lm_editSetRot") {
-        applyHouseEdit("rotation", Number(el.dataset.v) || 0);
-      }
-
-      /* ✅ 저장 */
-      else if (a === "lm_editConfirm") {
-        await saveHouseEdit();
-        clearHouseEditState();
-        render();
-      }
-
-      /* ✅ 취소 */
-      else if (a === "lm_editCancel") {
-        clearHouseEditState();
-        render();
-      }
-
-      /* ✅ 보관 */
-      else if (a === "lm_editRemove") {
-        if (!S.editingFurniture?.id) return;
-        await removeFurnitureFromHouse(S.editingFurniture.id);
-        clearHouseEditState();
-      }
-
-      else if (a === "lm_setWallpaper") {
-        const wp = WALLPAPERS[el.dataset.v];
-        if (wp && wp.cost > 0 && (S.myPet?.points || 0) < wp.cost) { alert(`포인트 부족! (필요: ${wp.cost}P)`); return; }
-        if (wp?.cost > 0 && !confirm(`${wp.name} 구입? (-${wp.cost}P)`)) return;
-        if (wp?.cost > 0) petCol.doc(S.myEntry.nick).update({ points: INC(-wp.cost) }).then(() => { S.myPet.points -= wp.cost; });
-        houseCol.doc(S.myEntry.nick).update({ wallpaper: el.dataset.v });
-        if (S.myHouse) S.myHouse.wallpaper = el.dataset.v;
-        if (window.__houseR) { window.__houseR.destroy(); window.__houseR = null; }
-        render();
-      }
-      else if (a === "lm_setFloor") {
-        const fl = FLOORS[el.dataset.v];
-        if (fl && fl.cost > 0 && (S.myPet?.points || 0) < fl.cost) { alert(`포인트 부족! (필요: ${fl.cost}P)`); return; }
-        if (fl?.cost > 0 && !confirm(`${fl.name} 구입? (-${fl.cost}P)`)) return;
-        if (fl?.cost > 0) petCol.doc(S.myEntry.nick).update({ points: INC(-fl.cost) }).then(() => { S.myPet.points -= fl.cost; });
-        houseCol.doc(S.myEntry.nick).update({ floor: el.dataset.v });
-        if (S.myHouse) S.myHouse.floor = el.dataset.v;
-        if (window.__houseR) { window.__houseR.destroy(); window.__houseR = null; }
-        render();
-      }
-      else if (a === "del") deleteParticipant(el.dataset.id);
-      else if (a === "delAll") { if (confirm("정말 전체 삭제하시겠어요?")) delAllMBTI(); }
-      else if (a === "edit") { S.editId = el.dataset.id; render(); }
-      else if (a === "cancelEdit") { S.editId = null; render(); }
-      else if (a === "saveEdit") {
-        const id = el.dataset.id;
-        const newData = {
-          nick: document.getElementById(`edit_nick_${id}`).value.trim(),
-          area: document.getElementById(`edit_area_${id}`).value.trim(),
-          gender: document.getElementById(`edit_gender_${id}`).value.trim(),
-          height: document.getElementById(`edit_height_${id}`).value.trim(),
-          freeTime: document.getElementById(`edit_freeTime_${id}`).value.trim(),
-          idealType: document.getElementById(`edit_idealType_${id}`).value.trim(),
-          appeal: document.getElementById(`edit_appeal_${id}`).value.trim(),
-          giDol: document.getElementById(`edit_giDol_${id}`).value.trim(),
-          mbti: document.getElementById(`edit_mbti_${id}`).value.trim(),
-          pin: document.getElementById(`edit_pin_${id}`).value.trim()
+      else if(a==="del")deleteParticipant(el.dataset.id);
+      else if(a==="delAll"){if(confirm("정말 전체 삭제하시겠어요?"))delAllMBTI();}
+      else if(a==="edit"){S.editId=el.dataset.id;render();}
+      else if(a==="cancelEdit"){S.editId=null;render();}
+      else if(a==="saveEdit"){
+        const id=el.dataset.id;
+        const newData={
+          nick:document.getElementById(`edit_nick_${id}`).value.trim(),
+          area:document.getElementById(`edit_area_${id}`).value.trim(),
+          gender:document.getElementById(`edit_gender_${id}`).value.trim(),
+          height:document.getElementById(`edit_height_${id}`).value.trim(),
+          freeTime:document.getElementById(`edit_freeTime_${id}`).value.trim(),
+          idealType:document.getElementById(`edit_idealType_${id}`).value.trim(),
+          appeal:document.getElementById(`edit_appeal_${id}`).value.trim(),
+          giDol:document.getElementById(`edit_giDol_${id}`).value.trim(),
+          mbti:document.getElementById(`edit_mbti_${id}`).value.trim(),
+          pin:document.getElementById(`edit_pin_${id}`).value.trim()
         };
-        updateParticipant(id, newData);
+        updateParticipant(id,newData);
       }
-
       /* ── 러브몬 액션 ── */
-      else if (a === "goLovemon") { S.screen = "board"; S.tab = "lm_pet"; render(); }
-      else if (a === "goPlaza") { S.screen = "board"; S.tab = "lm_plaza"; render(); }
-      else if (a === "lm_createPet") { initOrLoadPet(S.myEntry.nick, S.myEntry.gender, S.myEntry.mbti, S.myBalEntry?.answers); }
-      else if (a === "lm_buyFeed") { feedPet(el.dataset.item); }
-      else if (a === "lm_feedOther") {
-        const itemId = prompt("어떤 아이템을 선물하시겠습니까?\n1. 기본 사료 (100P) — 호감도 +10\n2. 도파민 특식 (500P) — 호감도 +10\n번호를 입력해주세요:", "1");
-        if (itemId === "1") feedPet('feed_basic', el.dataset.nick);
-        else if (itemId === "2") feedPet('feed_dopamine', el.dataset.nick);
+      else if(a==="goLovemon"){S.screen="board";S.tab="lm_pet";render();}
+      else if(a==="goPlaza"){S.screen="board";S.tab="lm_plaza";render();}
+      else if(a==="lm_createPet"){initOrLoadPet(S.myEntry.nick,S.myEntry.gender,S.myEntry.mbti,S.myBalEntry?.answers);}
+      else if(a==="lm_buyFeed"){feedPet(el.dataset.item);}
+      else if(a==="lm_feedOther"){
+        const itemId=prompt("어떤 아이템을 선물하시겠습니까?\n1. 기본 사료 (100P) — 호감도 +10\n2. 도파민 특식 (500P) — 호감도 +10\n번호를 입력해주세요:","1");
+        if(itemId==="1")feedPet('feed_basic',el.dataset.nick);
+        else if(itemId==="2")feedPet('feed_dopamine',el.dataset.nick);
       }
-      else if (a === "lm_giveRoseToPet") { giveRoseToPet(el.dataset.nick); }
-      else if (a === "lm_sendPoints") { transferPoints(el.dataset.nick); }
-      else if (a === "lm_breedReq") { requestBreed(el.dataset.nick); }
-      else if (a === "lm_breedAccept") { acceptBreed(el.dataset.id, el.dataset.from); }
-      else if (a === "lm_submitAnswer") { submitQuizAnswer(); }
-      else if (a === "lm_submitOX") { submitOXAnswer(el.dataset.v); }
-      else if (a === "lm_setQuizMode") {
-        S.quizMode = el.dataset.v;
-        startQuizQuestion(el.dataset.v, null).catch(() => {});
-        render();
-      }
-      else if (a === "lm_cm_start") { startCatchmindRound(S.myEntry?.nick); }
-      else if (a === "lm_cm_skip") { skipCMRound(); }
-      else if (a === "lm_cm_guess") { submitCMGuess(); }
-      else if (a === "lm_cm_color") {
-        S.cmTool = { ...S.cmTool, color: el.dataset.v, eraser: false };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-      else if (a === "lm_cm_width") {
-        S.cmTool = { ...S.cmTool, width: Number(el.dataset.v), eraser: false };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-      else if (a === "lm_cm_eraser") {
-        S.cmTool = { ...S.cmTool, eraser: true };
-        if (window.__cmCanvas) window.__cmCanvas.updateTool(S.cmTool);
-      }
-    });
-  });
-}
       /* ★ 장미꽃 선물 → 호감도 +20 */
       else if(a==="lm_giveRoseToPet"){giveRoseToPet(el.dataset.nick);}
       else if(a==="lm_sendPoints"){transferPoints(el.dataset.nick);}
