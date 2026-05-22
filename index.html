@@ -3488,12 +3488,26 @@ if(placed.length>=tier.maxSlots){alert(`현재 집에 최대 ${tier.maxSlots}개
 }
 async function removeFurnitureFromHouse(itemId){
   const myNick=S.myEntry?.nick;if(!myNick||!S.myHouse)return;
+  
+  /* ★ 편집 중인 가구를 보관할 경우 편집 모드 해제 */
+  if(S.editingFurniture?.id === itemId){
+    S.editingFurniture = null;
+    if(window.__houseR) window.__houseR.setEditingItem(null);
+  }
+  
   const furniture=(S.myHouse.furniture||[]).filter(f=>f.id!==itemId);
   const removed=(S.myHouse.furniture||[]).find(f=>f.id===itemId);
   const inv=[...(S.myHouse.inventory||[])];
-  if(removed)inv.push(removed);
-  await houseCol.doc(myNick).update({furniture,inventory:inv});
-  S.myHouse.furniture=furniture;S.myHouse.inventory=inv;render();
+  
+  if(removed){
+    delete removed.position; // 다음 배치를 위해 위치 초기화
+    delete removed.rotation; // 다음 배치를 위해 회전 초기화
+    inv.push(removed);
+  }
+  
+  await houseCol.doc(myNick).update({furniture,inventory:inv}).catch(()=>{});
+  S.myHouse.furniture=furniture;S.myHouse.inventory=inv;
+  render();
 }
 async function visitHouse(nick){
   S.visitingHouse=nick;S.tab='lm_house';
@@ -4301,8 +4315,8 @@ class HouseRenderer3D {
     const c = this.renderer.domElement;
     c.style.touchAction = 'none';
     c.style.cursor = 'grab';
- 
     const onDown = (clientX) => {
+      if (this.editingId) return; // ★ 추가: 가구 편집 중에는 화면 회전(드래그) 방지
       this.isDrag = true;
       this.autoRotate = false;
       this.lastX = clientX;
@@ -6144,12 +6158,16 @@ function rHouseTab(){
           🏠 Placed (${furniture.length}/${tier?.maxSlots || 3})
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
           ${furniture.map(f => `
-            <div class="furn-chip ${editing?.id === f.id ? 'editing' : 'placed'}"
-                 data-a="lm_editFurniture" data-id="${f.id}" title="편집">
-              <span class="chip-emoji">${f.emoji}</span>
-              <span>${esc(f.name)}</span>
-              <span class="chip-edit">${editing?.id === f.id ? '🎯' : '✎'}</span>
+            <div class="furn-chip ${editing?.id === f.id ? 'editing' : 'placed'}" style="padding:0; display:inline-flex; align-items:stretch; overflow:hidden;">
+              <div style="padding:7px 8px; cursor:pointer; display:flex; align-items:center; gap:5px;" data-a="lm_removeFurniture" data-id="${f.id}" title="클릭 시 인벤토리로 보관">
+                <span class="chip-emoji">${f.emoji}</span>
+                <span>${esc(f.name)}</span>
+              </div>
+              <div style="padding:7px 10px; background:rgba(0,0,0,0.08); cursor:pointer; display:flex; align-items:center; border-left:1px solid rgba(0,0,0,0.05);" data-a="lm_editFurniture" data-id="${f.id}" title="가구 배치/회전 편집">
+                <span class="chip-edit" style="margin:0; font-size:14px;">${editing?.id === f.id ? '🎯' : '✎'}</span>
+              </div>
             </div>
           `).join('')}
         </div>` : ''}
@@ -6923,7 +6941,7 @@ function attachEvents(){
       else if(a==="lm_upgradeHouse"){upgradeHouse(el.dataset.tier);}
       else if(a==="lm_buyFurniture"){buyFurnitureItem(el.dataset.id);}
       else if(a==="lm_placeFurniture"){placeFurnitureItem(el.dataset.id);}
-      else if(a==="lm_removeFurniture"){if(confirm("가구를 제거하고 인벤토리로 돌려보낼까요?"))removeFurnitureFromHouse(el.dataset.id);}
+      else if(a==="lm_removeFurniture"){ removeFurnitureFromHouse(el.dataset.id); }
       else if(a==="lm_visitHouse"){visitHouse(el.dataset.nick);}
       else if(a==="lm_backFromHouse"){S.visitingHouse=null;if(window.__houseR){window.__houseR.destroy();window.__houseR=null;}render();}
       else if(a==="lm_leaveGuestbook"){
