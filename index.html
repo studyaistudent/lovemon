@@ -2572,8 +2572,7 @@ async function rerollDice(){
   if(cost>0&&(S.myPet.points||0)<cost){alert("포인트가 부족합니다! (필요: 500P)");return;}
   if(!confirm(`🎲 주사위를 굴려 기본 스탯을 결정합니다!\n${isFirst?'첫 번째 굴림은 무료예요! 🎁':'추가 굴림은 500P 차감됩니다.'}\n\n결과는 랜덤이며 레벨에 비례해 성장합니다.`))return;
 const newStats=rollDiceStats();
-  const scaled=getScaledStats({...S.myPet,diceStats:newStats});
-
+  const scaled=getEquippedStats({...S.myPet,diceStats:newStats}); /* 장비 스탯 반영 */
   /* ★ DB용(INC 포함)과 로컬용(순수 숫자)을 분리 → points가 NaN되는 버그 수정 */
   const dbData={
     diceStats:newStats,
@@ -2833,7 +2832,7 @@ async function restoreHpMp(){
   /* 던전 밖에서 시간 경과 회복 (버튼으로 요청) */
   const myNick=S.myEntry?.nick;
   if(!myNick||!S.myPet)return;
-  const scaled=getScaledStats(S.myPet);
+  const scaled=getEquippedStats(S.myPet); /* 장비 스탯 반영 */
 if(!confirm("HP/MP를 최대치로 회복합니다. (500P 소모)"))return;
   if((S.myPet.points||0)<500){alert("포인트가 부족합니다! (500P 필요)");return;}
   await petCol.doc(myNick).update({
