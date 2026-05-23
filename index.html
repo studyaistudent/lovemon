@@ -10341,7 +10341,7 @@ async function addIQ(nick, amount){
     if(S.myPet?.nick===nick)S.myPet.iq=(S.myPet.iq||0)+amount;
   }catch(e){}
 }
-/* 답변 제출 (모든 퀴즈 타입) */
+/* 답변 제출 (모든 퀴즈 타입) - [수정됨: 탭 섞임 방지 및 자동 다음 문제] */
 async function submitQuizAnswer(){
   const inputEl=document.getElementById("lm_chosung_input");
   if(!inputEl)return;
@@ -10351,6 +10351,13 @@ async function submitQuizAnswer(){
   if(!myNick){alert("MBTI 검사를 완료 후 참여해주세요!");inputEl.value="";return;}
   const state=S.chosungState;
   if(!state){inputEl.value="";return;}
+  
+  // [핵심 추가] 현재 탭과 문제 타입이 다르면 제출 방지
+  if(state.type !== (S.quizMode || 'chosung')){
+    alert("새로운 문제를 불러오는 중입니다. 잠시만 기다려주세요! 🔄");
+    return;
+  }
+
   if(state.solvedBy){alert("이미 정답이 나왔어요! 다음 문제를 기다려주세요 ⏳");inputEl.value="";return;}
   let isCorrect=false;
   const type=state.type||'chosung';
@@ -10373,7 +10380,12 @@ async function submitQuizAnswer(){
   if(isCorrect){
     const pReward=type==='chosung'?50:type==='ox'?20:type==='nonsense'?40:30;
     const iqReward=type==='chosung'?3:type==='ox'?1:type==='nonsense'?2:2;
-    try{await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS(),explain:state.explain||''});}catch(e){}
+    try{
+      await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS(),explain:state.explain||''});
+      
+      // [핵심 추가] 정답을 맞추면 3초 뒤 현재 탭에 맞는 다음 문제 강제 호출
+      setTimeout(() => startQuizQuestion(S.quizMode || 'chosung'), 3000);
+    }catch(e){}
     if(S.myPet){
       await addPoints(myNick,pReward);
       await addIQ(myNick,iqReward);
@@ -10381,17 +10393,25 @@ async function submitQuizAnswer(){
     }
   }
 }
-/* OX 버튼 전용 제출 */
+/* OX 버튼 전용 제출 - [수정됨: 탭 섞임 방지 및 자동 다음 문제] */
 async function submitOXAnswer(choice){
   const myNick=S.myEntry?.nick||S.myPet?.nick;
   if(!myNick){alert("MBTI 검사를 완료 후 참여해주세요!");return;}
   const state=S.chosungState;
-  if(!state||state.type!=='ox')return;
+  
+  // [핵심 추가] OX 탭이 아닐 때 버튼이 눌리는 것 방지
+  if(!state||state.type!=='ox' || S.quizMode !== 'ox') return;
+  
   if(state.solvedBy){alert("이미 정답이 나왔어요!");return;}
   const isCorrect=(choice===state.answer);
   await chatCol.add({nick:shortNick(myNick),message:choice,isCorrect,type:'ox',timestamp:TS()});
   if(isCorrect){
-    try{await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS()});}catch(e){}
+    try{
+      await gameStateCol.doc("chosung_current").update({solvedBy:shortNick(myNick),solvedAt:TS()});
+      
+      // [핵심 추가] 정답을 맞추면 3초 뒤 OX 다음 문제 강제 호출
+      setTimeout(() => startQuizQuestion('ox'), 3000);
+    }catch(e){}
     if(S.myPet){
       await addPoints(myNick,20);
       await addIQ(myNick,1);
@@ -12302,10 +12322,10 @@ function rPlazaTab(){
   const quizTypeTabs=`
   <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap">
     ${[
-      {id:'chosung', label:'🔤 초성퀴즈', reward:'+50P +3IQ'},
-      {id:'ox',      label:'⭕ OX퀴즈',   reward:'+20P +1IQ'},
-      {id:'nonsense',label:'🤪 넌센스',   reward:'+40P +2IQ'},
-      {id:'short',   label:'✏️ 주관식',   reward:'+30P +2IQ'},
+      {id:'chosung', label:'초성', reward:'(+50P,+3IQ)'},
+      {id:'ox',      label:'OX',   reward:'(+20P,+1IQ)'},
+      {id:'nonsense',label:'넌센스',   reward:'(+40P,+2IQ)'},
+      {id:'short',   label:'주관식',   reward:'(+30P,+2IQ)'},
     ].map(t=>`<button class="btn ${qMode===t.id?'btn-sel':''}" style="padding:6px 10px;font-size:11.5px;flex:1"
       data-a="lm_setQuizMode" data-v="${t.id}">${t.label}<br><span style="font-size:9.5px;opacity:.7">${t.reward}</span></button>`).join('')}
   </div>`;
@@ -12321,16 +12341,18 @@ function rPlazaTab(){
     const solvedBox=solved?`<div style="text-align:center;padding:10px;background:var(--rose-lt);border-radius:10px;margin-top:10px;border:1px solid var(--border2)">
       <p style="font-size:14px;font-weight:700;color:var(--rose2)">⚡ ${esc(state.solvedBy)}님이 먼저 정답!</p>
       <p style="font-size:12px;color:var(--text2);margin:4px 0 0">정답: <b>${esc(state.answer||state.answers?.[0]||'')}</b></p>
-      ${state.explain?`<p style="font-size:11px;color:var(--text3);margin:3px 0 0">${esc(state.explain)}</p>`:''}
+      ${state.explain?`<p style="font-size:11px;color:var(--text3);margin:3px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(state.explain)}</p>`:''}
       <p style="font-size:11px;color:var(--text3);margin:3px 0 0">다음 문제 준비 중...</p>
     </div>`:'';
+    
+    // ── 각 퀴즈 구역별 폰트 크기 조정 및 강제 1줄 처리 (white-space, text-overflow 추가) ──
     if(state.type==='chosung'){
       questionHTML=`
         <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:8px">🔤 초성 퀴즈 [${esc(state.genre||'일반')}]</p>
         <div style="display:flex;justify-content:center;gap:8px;margin:8px 0 12px;flex-wrap:wrap">
           ${(state.chosung||[]).map(c=>`<div class="lm-cho-char">${c}</div>`).join('')}
         </div>
-        <p style="font-size:12px;color:var(--text3);text-align:center">💡 힌트: ${esc(state.hint||'')}</p>
+        <p style="font-size:12px;color:var(--text3);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 5px">💡 힌트: ${esc(state.hint||'')}</p>
         ${solvedBox}`;
       if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
         <input id="lm_chosung_input" class="inp" placeholder="정답을 입력하세요..." style="flex:1">
@@ -12339,8 +12361,8 @@ function rPlazaTab(){
     } else if(state.type==='ox'){
       questionHTML=`
         <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">⭕ OX 퀴즈</p>
-        <div style="background:white;border-radius:12px;padding:14px 16px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px">
-          <p style="font-size:16px;font-weight:600;line-height:1.6">${esc(state.question||'')}</p>
+        <div style="background:white;border-radius:12px;padding:12px 14px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px;overflow:hidden">
+          <p style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;width:100%">${esc(state.question||'')}</p>
         </div>
         ${solvedBox}`;
       if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:10px;margin-top:10px">
@@ -12350,9 +12372,9 @@ function rPlazaTab(){
     } else if(state.type==='nonsense'){
       questionHTML=`
         <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">🤪 넌센스 퀴즈</p>
-        <div style="background:linear-gradient(135deg,rgba(253,238,244,.6),rgba(240,230,255,.6));border-radius:12px;padding:16px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px">
-          <p style="font-size:15px;font-weight:600;line-height:1.7">${esc(state.question||'')}</p>
-          ${state.hint?`<p style="font-size:11.5px;color:var(--text3);margin-top:6px">💡 ${esc(state.hint)}</p>`:''}
+        <div style="background:linear-gradient(135deg,rgba(253,238,244,.6),rgba(240,230,255,.6));border-radius:12px;padding:12px 14px;border:1.5px solid var(--border);text-align:center;margin-bottom:10px;overflow:hidden">
+          <p style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;width:100%">${esc(state.question||'')}</p>
+          ${state.hint?`<p style="font-size:11px;color:var(--text3);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:0">💡 ${esc(state.hint)}</p>`:''}
         </div>
         ${solvedBox}`;
       if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
@@ -12362,8 +12384,8 @@ function rPlazaTab(){
     } else { /* short */
       questionHTML=`
         <p style="font-size:13px;font-weight:700;color:var(--plum);text-align:center;margin-bottom:10px">✏️ 주관식 퀴즈</p>
-        <div style="background:white;border-radius:12px;padding:16px;border:2px solid rgba(232,83,122,.3);text-align:center;margin-bottom:10px">
-          <p style="font-size:16px;font-weight:600;line-height:1.6">${esc(state.question||'')}</p>
+        <div style="background:white;border-radius:12px;padding:12px 14px;border:2px solid rgba(232,83,122,.3);text-align:center;margin-bottom:10px;overflow:hidden">
+          <p style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;width:100%">${esc(state.question||'')}</p>
         </div>
         ${solvedBox}`;
       if(!solved&&myNick)inputHTML=`<div style="display:flex;gap:8px;margin-top:10px">
@@ -12408,7 +12430,7 @@ function rPlazaTab(){
       return `<div class="lm-lb-row">
         <div class="lm-lb-rank">${rankEmoji}</div>
         <div class="lm-lb-pet">${getVisualEmoji(p)}</div>
-<div class="lm-lb-nick">${esc(p.nick)} ${rebirthBadge} <span style="font-size:11px;color:${getRebirthColor(p.rebirthCount)};font-weight:700">${esc(p.petName||'')}</span></div>        ${rightVal}
+        <div class="lm-lb-nick">${esc(p.nick)} ${rebirthBadge} <span style="font-size:11px;color:${getRebirthColor(p.rebirthCount)};font-weight:700">${esc(p.petName||'')}</span></div>        ${rightVal}
       </div>`;
     }).join('');
   return `
@@ -12454,8 +12476,7 @@ ${myPet?`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;
       <div style="display:flex;justify-content:space-between"><span>📅 매일 출석</span><span class="gold-badge">+10P</span></div>
     </div>
   </div>`;
-}
-/* ═══════════════════════════════════════
+}/* ═══════════════════════════════════════
    DOM EVENTS BINDING
 ═══════════════════════════════════════ */
 function attachEvents(){
