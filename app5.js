@@ -1143,7 +1143,7 @@ const BABY_CARE_ITEMS=[
   {type:'story', label:'태교 동화 읽기',emoji:'📖', cost:8000,  reductionMins:360, desc:'-6시간 / 800P'},
   {type:'massage',label:'마사지 해주기',emoji:'💆', cost:15000, reductionMins:720, desc:'-12시간 / 1500P'},
 ];
-const XP_PER_LV(lv) = (level) => 500 + (level - 1) * 100;
+const XP_PER_LV = (level) => 500 + (level - 1) * 100;
 const MAX_LV=100;
 const BREED_LV=15;
 const BREED_AFFECTION=100;
