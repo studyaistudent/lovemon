@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💕 너를 담아 미니게임</title>
-<meta property="og:title" content="💕 너를 담아 미니게임">
-<meta property="og:description" content="MBTI · 밸런스게임 · 연애성향 · 장미꽃 · 러브몬 육성 · 초성광장 · 캐치마인드 등">
+<meta property="og:title" content="러브몬 미니게임">
+<meta property="og:description" content="러브몬 육성 · 퀴즈 · 캐치마인드 · 마피아 오픈월드 등">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
@@ -752,6 +752,59 @@ body::before{
 /* 가속/브레이크 색상 구분 (원한다면 추가) */
 .ow-drive-btn.gas { background: rgba(76, 175, 80, 0.9); color: white; }
 .ow-drive-btn.brake { background: rgba(244, 67, 54, 0.9); color: white; }
+
+/* ═══════════════════ 🕹️ 가상 조이스틱 (모바일 이동) ═══════════════════ */
+.ow-joystick{
+  position:absolute;
+  left:18px;
+  bottom:90px;
+  width:140px;height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle at center, rgba(255,255,255,.18), rgba(255,255,255,.05) 60%, rgba(0,0,0,.18));
+  border:2px solid rgba(255,255,255,.42);
+  box-shadow:0 4px 18px rgba(0,0,0,.32), inset 0 0 18px rgba(255,255,255,.08);
+  pointer-events:auto;
+  z-index:11;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.ow-joystick::before{
+  content:'';
+  position:absolute;inset:50% 50% 50% 50%;
+  width:8px;height:8px;margin:-4px 0 0 -4px;
+  background:rgba(255,255,255,.5);
+  border-radius:50%;
+  pointer-events:none;
+}
+.ow-joystick-knob{
+  position:absolute;
+  left:50%;top:50%;
+  width:58px;height:58px;
+  margin:-29px 0 0 -29px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#FFD700,#FF5BAE,#7C4DFF);
+  box-shadow:0 4px 12px rgba(0,0,0,.4), inset 0 -3px 6px rgba(0,0,0,.18), inset 0 3px 6px rgba(255,255,255,.3);
+  pointer-events:none;
+  transition:transform .04s ease-out;
+  will-change:transform;
+}
+.ow-joystick.active{
+  border-color:rgba(255,215,0,.7);
+  background:radial-gradient(circle at center, rgba(255,215,0,.18), rgba(255,255,255,.05) 60%, rgba(0,0,0,.2));
+}
+.ow-joystick-label{
+  position:absolute;bottom:-22px;left:0;right:0;
+  text-align:center;font-size:10.5px;color:rgba(255,255,255,.7);
+  font-weight:700;letter-spacing:.5px;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);
+  pointer-events:none;
+}
+@media (max-width:380px){
+  .ow-joystick{width:120px;height:120px;left:14px;bottom:80px}
+  .ow-joystick-knob{width:50px;height:50px;margin:-25px 0 0 -25px}
+}
 /* 채팅 입력바 */
 .ow-chat-bar{
   pointer-events:auto;
