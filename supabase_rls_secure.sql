@@ -136,12 +136,12 @@ CREATE POLICY lm_sel_mbti_entries ON public.mbti_entries FOR SELECT TO anon, aut
 CREATE POLICY lm_ins_mbti_entries ON public.mbti_entries FOR INSERT TO anon, authenticated
   WITH CHECK (
     lm_req_nick() IS NOT NULL
-    AND NEW.nick = lm_req_nick()
-    AND NEW.pin = lm_req_pin()
-    AND length(NEW.pin) >= 4
+    AND nick = lm_req_nick()
+    AND pin = lm_req_pin()
+    AND length(pin) >= 4
     AND (
-      NOT EXISTS (SELECT 1 FROM public.mbti_entries e WHERE e.nick = NEW.nick)
-      OR lm_pin_ok(NEW.nick)
+      NOT EXISTS (SELECT 1 FROM public.mbti_entries e WHERE e.nick = nick)
+      OR lm_pin_ok(nick)
     )
   );
 CREATE POLICY lm_upd_mbti_entries ON public.mbti_entries FOR UPDATE TO anon, authenticated
