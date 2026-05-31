@@ -30,6 +30,8 @@
     pendingFurniture: 'pending_furniture',
     dailyQuests: 'daily_quests',
     dungeonKills: 'dungeon_kills',
+    dungeonBattleCount: 'dungeon_battle_count',
+    dungeonCooldownStart: 'dungeon_cooldown_start',
     rebirthCount: 'rebirth_count',
     activeCardSkin: 'active_card_skin',
     activeTitle: 'active_title',
@@ -109,7 +111,7 @@
     dating_entries: { pk: 'id', known: ['nick', 'gender', 'answers', 'time', 'extra'] },
     roses: { pk: 'id', known: ['sender', 'sender_gender', 'receiver', 'receiver_gender', 'date', 'extra'] },
     mutual_roses: { pk: 'id', known: ['user1', 'user1_gender', 'user2', 'user2_gender', 'date', 'extra'] },
-    lm_pets: { pk: 'nick', overflowCol: 'data', known: ['nick', 'gender', 'mbti', 'pet_emoji', 'pet_name', 'pet_desc', 'level', 'xp', 'points', 'is_bred', 'last_login', 'login_streak', 'name_change_count', 'affection_map', 'iq', 'dice_stats', 'current_hp', 'current_mp', 'current_sp', 'inventory', 'pet_inventory', 'equipment', 'pending_furniture', 'daily_quests', 'dungeon_kills', 'rebirth_count', 'active_card_skin', 'active_title', 'mafia_record', 'oncard_record', 'ow_data', 'data'] },
+    lm_pets: { pk: 'nick', overflowCol: 'data', known: ['nick', 'gender', 'mbti', 'pet_emoji', 'pet_name', 'pet_desc', 'level', 'xp', 'points', 'is_bred', 'last_login', 'login_streak', 'name_change_count', 'affection_map', 'iq', 'dice_stats', 'current_hp', 'current_mp', 'current_sp', 'inventory', 'pet_inventory', 'equipment', 'pending_furniture', 'daily_quests', 'dungeon_kills', 'dungeon_battle_count', 'dungeon_cooldown_start', 'rebirth_count', 'active_card_skin', 'active_title', 'mafia_record', 'oncard_record', 'ow_data', 'data'] },
     lm_game: { pk: 'doc_key', dataBlob: true },
     lm_chat: { pk: 'id', known: ['nick', 'message', 'is_correct', 'type', 'extra'] },
     lm_breed_requests: { pk: 'id', alias: { from: 'from_nick', to: 'to_nick' }, known: ['from_nick', 'from_emoji', 'from_pet_name', 'to_nick', 'to_emoji', 'to_pet_name', 'status', 'extra'] },
@@ -289,6 +291,12 @@
       if (!doc.petDesc && doc.pet_desc) doc.petDesc = doc.pet_desc;
       if (doc.isBred == null && doc.is_bred != null) doc.isBred = doc.is_bred;
       if (!doc.petEmoji) doc.petEmoji = '🐾';
+      if (doc.dungeonBattleCount == null && row.dungeon_battle_count != null) {
+        doc.dungeonBattleCount = row.dungeon_battle_count;
+      }
+      if (doc.dungeonCooldownStart == null && row.dungeon_cooldown_start != null) {
+        doc.dungeonCooldownStart = Number(row.dungeon_cooldown_start);
+      }
     }
     if (row.created_at) {
       doc.timestamp = row.created_at;
@@ -407,19 +415,46 @@
     }
   }
 
-  function lmAuthHeaders() {
-    const out = {};
-    let raw = {};
+  function lmReadUser() {
+    let nick = '';
+    let pin = '';
     try {
-      if (typeof global.lmGetAuthHeaders === 'function') raw = global.lmGetAuthHeaders() || {};
+      const raw = global.localStorage && global.localStorage.getItem('lmg_user');
+      if (raw) {
+        const u = JSON.parse(raw);
+        if (u && u.nick) {
+          nick = String(u.nick).trim();
+          pin = String(u.pin || '').trim();
+        }
+      }
     } catch (_) {}
-    let nickB64 = raw['x-lm-nick-b64'] ? String(raw['x-lm-nick-b64']) : '';
-    if (!nickB64 && raw['x-lm-nick']) nickB64 = lmB64Utf8(String(raw['x-lm-nick']).trim());
-    let pinB64 = raw['x-lm-pin-b64'] ? String(raw['x-lm-pin-b64']) : '';
-    if (!pinB64 && raw['x-lm-pin']) pinB64 = lmB64Utf8(String(raw['x-lm-pin']).trim());
-    if (nickB64) out['x-lm-nick-b64'] = nickB64;
-    if (pinB64) out['x-lm-pin-b64'] = pinB64;
+    if (!nick && typeof document !== 'undefined') {
+      const n = document.getElementById('nickI');
+      const p = document.getElementById('pinI');
+      if (n && n.value && String(n.value).trim()) {
+        nick = String(n.value).trim();
+        pin = p && p.value ? String(p.value).trim() : '';
+      }
+    }
+    return { nick, pin };
+  }
+
+  function lmAuthHeaders() {
+    const { nick, pin } = lmReadUser();
+    const out = {};
+    const nb = nick ? lmB64Utf8(nick) : '';
+    const pb = pin ? lmB64Utf8(pin) : '';
+    if (nb && /^[A-Za-z0-9+/=]+$/.test(nb)) out['x-lm-nick-b64'] = nb;
+    if (pb && /^[A-Za-z0-9+/=]+$/.test(pb)) out['x-lm-pin-b64'] = pb;
     return out;
+  }
+
+  function lmStripLegacyAuthHeaders(headers) {
+    ['x-lm-nick', 'x-lm-pin', 'X-Lm-Nick', 'X-Lm-Pin'].forEach((h) => {
+      try {
+        headers.delete(h);
+      } catch (_) {}
+    });
   }
 
   function getRestClient() {
@@ -435,16 +470,18 @@
       realtime: { params: { eventsPerSecond: 20 } },
       global: {
         fetch: (input, init = {}) => {
-          const extra = lmAuthHeaders();
+          const opts = { ...init };
+          delete opts.headers;
           const headers = new Headers(init.headers || {});
-          Object.entries(extra).forEach(([k, v]) => {
-            if (v == null || String(v) === '') return;
+          lmStripLegacyAuthHeaders(headers);
+          const extra = lmAuthHeaders();
+          for (const [k, v] of Object.entries(extra)) {
             const val = String(v);
-            /* Latin-1 밖 문자는 set() 전에 차단 (구버전 index.html 폴백) */
-            if (!/^[\u0000-\u00FF]*$/.test(val)) return;
-            headers.set(k, val);
-          });
-          return __baseFetch(input, { ...init, headers });
+            if ((k === 'x-lm-nick-b64' || k === 'x-lm-pin-b64') && /^[A-Za-z0-9+/=]+$/.test(val)) {
+              headers.set(k, val);
+            }
+          }
+          return __baseFetch(input, { ...opts, headers });
         },
       },
     });
@@ -824,11 +861,24 @@
 
   global.checkSupabaseHealth = async function () {
     try {
-      const c = createDb();
-      const { error } = await c._client.from('lm_pets').select('nick').limit(1);
-      return error || null;
+      const url = SUPABASE_URL + '/rest/v1/lm_pets?select=nick&limit=1';
+      const res = await __baseFetch(url, {
+        method: 'GET',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+          Accept: 'application/json',
+        },
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        return { message: j.message || res.statusText, code: String(res.status) };
+      }
+      return null;
     } catch (e) {
       return e;
     }
   };
+
+  global.__lmShimVersion = '4';
 })(typeof window !== 'undefined' ? window : globalThis);
