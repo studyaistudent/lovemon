@@ -5803,15 +5803,36 @@ const __memStore={};
 function lmgGetItem(k){try{return localStorage.getItem(k);}catch(e){return __memStore[k]??null;}}
 function lmgSetItem(k,v){try{localStorage.setItem(k,v);}catch(e){__memStore[k]=v;}}
 function lmgRemoveItem(k){try{localStorage.removeItem(k);}catch(e){delete __memStore[k];}}
-/** Supabase RLS: 닉+PIN을 REST 요청 헤더로 전달 (supabase_rls_secure.sql) */
+/** HTTP 헤더는 ASCII만 가능 → 한글 닉은 Base64(UTF-8)로 전송 */
+function lmB64Utf8(s){
+  if(s==null||s==="")return"";
+  try{
+    if(typeof TextEncoder!=="undefined"){
+      const bytes=new TextEncoder().encode(String(s));
+      let bin="";
+      bytes.forEach(b=>{bin+=String.fromCharCode(b);});
+      return btoa(bin);
+    }
+    return btoa(unescape(encodeURIComponent(String(s))));
+  }catch(e){return"";}
+}
+/** Supabase RLS: 닉+PIN 헤더 (supabase_rls_secure.sql — x-lm-nick-b64 / x-lm-pin-b64) */
 window.lmGetAuthHeaders=function(){
+  let nick="",pin="";
   try{
     const u=JSON.parse(lmgGetItem("lmg_user")||"null");
-    if(u&&u.nick)return{"x-lm-nick":String(u.nick).trim(),"x-lm-pin":String(u.pin||"").trim()};
+    if(u&&u.nick){nick=String(u.nick).trim();pin=String(u.pin||"").trim();}
   }catch(e){}
-  const n=document.getElementById("nickI"),p=document.getElementById("pinI");
-  if(n&&n.value.trim())return{"x-lm-nick":n.value.trim(),"x-lm-pin":p?String(p.value||"").trim():""};
-  return{};
+  if(!nick){
+    const n=document.getElementById("nickI"),p=document.getElementById("pinI");
+    if(n&&n.value.trim()){nick=n.value.trim();pin=p?String(p.value||"").trim():"";}
+  }
+  if(!nick)return{};
+  const nb=lmB64Utf8(nick),pb=lmB64Utf8(pin);
+  const h={};
+  if(nb)h["x-lm-nick-b64"]=nb;
+  if(pb)h["x-lm-pin-b64"]=pb;
+  return h;
 };
 (()=>{
   try{
@@ -6044,9 +6065,10 @@ function showDbError(title, detail){
       <h2 style="margin:0 0 10px">⚠️ ${title||'DB 오류'}</h2>
       <p style="word-break:break-all;background:#fff3f3;padding:10px;border-radius:8px;font-size:13px">${msg}${code}</p>
       <p style="font-size:14px;color:#444;margin-top:14px">
-        ① <b>start-server.bat</b> 실행 후 <code>http://localhost:5500/index.html</code><br>
-        ② Supabase → SQL Editor → <code>supabase_schema.sql</code> 전체 실행<br>
-        ③ 그래도 안 되면 F12 → Console 빨간 줄 캡처 후 보내주세요
+        ① <b>index.html</b> · <b>supabase-firestore-shim.js</b> 최신본 GitHub에 올렸는지 확인 (한글 닉 Base64 수정)<br>
+        ② Supabase SQL → <code>supabase_rls_header_utf8_patch.sql</code> 실행<br>
+        ③ <b>Ctrl+Shift+R</b> 강력 새로고침 (캐시 삭제)<br>
+        ④ 로컬 테스트: <code>start-server.bat</code> → <code>http://localhost:5500/index.html</code>
       </p></div>`;
   }
   console.error('[DB]',title,detail);
