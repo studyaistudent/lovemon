@@ -397,8 +397,58 @@
         detectSessionInUrl: false,
         storage: sbAuthStorage,
       },
+      realtime: { params: { eventsPerSecond: 20 } },
     });
     return __sbRestClient;
+  }
+
+  /** 테이블당 Realtime 채널 1개 — 동시 구독 폭주·조기 close 경고 완화 */
+  const __rtChannels = new Map();
+  let __rtStaggerMs = 0;
+
+  function subscribeRealtime(client, table, filter, listener) {
+    const key = filter ? `doc:${table}:${filter}` : `col:${table}`;
+    let entry = __rtChannels.get(key);
+    if (!entry) {
+      const chName = ('lm-' + key).replace(/[^a-zA-Z0-9:_-]/g, '_').slice(0, 100);
+      const opts = { event: '*', schema: 'public', table };
+      if (filter) opts.filter = filter;
+      const callbacks = new Set();
+      const channel = client.channel(chName).on('postgres_changes', opts, () => {
+        callbacks.forEach((fn) => {
+          try {
+            fn();
+          } catch (e) {
+            console.error('[supabase realtime]', table, e);
+          }
+        });
+      });
+      entry = { channel, callbacks, subscribed: false };
+      __rtChannels.set(key, entry);
+      const delay = __rtStaggerMs;
+      __rtStaggerMs += 50;
+      setTimeout(() => {
+        channel.subscribe((status, err) => {
+          if (status === 'SUBSCRIBED') entry.subscribed = true;
+          else if (status === 'CHANNEL_ERROR' && err) console.warn('[supabase realtime]', table, err.message || err);
+        });
+      }, delay);
+    }
+    entry.callbacks.add(listener);
+    return () => {
+      entry.callbacks.delete(listener);
+      if (entry.callbacks.size === 0) {
+        __rtChannels.delete(key);
+        try {
+          if (entry.subscribed) entry.channel.unsubscribe();
+          else client.removeChannel(entry.channel);
+        } catch (_) {
+          try {
+            client.removeChannel(entry.channel);
+          } catch (_2) {}
+        }
+      }
+    };
   }
 
   let __dbWrapper = null;
@@ -533,16 +583,7 @@
         }
       };
       run();
-      const channel = this._db._client
-        .channel('col-' + this._table + '-' + Math.random().toString(36).slice(2))
-        .on('postgres_changes', { event: '*', schema: 'public', table: this._table }, () => run())
-        .subscribe();
-      this._db._channels.push(channel);
-      return () => {
-        try {
-          this._db._client.removeChannel(channel);
-        } catch (_) {}
-      };
+      return subscribeRealtime(this._db._client, this._table, null, run);
     }
   }
 
@@ -621,19 +662,8 @@
         }
       };
       run();
-      const channel = this._db._client
-        .channel('doc-' + this._table + '-' + this.id)
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: this._table, filter: `${m.pk}=eq.${this.id}` },
-          () => run()
-        )
-        .subscribe();
-      return () => {
-        try {
-          this._db._client.removeChannel(channel);
-        } catch (_) {}
-      };
+      const filter = `${m.pk}=eq.${this.id}`;
+      return subscribeRealtime(this._db._client, this._table, filter, run);
     }
   }
 
